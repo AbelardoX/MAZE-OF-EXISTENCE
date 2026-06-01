@@ -1,3 +1,4 @@
+// feather disable GM2017
 global.brocolis_vivo = true;
 function scr_boss_escolher_atk() {
 	 image_speed = 1;  
@@ -35,9 +36,9 @@ function scr_boss_atk_zero() {
 
 // Ataque 1: Investida corpo a corpo
 function scr_boss_atk_um() {
-    var dir = point_direction(x, y, obj_player.x, obj_player.y);  // Direção do jogador
+    var _dir = point_direction(x, y, obj_player.x, obj_player.y);  // Direção do jogador
     speed = global.speed_player - 3;  // Velocidade da investida
-    direction = dir;  // Define a direção da investida
+    direction = _dir;  // Define a direção da investida
     image_speed = 1;  // Aumenta a velocidade da animação do chefe
 	damage = 15;
 	
@@ -67,17 +68,17 @@ function criar_ondas_de_choque() {
 
     // Se a variável 'onda' estiver true, cria as ondas
     if (obj_boss_brocolis.onda) {
-		var dor = irandom_range(10,30);
-        var num_ondas = dor;  // Número de ondas de choque
-        var angulo_inicial = 0;  // Ângulo inicial
+		var _dor = irandom_range(10,30);
+        var _num_ondas = _dor;  // Número de ondas de choque
+        var _angulo_inicial = 0;  // Ângulo inicial
 
-        for (var i = 0; i < num_ondas; i++) {
-            var angulo = angulo_inicial + (i * (360 / num_ondas));  // Distribui as ondas em 360 graus
+        for (var _i = 0; _i < _num_ondas; _i++) {
+            var _angulo = _angulo_inicial + (_i * (360 / _num_ondas));  // Distribui as ondas em 360 graus
 
             // Criar a onda de choque (um tipo de projétil que se espalha ao redor)
-            var onda = instance_create_layer(x, y, "instances", obj_projetil_boss);
-            with (onda) {
-                direction = angulo;  // Define a direção da onda de choque
+            var _onda = instance_create_layer(x, y, "instances", obj_projetil_boss);
+            with (_onda) {
+                direction = _angulo;  // Define a direção da onda de choque
                 speed = 6;  // Velocidade da onda
                 damage = 15;  // Dano causado pela onda
 				
@@ -104,18 +105,18 @@ function scr_boss_atk_tres() {
 }
 
 function scr_boss_atk_quatro() {
-    var num_projeteis = irandom_range(20,40);  // Número de projéteis disparados
-    var angulo_inicial = 0;  // Ângulo inicial para o primeiro projétil
-    var velocidade_base = irandom(6);  // Velocidade base dos projéteis
+    var _num_projeteis = irandom_range(20,40);  // Número de projéteis disparados
+    var _angulo_inicial = 0;  // Ângulo inicial para o primeiro projétil
+    var _velocidade_base = irandom(6);  // Velocidade base dos projéteis
 
-    for (var i = 0; i < num_projeteis; i++) {
-        var angulo = angulo_inicial + (i * (360 / num_projeteis));  // Distribui os projéteis igualmente em 360 graus
+    for (var _i = 0; _i < _num_projeteis; _i++) {
+        var _angulo = _angulo_inicial + (_i * (360 / _num_projeteis));  // Distribui os projéteis igualmente em 360 graus
 
         // Criar o projétil e definir direção
-        var proj = instance_create_layer(x, y, "instances", obj_projetil_boss);
-        with (proj) {
-            direction = angulo;  // Define a direção do projétil
-            speed = velocidade_base + (i * 0.5);  // Aumenta a velocidade com base no índice do projétil
+        var _proj = instance_create_layer(x, y, "instances", obj_projetil_boss);
+        with (_proj) {
+            direction = _angulo;  // Define a direção do projétil
+            speed = _velocidade_base + (_i * 0.5);  // Aumenta a velocidade com base no índice do projétil
             damage = 15;  // Dano causado pelo projétil
         }
     }
@@ -126,8 +127,8 @@ function scr_boss_atk_quatro() {
 // Ataque 5: Disparar um projétil que segue o jogador
 function scr_boss_atk_cinco() {
     // Criar o projétil que segue o jogador
-    var proj = instance_create_layer(x, y, "instances", obj_projetil_boss);
-    with (proj) {
+    var _proj = instance_create_layer(x, y, "instances", obj_projetil_boss);
+    with (_proj) {
         speed = 4;  // Velocidade do projétil seguidor
         target = obj_player;  // O alvo do projétil é o jogador
         damage = 15;  // Dano causado pelo projétil

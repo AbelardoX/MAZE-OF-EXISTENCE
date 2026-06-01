@@ -1,3 +1,4 @@
+// feather disable GM2017
 // ========================================================
 // COLISÃO DO INIMIGO COM O PLAYER
 // (O "other" aqui se refere ao PLAYER)

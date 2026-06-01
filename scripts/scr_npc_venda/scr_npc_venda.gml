@@ -1,117 +1,118 @@
-function inicializar_itens_venda(npc_level) {
+// feather disable GM2017
+function inicializar_itens_venda(_npc_level) {
     randomize();
     ds_grid_clear(inventario_venda, -1);
     
     // Define quantos itens o NPC terá para vender (baseado no nível)
-    var quantidade_itens = clamp(3 + floor(npc_level / 2), 3, 8); // Mínimo 3, máximo 8 itens
+    var _quantidade_itens = clamp(3 + floor(_npc_level / 2), 3, 8); // Mínimo 3, máximo 8 itens
     
     // Filtra itens baseado no nível do NPC
-    var itens_disponiveis = filtrar_itens_por_nivel(npc_level);
+    var _itens_disponiveis = filtrar_itens_por_nivel(_npc_level);
     
     // Adiciona itens aleatórios ao inventário de venda
-    for (var i = 0; i < quantidade_itens; i++) {
-        // Escolhe um item aleatório da lista filtrada
-        var item_index = irandom(ds_list_size(itens_disponiveis) - 1);
-        var item = itens_disponiveis[| item_index];
+    for (var _i = 0; _i < _quantidade_itens; _i++) {
+        // Escolhe um _item aleatório da lista filtrada
+        var _item_index = irandom(ds_list_size(_itens_disponiveis) - 1);
+        var _item = _itens_disponiveis[| _item_index];
         
-        // Define quantidade aleatória baseada no tipo de item e nível do NPC
-        var quantidade = 1;
-        if (item[8] == "uso") { // Itens de uso têm quantidades maiores
-            quantidade = irandom_range(1, 3 + npc_level);
+        // Define _quantidade aleatória baseada no tipo de _item e nível do NPC
+        var _quantidade = 1;
+        if (_item[8] == "uso") { // Itens de uso têm quantidades maiores
+            _quantidade = irandom_range(1, 3 + _npc_level);
         }
         
-        // Adiciona o item ao inventário de venda
+        // Adiciona o _item ao inventário de venda
         adicionar_item_venda(
-            item[0],       // sprite
-            item[7],       // image_index
-            item[10],    // quantidade
-            item[1],       // nome
-            item[2],       // descricao
-            item[4],       // dano
-            item[5],       // armadura
-            item[6],       // velocidade
-            item[3],       // cura
-            item[8],       // tipo
-            item[7],       // ind (usando image_index)
-            calcular_preco_com_base_no_nivel(item[9], npc_level) // preco ajustado
+            _item[0],       // sprite
+            _item[7],       // image_index
+            _quantidade,    // _quantidade (USA A VARIÁVEL CALCULADA)
+            _item[1],       // nome
+            _item[2],       // descricao
+            _item[4],       // dano
+            _item[5],       // armadura
+            _item[6],       // velocidade
+            _item[3],       // cura
+            _item[8],       // tipo
+            _item[7],       // ind (usando image_index)
+            calcular_preco_com_base_no_nivel(_item[9], _npc_level) // preco ajustado
         );
         
-        // Remove o item da lista temporária para evitar duplicatas
-        ds_list_delete(itens_disponiveis, item_index);
+        // Remove o _item da lista temporária para evitar duplicatas
+        ds_list_delete(_itens_disponiveis, _item_index);
         
         // Se não houver mais itens disponíveis, sai do loop
-        if (ds_list_size(itens_disponiveis) == 0) break;
+        if (ds_list_size(_itens_disponiveis) == 0) break;
     }
     
     // Limpa a lista temporária
-    ds_list_destroy(itens_disponiveis);
+    ds_list_destroy(_itens_disponiveis);
 }
 
-function filtrar_itens_por_nivel(npc_level) {
-    var itens_filtrados = ds_list_create();
+function filtrar_itens_por_nivel(_npc_level) {
+    var _itens_filtrados = ds_list_create();
     
-    for (var i = 0; i < ds_list_size(global.lista_itens); i++) {
-        var item = global.lista_itens[| i];
-        var item_tier = determinar_tier_do_item(item);
+    for (var _i = 0; _i < ds_list_size(global.lista_itens); _i++) {
+        var _item = global.lista_itens[| _i];
+        var _item_tier = determinar_tier_do_item(_item);
         
         // Itens de tier mais alto só aparecem para NPCs de nível mais alto
-        if (item_tier <= npc_level) {
-            ds_list_add(itens_filtrados, item);
+        if (_item_tier <= _npc_level) {
+            ds_list_add(_itens_filtrados, _item);
         }
     }
     
-    return itens_filtrados;
+    return _itens_filtrados;
 }
 
-function determinar_tier_do_item(item) {
-    // Define o tier do item baseado em suas propriedades
-    var poder = 0;
+function determinar_tier_do_item(_item) {
+    // Define o tier do _item baseado em suas propriedades
+    var _poder = 0;
     
-    switch (item[8]) { // tipo
+    switch (_item[8]) { // tipo
         case "uso":
-            poder = item[3] / 10; // baseado na cura
+            _poder = _item[3] / 10; // baseado na cura
             break;
         case "arma":
-            poder = item[5] / 2;  // baseado no dano
+            _poder = _item[4] / 2;  // baseado no dano
             break;
         case "armadura":
-            poder = item[6];      // baseado na armadura
+            _poder = _item[5];      // baseado na armadura
             break;
         case "bota":
-            poder = item[7];      // baseado na velocidade
+            _poder = _item[6];      // baseado na velocidade
             break;
     }
     
-    return clamp(floor(poder / 2), 1, 5); // Tiers de 1 a 5
+    return clamp(floor(_poder / 2), 1, 5); // Tiers de 1 a 5
 }
 
-function calcular_preco_com_base_no_nivel(preco_base, npc_level) {
+function calcular_preco_com_base_no_nivel(_preco_base, _npc_level) {
     // Aumenta o preço baseado no nível do NPC (10% por nível)
-    var multiplicador = 1 + (npc_level * 0.1);
+    var _multiplicador = 1 + (_npc_level * 0.1);
     
     // Adiciona uma variação aleatória de ±20%
-    var variacao = random_range(0.8, 1.2);
+    var _variacao = random_range(0.8, 1.2);
     
-    return round(preco_base * multiplicador * variacao);
+    return round(_preco_base * _multiplicador * _variacao);
 }
 
 function adicionar_item_venda(_sprite, _img_index, _quantidade, _nome, _descricao, _dano, _armadura, _velocidade, _cura, _tipo, _ind, _preco) {
     // Encontra o primeiro slot vazio
-    for (var i = 0; i < ds_grid_height(inventario_venda); i++) {
-        if (inventario_venda[# Infos.item, i] == -1) {
+    for (var _i = 0; _i < ds_grid_height(inventario_venda); _i++) {
+        if (inventario_venda[# INFOS.ITEM, _i] == -1) {
             // Preenche os dados do item
-            inventario_venda[# Infos.item, i] = i; // ID único
-            inventario_venda[# Infos.quantidade, i] = _quantidade;
-            inventario_venda[# Infos.sprite, i] = _sprite;
-            inventario_venda[# Infos.nome, i] = _nome;
-            inventario_venda[# Infos.descricao, i] = _descricao;
-            inventario_venda[# Infos.dano, i] = _dano;
-            inventario_venda[# Infos.armadura, i] = _armadura;
-            inventario_venda[# Infos.velocidade, i] = _velocidade;
-            inventario_venda[# Infos.cura, i] = _cura;
-            inventario_venda[# Infos.tipo, i] = _tipo;
-            inventario_venda[# Infos.image_ind, i] = _ind;
-            inventario_venda[# Infos.preco, i] = _preco;
+            inventario_venda[# INFOS.ITEM, _i] = _i; // ID único
+            inventario_venda[# INFOS.QUANTIDADE, _i] = _quantidade;
+            inventario_venda[# INFOS.SPRITE, _i] = _sprite;
+            inventario_venda[# INFOS.NOME, _i] = _nome;
+            inventario_venda[# INFOS.DESCRICAO, _i] = _descricao;
+            inventario_venda[# INFOS.DANO, _i] = _dano;
+            inventario_venda[# INFOS.ARMADURA, _i] = _armadura;
+            inventario_venda[# INFOS.VELOCIDADE, _i] = _velocidade;
+            inventario_venda[# INFOS.CURA, _i] = _cura;
+            inventario_venda[# INFOS.TIPO, _i] = _tipo;
+            inventario_venda[# INFOS.IMAGE_IND, _i] = _ind;
+            inventario_venda[# INFOS.PRECO, _i] = _preco;
             break;
         }
     }

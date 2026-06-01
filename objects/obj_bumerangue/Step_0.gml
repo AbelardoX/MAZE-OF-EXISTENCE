@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Lógica de Movimento (Máquina de Estados)
 /// [O QUE]: Controla o comportamento de "ir" e "voltar", rastro visual e pausa.
 /// [COMO] :
@@ -42,9 +43,6 @@ switch (state)
         if (timer_going <= 0) 
         {
             state = "returning";
-            // Limpa a lista de hits para poder bater nos mesmos inimigos na volta?
-            // Se quiser que bata de novo na volta, descomente a linha abaixo:
-            // ds_list_clear(hit_list); 
         }
         break;
 

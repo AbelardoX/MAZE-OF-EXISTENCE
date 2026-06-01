@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @description Move o objeto para trás antes de ir em direção ao jogador
 if(global.level_up == true){
 	alarm[0]++;

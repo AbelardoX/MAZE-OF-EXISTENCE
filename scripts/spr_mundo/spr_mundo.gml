@@ -1,21 +1,22 @@
+// feather disable GM2017
 /// @desc Inicialização e Lógica de Geração Procedural por Chunks
 /// [O QUE]: Inicializa as estruturas de dados globais (Mapas e Listas) e define as funções de geração de mundo baseada na posição do player.
 
 // ============================================================================
 // FUNÇÃO PRINCIPAL: CHAMA A GERAÇÃO PARA O BLOCO ATUAL E OS 8 VIZINHOS (3x3)
 // ============================================================================
-function gerar_estruturas(obj_struct, quantidade_estruturas, distancia_minima) 
+function gerar_estruturas(_obj_struct, _quantidade_estruturas, _distancia_minima) 
 {
     // Pega a posição atual do player no grid de blocos
     var _bloco_atual_x = floor(obj_player.x / global.tamanho_bloco);
     var _bloco_atual_y = floor(obj_player.y / global.tamanho_bloco);
 
     // Percorre o bloco atual e os 8 blocos vizinhos (Grid 3x3)
-    for (var bx = _bloco_atual_x - 1; bx <= _bloco_atual_x + 1; bx++) 
+    for (var _bx = _bloco_atual_x - 1; _bx <= _bloco_atual_x + 1; _bx++) 
     {
-        for (var by = _bloco_atual_y - 1; by <= _bloco_atual_y + 1; by++) 
+        for (var _by = _bloco_atual_y - 1; _by <= _bloco_atual_y + 1; _by++) 
         {
-            gerar_estruturas_para_bloco(bx, by, obj_struct, quantidade_estruturas, distancia_minima);
+            gerar_estruturas_para_bloco(_bx, _by, _obj_struct, _quantidade_estruturas, _distancia_minima);
         }
     }
 }
@@ -29,9 +30,9 @@ function recriar_estruturas()
     // 1. Recria Estruturas Padrão (Casas, Boss, Vendedor)
     // ==========================================
     var _total = ds_list_size(global.posicoes_estruturas);
-    for (var i = 0; i < _total; i++) 
+    for (var _i = 0; _i < _total; _i++) 
     {
-        var _info = global.posicoes_estruturas[| i];
+        var _info = global.posicoes_estruturas[| _i];
         
         var _px      = _info[0];
         var _py      = _info[1];
@@ -57,30 +58,33 @@ function recriar_estruturas()
     // 2. Recria as Árvores
     // ==========================================
     var _total_arvores = ds_list_size(global.posicoes_arvores);
-    for (var i = 0; i < _total_arvores; i++) 
+    for (var _i = 0; _i < _total_arvores; _i++) 
     {
-        var _a_info = global.posicoes_arvores[| i];
-        instance_create_depth(_a_info[0], _a_info[1], 0, obj_arvore, { seed: _a_info[2] });
+        var _a_info = global.posicoes_arvores[| _i];
+        var _inst = instance_create_depth(_a_info[0], _a_info[1], 0, obj_arvore, {});
+		_inst.seed = _a_info[2];
     }
 
     // ==========================================
     // 3. Recria as Pedras
     // ==========================================
     var _total_pedras = ds_list_size(global.posicoes_pedras);
-    for (var i = 0; i < _total_pedras; i++) 
+    for (var _i = 0; _i < _total_pedras; _i++) 
     {
-        var _p_info = global.posicoes_pedras[| i];
-        instance_create_depth(_p_info[0], _p_info[1], 0, obj_rock, { seed: _p_info[2] });
+        var _p_info = global.posicoes_pedras[| _i];
+        var _inst = instance_create_depth(_p_info[0], _p_info[1], 0, obj_rock, {});
+		_inst.seed = _p_info[2];
     }
 
     // ==========================================
     // 4. Recria Grupos de Inimigos
     // ==========================================
     var _total_grupos = ds_list_size(global.posicoes_grupos_inimigos);
-    for (var i = 0; i < _total_grupos; i++) 
+    for (var _i = 0; _i < _total_grupos; _i++) 
     {
-        var _g_info = global.posicoes_grupos_inimigos[| i];
-        instance_create_depth(_g_info[0], _g_info[1], 0, obj_grupo_inimigos, { seed: _g_info[2] });
+        var _g_info = global.posicoes_grupos_inimigos[| _i];
+        var _inst = instance_create_depth(_g_info[0], _g_info[1], 0, obj_grupo_inimigos, {});
+		_inst.seed = _g_info[2];
     }
 }
 
@@ -151,15 +155,15 @@ function posicao_conflitante_geracao(_x, _y, _dist_minima) {
     var _gy = floor(_y / 500);
     
     // Checa a célula atual e as 8 vizinhas
-    for (var i = -1; i <= 1; i++) {
-        for (var j = -1; j <= 1; j++) {
-            var _key = string(_gx + i) + "," + string(_gy + j);
+    for (var _i = -1; _i <= 1; _i++) {
+        for (var _j = -1; _j <= 1; _j++) {
+            var _key = string(_gx + _i) + "," + string(_gy + _j);
             var _list = global.grid_colisao_geracao[? _key];
             
             if (!is_undefined(_list)) {
                 var _size = ds_list_size(_list);
-                for (var k = 0; k < _size; k++) {
-                    var _pos = _list[| k];
+                for (var _k = 0; _k < _size; _k++) {
+                    var _pos = _list[| _k];
                     if (point_distance(_x, _y, _pos[0], _pos[1]) < _dist_minima) return true;
                 }
             }
@@ -171,9 +175,9 @@ function posicao_conflitante_geracao(_x, _y, _dist_minima) {
 // ============================================================================
 // 2. SISTEMA DE BIOMAS (Caminhada Aleatória para Áreas Irregulares)
 // ============================================================================
-function definir_bioma_do_cluster(start_bx, start_by)
+function definir_bioma_do_cluster(_start_bx, _start_by)
 {
-    var _id_inicial = string(start_bx) + "," + string(start_by);
+    var _id_inicial = string(_start_bx) + "," + string(_start_by);
     
     // Se o bloco já tem um bioma, ignoramos
     if (ds_map_exists(global.mapa_biomas, _id_inicial)) return;
@@ -183,11 +187,11 @@ function definir_bioma_do_cluster(start_bx, start_by)
     var _bioma_escolhido = _tipos_biomas[irandom(array_length(_tipos_biomas) - 1)];
     var _tamanho_cluster = irandom_range(2, 8);
 
-    var _cx = start_bx;
-    var _cy = start_by;
+    var _cx = _start_bx;
+    var _cy = _start_by;
 
     // Faz a "Caminhada Aleatória" pintando os blocos
-    for (var i = 0; i < _tamanho_cluster; i++) 
+    for (var _i = 0; _i < _tamanho_cluster; _i++) 
     {
         var _cluster_id = string(_cx) + "," + string(_cy);
         
@@ -217,13 +221,13 @@ function gerenciar_mundo_procedural()
 
     if (_chunk_x_atual != global.ultimo_bloco[0] || _chunk_y_atual != global.ultimo_bloco[1]) 
     {
-        for (var bx = _chunk_x_atual - 1; bx <= _chunk_x_atual + 1; bx++) 
+        for (var _bx = _chunk_x_atual - 1; _bx <= _chunk_x_atual + 1; _bx++) 
         {
-            for (var by = _chunk_y_atual - 1; by <= _chunk_y_atual + 1; by++) 
+            for (var _by = _chunk_y_atual - 1; _by <= _chunk_y_atual + 1; _by++) 
             {
                 // NOVO: Antes de mandar para a fila, garante que essa região tem um bioma
-                definir_bioma_do_cluster(bx, by);
-                array_push(global.fila_de_chunks, [bx, by]);
+                definir_bioma_do_cluster(_bx, _by);
+                array_push(global.fila_de_chunks, [_bx, _by]);
             }
         }
         global.ultimo_bloco[0] = _chunk_x_atual;
@@ -263,7 +267,7 @@ function gerenciar_mundo_procedural()
             case "cidade":
                 gerar_estruturas_para_bloco(_bx, _by, obj_estrutura, irandom_range(4, 10), 300);
                 gerar_estruturas_para_bloco(_bx, _by, obj_poste, irandom_range(3, 6), 200);
-                gerar_estruturas_para_bloco(_bx, _by, par_npc_vendedor_um, 1, 400);
+                gerar_estruturas_para_bloco(_bx, _by, obj_par_npc_vendedor_um, 1, 400);
                 gerar_monstros_para_bloco(_bx, _by, _meu_bioma, 300); 
                 break;
 
@@ -287,32 +291,32 @@ function gerenciar_mundo_procedural()
 // ============================================================================
 // 4. FUNÇÃO DE ESTRUTURAS
 // ============================================================================
-function gerar_estruturas_para_bloco(bx, by, obj_struct, quantidade_estruturas, distancia_minima) 
+function gerar_estruturas_para_bloco(_bx, _by, _obj_struct, _quantidade_estruturas, _distancia_minima) 
 {
-    var _bloco_id = "struct_" + object_get_name(obj_struct) + "_" + string(bx) + "," + string(by);
+    var _bloco_id = "struct_" + object_get_name(_obj_struct) + "_" + string(_bx) + "," + string(_by);
     if (ds_map_exists(global.blocos_gerados, _bloco_id)) return;
     ds_map_add(global.blocos_gerados, _bloco_id, true);
 
-    var _centro_x = (bx + 0.5) * global.tamanho_bloco;
-    var _centro_y = (by + 0.5) * global.tamanho_bloco;
+    var _centro_x = (_bx + 0.5) * global.tamanho_bloco;
+    var _centro_y = (_by + 0.5) * global.tamanho_bloco;
 
     var _estruturas_geradas = 0;
     var _tentativas = 0;
-    var _max_tentativas = quantidade_estruturas * 3; 
+    var _max_tentativas = _quantidade_estruturas * 3; 
 
-    while (_estruturas_geradas < quantidade_estruturas && _tentativas < _max_tentativas) 
+    while (_estruturas_geradas < _quantidade_estruturas && _tentativas < _max_tentativas) 
     {
         var _pos_x = _centro_x + random_range(-global.tamanho_bloco / 2 + 100, global.tamanho_bloco / 2 - 100);
         var _pos_y = _centro_y + random_range(-global.tamanho_bloco / 2 + 100, global.tamanho_bloco / 2 - 100);
 
         // PERFORMANCE: Spatial Hashing em vez de loop global
-        if (!posicao_conflitante_geracao(_pos_x, _pos_y, distancia_minima)) 
+        if (!posicao_conflitante_geracao(_pos_x, _pos_y, _distancia_minima)) 
         {
             randomize(); 
             var _seed = random_get_seed();
-            var _obj_a_criar = obj_struct;
+            var _obj_a_criar = _obj_struct;
 
-            if (obj_struct == obj_estrutura) 
+            if (_obj_struct == obj_estrutura) 
             {
                 var _objetos_casas = [obj_casa_1, obj_casa_2, obj_casa_3, obj_casa_4];
                 var _indice = abs(_seed) mod array_length(_objetos_casas);
@@ -322,11 +326,11 @@ function gerar_estruturas_para_bloco(bx, by, obj_struct, quantidade_estruturas, 
             var _spr = noone; 
             var _nome = "Outro"; 
 
-            switch (obj_struct) {
+            switch (_obj_struct) {
                 case obj_estrutura:       _spr = spr_casa_mini_map;      _nome = "Casa"; break;
                 case obj_poste:           _spr = spr_poste_mini_map;     _nome = "Poste"; break;
                 case obj_grupo_inimigos:  _spr = spr_grupoini_mini_map;  _nome = "Grupo Inimigos"; break;
-                case par_npc_vendedor_um: _spr = spr_vendedor;           _nome = "Vendedor"; break;
+                case obj_par_npc_vendedor_um: _spr = spr_vendedor;           _nome = "Vendedor"; break;
                 case obj_secondary_boss:  _spr = spr_boss_mini_map;      _nome = "BOSS"; break;
             }
 
@@ -340,7 +344,7 @@ function gerar_estruturas_para_bloco(bx, by, obj_struct, quantidade_estruturas, 
             // VIRTUALIZAÇÃO: Apenas salva os dados. O obj_otimizador criará o objeto real.
             var _dados = [_pos_x, _pos_y, _seed, _obj_a_criar, _spr, _nome, _escala_minimapa];
             ds_list_add(global.posicoes_estruturas, _dados);
-            registrar_entidade_no_bloco(bx, by, "estrutura", _dados);
+            registrar_entidade_no_bloco(_bx, _by, "estrutura", _dados);
             registrar_posicao_geracao(_pos_x, _pos_y);
 
             _estruturas_geradas++;
@@ -352,41 +356,41 @@ function gerar_estruturas_para_bloco(bx, by, obj_struct, quantidade_estruturas, 
 // ============================================================================
 // 5. FUNÇÃO DE CENÁRIO 
 // ============================================================================
-function gerar_cobertura_cenario(bx, by, obj, quantidade, lista_global, dist_minima) 
+function gerar_cobertura_cenario(_bx, _by, _obj, _quantidade, _lista_global, _dist_minima) 
 {
-    var _bloco_id = "cenario_" + object_get_name(obj) + "_" + string(bx) + "," + string(by);
+    var _bloco_id = "cenario_" + object_get_name(_obj) + "_" + string(_bx) + "," + string(_by);
     if (ds_map_exists(global.blocos_gerados, _bloco_id)) return;
     ds_map_add(global.blocos_gerados, _bloco_id, true);
 
-    var _inicio_x = bx * global.tamanho_bloco;
-    var _inicio_y = by * global.tamanho_bloco;
+    var _inicio_x = _bx * global.tamanho_bloco;
+    var _inicio_y = _by * global.tamanho_bloco;
 
-    var _celulas_por_lado = ceil(sqrt(quantidade));
+    var _celulas_por_lado = ceil(sqrt(_quantidade));
     if (_celulas_por_lado == 0) return; 
 
     var _tamanho_celula = global.tamanho_bloco / _celulas_por_lado;
 
     // Identifica o tipo de cenário para a virtualização
-    var _tipo = (obj == obj_arvore) ? "arvore" : "pedra";
+    var _tipo = (_obj == obj_arvore) ? "arvore" : "pedra";
 
-    for (var i = 0; i < _celulas_por_lado; i++) 
+    for (var _i = 0; _i < _celulas_por_lado; _i++) 
     {
-        for (var j = 0; j < _celulas_por_lado; j++) 
+        for (var _j = 0; _j < _celulas_por_lado; _j++) 
         {
             if (random(100) < 80) 
             {
-                var _pos_x = _inicio_x + (i * _tamanho_celula) + random_range(50, _tamanho_celula - 50);
-                var _pos_y = _inicio_y + (j * _tamanho_celula) + random_range(50, _tamanho_celula - 50);
+                var _pos_x = _inicio_x + (_i * _tamanho_celula) + random_range(50, _tamanho_celula - 50);
+                var _pos_y = _inicio_y + (_j * _tamanho_celula) + random_range(50, _tamanho_celula - 50);
 
                 // PERFORMANCE: Spatial Hashing
-                if (!posicao_conflitante_geracao(_pos_x, _pos_y, dist_minima)) 
+                if (!posicao_conflitante_geracao(_pos_x, _pos_y, _dist_minima)) 
                 {
                     var _seed = abs((_pos_x * 73856093) ^ (_pos_y * 19349663));
 
                     // VIRTUALIZAÇÃO: Apenas dados
                     var _dados = [_pos_x, _pos_y, _seed];
-                    ds_list_add(lista_global, _dados);
-                    registrar_entidade_no_bloco(bx, by, _tipo, _dados);
+                    ds_list_add(_lista_global, _dados);
+                    registrar_entidade_no_bloco(_bx, _by, _tipo, _dados);
                     registrar_posicao_geracao(_pos_x, _pos_y);
                 }
             }
@@ -397,16 +401,16 @@ function gerar_cobertura_cenario(bx, by, obj, quantidade, lista_global, dist_min
 // ============================================================================
 // 6. FUNÇÃO DE BICHOS
 // ============================================================================
-function gerar_fauna_para_bloco(bx, by, quantidade_tentativas) 
+function gerar_fauna_para_bloco(_bx, _by, _quantidade_tentativas) 
 {
-    var _bloco_id = "fauna_" + string(bx) + "," + string(by);
+    var _bloco_id = "fauna_" + string(_bx) + "," + string(_by);
     if (ds_map_exists(global.blocos_gerados, _bloco_id)) return;
     ds_map_add(global.blocos_gerados, _bloco_id, true);
 
-    var _inicio_x = bx * global.tamanho_bloco;
-    var _inicio_y = by * global.tamanho_bloco;
+    var _inicio_x = _bx * global.tamanho_bloco;
+    var _inicio_y = _by * global.tamanho_bloco;
 
-    for (var i = 0; i < quantidade_tentativas; i++) 
+    for (var _i = 0; _i < _quantidade_tentativas; _i++) 
     {
         var _pos_x = _inicio_x + random(global.tamanho_bloco);
         var _pos_y = _inicio_y + random(global.tamanho_bloco);
@@ -426,7 +430,7 @@ function gerar_fauna_para_bloco(bx, by, quantidade_tentativas)
         // VIRTUALIZAÇÃO: Apenas dados
         var _dados = [_pos_x, _pos_y, _seed, _spr, _vel];
         ds_list_add(global.posicoes_bichos, _dados);
-        registrar_entidade_no_bloco(bx, by, "fauna", _dados);
+        registrar_entidade_no_bloco(_bx, _by, "fauna", _dados);
         registrar_posicao_geracao(_pos_x, _pos_y);
 
         randomize(); 

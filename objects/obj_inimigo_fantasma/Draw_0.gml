@@ -1,3 +1,4 @@
+// feather disable GM2017
 if dest_x < x{
 	image_xscale = -escala;
 }else{

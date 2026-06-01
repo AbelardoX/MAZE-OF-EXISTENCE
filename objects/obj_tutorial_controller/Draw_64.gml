@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Desenha o Objetivo Atual na Tela
 draw_set_font(fnt_dialogos);
 draw_set_halign(fa_center);

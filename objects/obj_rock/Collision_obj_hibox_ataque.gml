@@ -1,3 +1,4 @@
+// feather disable GM2017
 vida -= 10;
 show_debug_message(vida);
 quantis = choose(1, 2, 3, 4, 5, 6); // Vai dropar de 1 a 3 itens

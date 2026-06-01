@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Reseta e recria a fase inteira baseado no nível atual.
 /// [O QUE]: Incrementa o nível, limpa estruturas antigas, gera novo labirinto procedural e popula com objetos/inimigos.
 function reset_level_data() 
@@ -31,9 +32,9 @@ function reset_level_data()
     global.salas_criadas = []; 
     
     var _total_rooms = array_length(global.salas_geradas);
-    for (var i = 0; i < _total_rooms; i++) 
+    for (var _i = 0; _i < _total_rooms; _i++) 
     {
-        var _room_info = criar_salas_lista(global.salas_geradas[i], i + 1);
+        var _room_info = criar_salas_lista(global.salas_geradas[_i], _i + 1);
         array_push(global.salas_criadas, _room_info);
     }
 
@@ -43,7 +44,7 @@ function reset_level_data()
     gerar_inimigos_e_itens_para_o_nivel(global.salas_geradas, global.level_fase);
     
     // Móveis e Decoração
-    furniture_generate_positions(global.salas_geradas, global.salas_com_escrivaninha, 3)
+    furniture_generate_positions(global.salas_geradas, global.salas_com_escrivaninha, 3);
     furniture_generate_positions(global.salas_geradas, global.salas_com_geladeira, 1, "cozinha");
     furniture_generate_positions(global.salas_geradas, global.salas_com_guarda_roupa, 1, "quarto");
     create_escada_porao_em_fundos(global.salas_geradas);
@@ -68,9 +69,9 @@ function reset_level_data()
     
     // Reseta Minimapa
     global.minimap = [];
-    for (var i = 0; i < _total_rooms; i++) 
+    for (var _i = 0; _i < _total_rooms; _i++) 
     {
-        global.minimap[i] = c_white; // Todas as salas começam inexploradas/brancas
+        global.minimap[_i] = c_white; // Todas as salas começam inexploradas/brancas
     }
 }
 
@@ -125,4 +126,3 @@ function reset_global_variables()
     global.templo_criado = false;
     global.inimigo_id_count = 0; 
 }
-

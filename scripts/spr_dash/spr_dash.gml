@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 global.dash_habilitado = false;  // Inicialmente, o dash está desabilitado
 global.dash_em_recarga = false;  // Indica se o dash está em recarga

@@ -1,8 +1,9 @@
+// feather disable GM2017
 /// @description Insert description here
 
 
-// Ar_mazena a referência ao objeto obj_lab
-obj_lab = instance_find(Obj_lab, 0);
+// Armazena a referência ao objeto obj_lab
+my_lab_inst = instance_find(obj_lab, 0);
 bombs = 10; // Número de bombas coletadas
 current_speed = global.speed_sperm;
 global.vida_sperm = global.vida_inicial;

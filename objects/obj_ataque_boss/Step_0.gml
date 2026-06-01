@@ -1,3 +1,4 @@
+// feather disable GM2017
 if (fim_animation()){
 	var _dir = 0;
 	repeat(4){

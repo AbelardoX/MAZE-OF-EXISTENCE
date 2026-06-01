@@ -1,3 +1,8 @@
+// feather disable GM2017
+// feather disable once GM2016
+var pos_x = 0;
+// feather disable once GM2016
+var pos_y = 0;
 // Desativar todas as instâncias, exceto obj_controle
 
 
@@ -6,7 +11,7 @@
 if(global.vinda_templo ==0){
 instance_deactivate_all(true); // Desativa todas as instância
 instance_activate_object(obj_control_fase_1);
-room_goto(TEMPLO)
+room_goto(templo)
 global.vinda_templo = 1;
 }else{
 	if (direcao == 4) { 
@@ -47,10 +52,11 @@ else if (direcao == 3) {
 	
 	instance_deactivate_all(true);
 	instance_activate_object(obj_control_fase_1);
-	room_goto(Fase_1);
-	carregar_sala(global.origem_templo, global.destino_templo);
+	room_goto(fase_1);
+ // feather disable once GM1041
+	carregar_sala(is_array(global.origem_templo) ? global.origem_templo : [0,0], is_array(global.destino_templo) ? global.destino_templo : [0,0]);
 	global.vinda_templo = 0;
-	instance_create_layer(pos_x+32, pos_y, "Layer_Player", obj_SPERM);
+	instance_create_layer(pos_x+32, pos_y, "Layer_Player", obj_sperm);
 	recriar_pontos_na_sala_atual(global.current_sala);
 	recriar_inimigos_na_sala_atual(global.current_sala);
 	recriar_slow_na_sala_atual(global.current_sala);

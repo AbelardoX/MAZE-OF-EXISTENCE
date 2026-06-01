@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 direction_x = 0;
 direction_y = 0;

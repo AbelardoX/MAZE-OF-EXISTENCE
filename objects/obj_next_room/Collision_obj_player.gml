@@ -1,21 +1,39 @@
-
+// feather disable GM2017
+// feather disable once GM2016
+var pos_x = 0;
+// feather disable once GM2016
+var pos_y = 0;
 if(global.permitido == true){
-    var sala_destino = room_destino;  // Sala que você está indo
-    
+    var _sala_destino = room_destino;  // Sala que você está indo
+
     // Se estiver saindo do tutorial para a Fase_BEBE
-    if (room == Main_tutorial && sala_destino == Fase_BEBE) {
-        // Inicializa o gerador para a fase 1
+    if (room == Main_tutorial && _sala_destino == Fase_BEBE) {
+        // Inicializa a primeira sala do mundo real
+        global.current_sala = [0, 0];
         global.fase = 1;
         room_goto(Fase_BEBE);
         exit;
     }
 
-	if(sala_destino == global.templos_salas_pos[0]){
+    // Lógica para Templos (compara coordenadas)
+    var _is_temple = false;
+    if (is_array(_sala_destino) && variable_global_exists("templos_salas_pos") && is_array(global.templos_salas_pos) && array_length(global.templos_salas_pos) > 0) {
+        if (array_equals(_sala_destino, global.templos_salas_pos[0])) {
+            _is_temple = true;
+        }
+    }
+
+	if (_is_temple) {
 		global.current_sala = global.templos_salas_pos[0];
-	carregar_sala_templo(sala_destino, room_origem,direcao);
-	}else{
-    carregar_sala(sala_destino, room_origem);
-	}
+     // feather disable once GM1041
+	    carregar_sala_templo(is_array(_sala_destino) ? _sala_destino : [0,0], room_origem, direcao);
+    } else {
+        // Movimentação normal entre salas procedurais
+     // feather disable once GM1041
+	    carregar_sala(is_array(_sala_destino) ? _sala_destino : [0,0], room_origem);
+    }
+
+    // ... (pos_x, pos_y logic) ...
 
 
 if (direcao == 2) { 

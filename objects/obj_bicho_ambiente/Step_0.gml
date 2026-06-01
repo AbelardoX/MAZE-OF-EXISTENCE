@@ -1,3 +1,4 @@
+// feather disable GM2017
 // 1. Efeito 3D (Z-Order)
 depth = -y+(30);
 

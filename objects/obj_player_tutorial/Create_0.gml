@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 direction_x = 0;
 direction_y = 0;
@@ -40,7 +41,8 @@ global.current_player = id; // Define para o sistema de diálogo saber quem trav
 // Inicia o controlador de tutorial com segurança (workaround para erro de indexação)
 var _tuto_obj = asset_get_index("obj_tutorial_controller");
 if (_tuto_obj != -1) {
-    if (!instance_exists(_tuto_obj)) {
-        instance_create_layer(x, y, "Instances", _tuto_obj);
+    // feather disable once GM1041
+    if (!instance_exists(real(_tuto_obj))) {
+        instance_create_layer(x, y, "Instances", (is_string(_tuto_obj) ? asset_get_index(_tuto_obj) : _tuto_obj));
     }
 }

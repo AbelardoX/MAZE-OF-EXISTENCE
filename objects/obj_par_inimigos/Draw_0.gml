@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @description Desenho (Draw)
 
 // --- Desenha a Sombra (Sempre atrás) ---

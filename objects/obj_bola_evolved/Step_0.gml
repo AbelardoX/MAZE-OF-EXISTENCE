@@ -1,3 +1,4 @@
+// feather disable GM2017
 // ========================================================
 // ESTADO 1: ENQUANTO ESTÁ VOANDO ATÉ O INIMIGO
 // ========================================================
@@ -36,7 +37,7 @@ else if (estado == "parado_atirando")
         var _angulo_distancia = 360 / qtd_bolinhas;
         
         // Loop vai rodar a quantidade de vezes que você definiu na variável
-        for (var i = 0; i < qtd_bolinhas; i++) 
+        for (var _i = 0; _i < qtd_bolinhas; _i++) 
         {
             var _tiro = instance_create_layer(x, y, "Instances", obj_bola_evolved);
             
@@ -47,7 +48,7 @@ else if (estado == "parado_atirando")
             
             // MÁGICA DOS ÂNGULOS AQUI: Multiplica a distância pelo número da bolinha
             // Ex (4 bolas): 0*90=0, 1*90=90, 2*90=180, 3*90=270...
-            _tiro.direction = i * _angulo_distancia; 
+            _tiro.direction = _i * _angulo_distancia; 
             
             _tiro.veloc = 6; 
             _tiro.speed = 6; 

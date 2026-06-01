@@ -1,3 +1,4 @@
+// feather disable GM2017
 // ==============================================================================
 // REGIÃO 1: CONFIGURAÇÃO (DADOS E VETOR DE NÍVEIS)
 // ==============================================================================
@@ -73,7 +74,7 @@ function scr_explosao(_row_index)
     if (global.level_up) exit; 
 
     // Obtém o nível atual corretamente baseado na linha recebida
-    var _current_level = global.upgrades_vamp_grid[# Upgrades_vamp.level, _row_index];
+    var _current_level = global.upgrades_vamp_grid[# UPGRADES_VAMP.LEVEL, _row_index];
     
     // Se nível 0, não faz nada (segurança)
     if (_current_level <= 0) exit;
@@ -85,7 +86,7 @@ function scr_explosao(_row_index)
     
     // Chama a calculadora genérica universal (Passando referências corretas da grid e colunas)
     // Nota: Certifique-se de que a função 'scr_generic_calculate_stats' já foi criada.
-    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, Upgrades_vamp.description);
+    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, UPGRADES_VAMP.DESCRIPTION);
 
     // ========================================================
     // --- 2. LÓGICA DO TIMER (Sua lógica Delta_Time permanece aqui) ---
@@ -109,8 +110,8 @@ function scr_explosao(_row_index)
         var _player_x = obj_player.x;
         var _player_y = obj_player.y;
 
-        // Itera por todos os inimigos (SUBSTÍTUA 'par_inimigos' SEU OBJETO PAI)
-        with (par_inimigos) 
+        // Itera por todos os inimigos (SUBSTÍTUA 'obj_par_inimigos' SEU OBJETO PAI)
+        with (obj_par_inimigos) 
         {
             var _dist = point_distance(_player_x, _player_y, x, y);
             

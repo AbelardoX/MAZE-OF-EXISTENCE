@@ -1,3 +1,4 @@
+// feather disable GM2017
 function zoom() {
     // --- Configurações (Constantes Locais) ---
     var _zoom_speed_base = 50;       

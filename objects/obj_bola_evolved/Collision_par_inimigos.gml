@@ -1,3 +1,4 @@
+// feather disable GM2017
 // 1. SE FOR A BOLA FILHA (As 4 bolinhas menores)
 if (eh_filho == true) 
 {

@@ -1,3 +1,4 @@
+// feather disable GM2017
 // Variáveis de Inteligência Artificial (Wander)
 estado = "parado"; // Pode ser "parado" ou "andando"
 tempo_estado = irandom_range(30, 120); // Quanto tempo ele fica no estado atual

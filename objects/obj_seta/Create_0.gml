@@ -1,3 +1,4 @@
+// feather disable GM2017
 alvo_x = 0;
 alvo_y = 0;
 

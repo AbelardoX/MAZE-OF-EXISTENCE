@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Controle de Animação e Dano
 /// [O QUE]: Aplica o dano em área no momento certo da animação e se destrói ao final.
 /// [COMO] : 
@@ -15,12 +16,12 @@ if (image_index >= 1 && !damage_applied)
     var _hit_list = ds_list_create();
     
     // Colisão Circular (Área de Efeito)
-    var _count = collision_circle_list(x, y, radius, par_inimigos, false, true, _hit_list, false);
+    var _count = collision_circle_list(x, y, radius, obj_par_inimigos, false, true, _hit_list, false);
     
     // Loop pelos inimigos atingidos
-    for (var i = 0; i < _count; i++) 
+    for (var _i = 0; _i < _count; _i++) 
     {
-        var _enemy_id = _hit_list[| i];
+        var _enemy_id = _hit_list[| _i];
         
         if (instance_exists(_enemy_id)) 
         {

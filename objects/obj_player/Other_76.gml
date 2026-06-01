@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Recebe mensagens da animação
 
 // event_data é um mapa (ds_map) automático do GameMaker que contém a mensagem

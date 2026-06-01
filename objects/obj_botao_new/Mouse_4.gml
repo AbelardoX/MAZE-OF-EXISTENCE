@@ -1,3 +1,4 @@
+// feather disable GM2017
 // Dá um efeito de "afundar" visualmente no clique
 current_scale = 0.9;
 target_scale = 1.1;

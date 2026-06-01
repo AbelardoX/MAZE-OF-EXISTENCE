@@ -1,8 +1,9 @@
+// feather disable GM2017
 // Detectar distância do jogador
-var dist = point_distance(x, y, obj_player.x, obj_player.y);
+var _dist = point_distance(x, y, obj_player.x, obj_player.y);
 
 // Se o jogador estiver próximo e apertar F
-if ((dist < distancia_interacao and keyboard_check_pressed(ord("F")) or abrir_venda)) {
+if ((_dist < distancia_interacao and keyboard_check_pressed(ord("F")) or abrir_venda)) {
     venda_aberta = !venda_aberta; // abre/fecha a loja
 	abrir_venda = false;
 }

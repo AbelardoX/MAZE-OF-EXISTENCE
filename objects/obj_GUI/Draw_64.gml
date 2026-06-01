@@ -1,3 +1,4 @@
+// feather disable GM2017
 relogio();
 // ============================================================
 // PARTE 1: TELA DE LEVEL UP (Misto: Armas e Itens)
@@ -52,10 +53,10 @@ if (global.level_up == true)
     // ========================================================
     // --- 3. LOOP DE DESENHO E INTERAÇÃO DAS CARTAS ---
     // ========================================================
-    for (var i = 0; i < _options_count; i++) 
+    for (var _i = 0; _i < _options_count; _i++) 
     {
         // Pega o Struct de dados sorteado
-        var _card_data = global.upgrades_vamp_list[| i];
+        var _card_data = global.upgrades_vamp_list[| _i];
         
         // --- PROTEÇÃO CONTRA CRASH ---
         if (!is_struct(_card_data)) 
@@ -73,8 +74,8 @@ if (global.level_up == true)
         var _type          = _card_data.type;        
         var _row_index     = _card_data.id_grid;   
 
-        // Posicionamento X da carta i
-        var _card_x = _start_x + (_sprite_w + _padding_x) * i;
+        // Posicionamento X da carta _i
+        var _card_x = _start_x + (_sprite_w + _padding_x) * _i;
         
         // Configurações de Animação Hover (Valores Padrão)
         var _current_scale = 1;
@@ -105,9 +106,9 @@ if (global.level_up == true)
             {
                 // 1. APLICAÇÃO DO LEVEL UP NA ARMA/ITEM
                 if (_type == 0) { // ARMA
-                    global.upgrades_vamp_grid[# Upgrades_vamp.level, _row_index] += 1;
+                    global.upgrades_vamp_grid[# UPGRADES_VAMP.LEVEL, _row_index] += 1;
                 } else { // ITEM
-                    global.itens_vamp_grid[# Itens_vamp.level, _row_index] += 1;
+                    global.itens_vamp_grid[# ITENS_VAMP.LEVEL, _row_index] += 1;
                 }
 
                 // 2. GERENCIA A FILA DE LEVEL UPS PENDENTES

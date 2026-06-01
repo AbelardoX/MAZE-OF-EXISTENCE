@@ -1,3 +1,4 @@
+// feather disable GM2017
 // No script scr_gerenciador_audio:
 function tocar_som_passo() {
     if (!audio_is_playing(snd_walk)) {

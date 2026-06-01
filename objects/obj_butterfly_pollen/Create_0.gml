@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @description Inicializa Explosão de Pólen
 damage = 0; // Definido pela borboleta
 radius = 0; // Definido pela borboleta

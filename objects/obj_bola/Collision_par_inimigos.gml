@@ -1,3 +1,4 @@
+// feather disable GM2017
 // 1. Dá o dano e Knockback
 other.vida -= damage;
 

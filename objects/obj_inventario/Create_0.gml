@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Inicialização Completa do Sistema de Inventário e Crafting
 
 // ========================================================
@@ -61,28 +62,10 @@ cooldown_timer = 0;  // Timer para evitar cliques duplos acidentais
 
 
 // ========================================================
-// 3. ESTRUTURAS DE DADOS (ENUMS)
-// ========================================================
-enum Infos {
-    item, quantidade, sprite, nome, descricao, sala_x, sala_y, pos_x, pos_y,
-    dano, armadura, velocidade, cura, tipo, image_ind, preco, Height
-}
-
-// Enums de IDs de Itens
-enum itens_ativos { batata, maca, banana, uva, vitamina, leite, Length }
-enum itens_passivos { Vela, cobertor, bota, Length }
-enum itens_armas { graveto, vassoura, espada_madeira, espada_plastico, espada_ouro, espada_mata_fantasma, Length }
-enum itens_pe { tenis_velho, sapato_velho, patins, skate, tenis_novo, sapato_novo, meia_vermelha, meia_amarela, Length }
-
-// Enum de Materiais de Craft
-enum itens_craft { madeira, pedra, erva_vermelha, frasco_vazio, barra_ferro, barra_ouro, couro, Length }
-
-
-// ========================================================
 // 4. CRIAÇÃO DA MOCHILA FÍSICA (DS GRID)
 // ========================================================
 var _grid_height = total_slots + equip_slots_count;
-global.grid_itens = ds_grid_create(Infos.Height, _grid_height);
+global.grid_itens = ds_grid_create(INFOS.HEIGHT, _grid_height);
 
 // Limpa todos os slots (Coloca -1 que significa "Vazio")
 ds_grid_clear(global.grid_itens, -1);
@@ -127,6 +110,8 @@ craft_item_icon_size = 32;
 // Tamanho dos ícones pequenininhos de ingrediente (a madeira)
 craft_ing_icon_size = 16; 
 
+craft_scroll = 0; // NOVA: Controle de scroll para lista de craft
+
 // Posição e tamanho do botão "CRAFT"
 craft_btn_w = 80;
 craft_btn_h = 30;
@@ -146,7 +131,7 @@ if (script_exists(asset_get_index("criar_lista_itens_padronizados"))) {
 global.receitas_craft = [];
 
 // Criamos uma mini-função mágica que procura o NOME do item e preenche o Sprite e Index sozinha!
-var add_receita = function(_enum_resultado, _nome_item_db, _ingredientes) {
+var _add_receita = function(_enum_resultado, _nome_item_db, _ingredientes) {
     var _dados = buscar_dados_por_nome(_nome_item_db);
     
     if (_dados != undefined) {
@@ -165,51 +150,51 @@ var add_receita = function(_enum_resultado, _nome_item_db, _ingredientes) {
 // --- LISTA DE RECEITAS ---
 
 // 1. Arma Básica
-add_receita(itens_armas.espada_madeira, "Espada de Madeira", [
-    { item: itens_craft.madeira, qtd: 2 }, 
-    { item: itens_craft.pedra, qtd: 1 }   
+_add_receita(ITENS_ARMAS.ESPADA_MADEIRA, "Espada de Madeira", [
+    { item: ITENS_CRAFT.MADEIRA, qtd: 2 }, 
+    { item: ITENS_CRAFT.PEDRA, qtd: 1 }   
 ]);
 
 // 2. Arma de Sobrevivência
-add_receita(itens_armas.graveto, "Graveto", [
-    { item: itens_craft.madeira, qtd: 1 }
+_add_receita(ITENS_ARMAS.GRAVETO, "Graveto", [
+    { item: ITENS_CRAFT.MADEIRA, qtd: 1 }
 ]);
 
 // 3. Poção / Consumível
-add_receita(itens_ativos.vitamina, "Vitamina", [
-    { item: itens_craft.erva_vermelha, qtd: 3 },
-    { item: itens_craft.frasco_vazio, qtd: 1 }
+_add_receita(ITENS_ATIVOS.VITAMINA, "Vitamina", [
+    { item: ITENS_CRAFT.ERVA_VERMELHA, qtd: 3 },
+    { item: ITENS_CRAFT.FRASCO_VAZIO, qtd: 1 }
 ]);
 
 // 4. Arma Intermediária
-add_receita(itens_armas.vassoura, "Vassoura", [
-    { item: itens_craft.madeira, qtd: 3 },
-    { item: itens_craft.erva_vermelha, qtd: 2 } 
+_add_receita(ITENS_ARMAS.VASSOURA, "Vassoura", [
+    { item: ITENS_CRAFT.MADEIRA, qtd: 3 },
+    { item: ITENS_CRAFT.ERVA_VERMELHA, qtd: 2 } 
 ]);
 
 // 5. Equipamento de Defesa
-add_receita(itens_passivos.cobertor, "Cobertor", [
-    { item: itens_craft.couro, qtd: 4 }
+_add_receita(ITENS_PASSIVOS.COBERTOR, "Cobertor", [
+    { item: ITENS_CRAFT.COURO, qtd: 4 }
 ]);
 
 // 6. Equipamento de Velocidade
-add_receita(itens_pe.tenis_novo, "Tênis de Corrida", [
-    { item: itens_craft.couro, qtd: 2 },
-    { item: itens_craft.barra_ferro, qtd: 1 } 
+_add_receita(ITENS_PE.TENIS_NOVO, "Tênis de Corrida", [
+    { item: ITENS_CRAFT.COURO, qtd: 2 },
+    { item: ITENS_CRAFT.BARRA_FERRO, qtd: 1 } 
 ]);
 
 // 7. Arma Avançada 
-add_receita(itens_armas.espada_ouro, "Espada Dourada", [
-    { item: itens_craft.barra_ouro, qtd: 3 },
-    { item: itens_craft.madeira, qtd: 1 },
-    { item: itens_craft.couro, qtd: 1 } 
+_add_receita(ITENS_ARMAS.ESPADA_OURO, "Espada Dourada", [
+    { item: ITENS_CRAFT.BARRA_OURO, qtd: 3 },
+    { item: ITENS_CRAFT.MADEIRA, qtd: 1 },
+    { item: ITENS_CRAFT.COURO, qtd: 1 } 
 ]);
 
 // 8. Arma Lendária Especial
-add_receita(itens_armas.espada_mata_fantasma, "Mata-Fantasma", [
-    { item: itens_craft.barra_ferro, qtd: 3 },
-    { item: itens_craft.barra_ouro, qtd: 1 },
-    { item: itens_craft.frasco_vazio, qtd: 1 } 
+_add_receita(ITENS_ARMAS.ESPADA_MATA_FANTASMA, "Mata-Fantasma", [
+    { item: ITENS_CRAFT.BARRA_FERRO, qtd: 3 },
+    { item: ITENS_CRAFT.BARRA_OURO, qtd: 1 },
+    { item: ITENS_CRAFT.FRASCO_VAZIO, qtd: 1 } 
 ]);
 
 // 7.3 Calcula pela primeira vez se o jogador pode craftar algo
@@ -222,12 +207,12 @@ if (script_exists(asset_get_index("atualizar_crafts_disponiveis"))) {
 // DAR ITENS INICIAIS PARA TESTAR O CRAFT
 // ==========================================
 // Chama a função nova passando Nome, Quantidade e o Enum
-dar_item_ao_jogador("Madeira", 5, itens_craft.madeira);
-dar_item_ao_jogador("Pedra", 5, itens_craft.pedra);
-dar_item_ao_jogador("Erva Vermelha", 5, itens_craft.erva_vermelha);
-dar_item_ao_jogador("Frasco Vazio", 5, itens_craft.frasco_vazio);
-dar_item_ao_jogador("Couro", 5, itens_craft.couro);
-dar_item_ao_jogador("Barra de Ferro", 5, itens_craft.barra_ferro);
+dar_item_ao_jogador("Madeira", 5, ITENS_CRAFT.MADEIRA);
+dar_item_ao_jogador("Pedra", 5, ITENS_CRAFT.PEDRA);
+dar_item_ao_jogador("Erva Vermelha", 5, ITENS_CRAFT.ERVA_VERMELHA);
+dar_item_ao_jogador("Frasco Vazio", 5, ITENS_CRAFT.FRASCO_VAZIO);
+dar_item_ao_jogador("Couro", 5, ITENS_CRAFT.COURO);
+dar_item_ao_jogador("Barra de Ferro", 5, ITENS_CRAFT.BARRA_FERRO);
 
 // Atualiza a lista pra UI saber que ganhamos itens
 atualizar_crafts_disponiveis();

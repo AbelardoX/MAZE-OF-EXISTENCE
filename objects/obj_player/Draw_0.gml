@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Renderização do Jogador e Interface
 /// [O QUE]: Desenha a sombra, o sprite do jogador, a arma atual e o botão de interação.
 /// [COMO] :

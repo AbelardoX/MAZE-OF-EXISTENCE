@@ -1,3 +1,4 @@
+// feather disable GM2017
 switch (dig) {
     case 0: nome = "BV0"; break;
     case 1: nome = "BV1"; break;

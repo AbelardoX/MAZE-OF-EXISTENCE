@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 // EVENTO CLEANUP (QUANDO O OBJETO É DESTRUÍDO):
 

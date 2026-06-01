@@ -1,3 +1,4 @@
+// feather disable GM2017
 yy -= 0.25;
 alpha -= 0.01;
 

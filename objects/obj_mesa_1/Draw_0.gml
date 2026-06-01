@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 if(aberto){
 	image_index = 1;

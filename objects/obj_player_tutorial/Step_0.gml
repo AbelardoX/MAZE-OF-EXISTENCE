@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 script_execute(state);
 depth = -y;
@@ -30,12 +31,12 @@ if (mouse_wheel_down() && dir_alfa <= 0){
 }
 
 // Verifica se `armamento` excede os limites
-if (global.armamento >= Armamentos.Altura){
+if (global.armamento >= ARMAMENTOS.ALTURA){
 
     global.armamento = 0;  // Reseta para o primeiro armamento se exceder o total
 } else if (global.armamento < 0){
 	
-    global.armamento = Armamentos.Altura - 1;  // Volta para o último armamento se for menor que 0
+    global.armamento = ARMAMENTOS.ALTURA - 1;  // Volta para o último armamento se for menor que 0
 }
 
 

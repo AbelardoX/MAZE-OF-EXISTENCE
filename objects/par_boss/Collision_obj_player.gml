@@ -1,3 +1,4 @@
+// feather disable GM2017
 // ========================================================
 // COLISÃO DO INIMIGO COM O PLAYER
 // (Coloque no evento de colisão do inimigo (ex: obj_amoeba) com obj_player)
@@ -32,11 +33,13 @@ if (other.tomar_dano) {
         // Ativa o estado de hit e o alarme para sair dele
         // Certifique-se que a macro ALARM_KNOCKBACK existe (ex: é o alarm[2])
         hit = true; 
+        // feather disable once GM2025
         alarm[ALARM_KNOCKBACK] = 10; 
 
         // Ativa a invencibilidade temporária (i-frames)
         // Certifique-se que a macro ALARM_INVENCIBILIDADE existe (ex: é o alarm[3])
         tomar_dano = false; 
+        // feather disable once GM2025
         alarm[ALARM_INVENCIBILIDADE] = 100; 
         
         // Efeito visual: fica vermelho

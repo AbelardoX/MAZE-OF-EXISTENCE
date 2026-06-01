@@ -1,6 +1,6 @@
+// feather disable GM2016
+// feather disable GM2017
 
-sprite_normal = spr_amoeba_vermelha;
-sprite_parado = spr_amoeba_vermelha_parada;
 event_inherited();
 
 if(vida <=0){

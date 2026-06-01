@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Inicialização do Controlador de Tutorial
 tutorial_step = 0;
 last_step = -1;

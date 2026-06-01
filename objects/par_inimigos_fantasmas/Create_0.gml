@@ -1,3 +1,4 @@
+// feather disable GM2017
 randomize();
 
 escala = 3;
@@ -14,7 +15,7 @@ dest_x = 0;
 dest_y = 0;
 
 alarm[0] = 1;
-sombra = -1;
+sombra_sprite = -1;
 
 veloc_perse = 1;
 vida = 10;

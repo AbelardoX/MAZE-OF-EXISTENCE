@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @description Script unificado com todos os estados do Player
 // Certifique-se que as macros (ALARM_ESTAMINA, etc.) estão definidas em um script de inicialização.
 
@@ -62,12 +63,12 @@ function scr_personagem_andando() {
         var _dir_mouse = point_direction(x, y, mouse_x, mouse_y);
         dir = round(_dir_mouse / 90) % 4;
 
-        if (global.armamento == Armamentos.espada) {
+        if (global.armamento == ARMAMENTOS.ESPADA) {
             image_index = 0;
             atacando = false;
             state = scr_ataque_player;
         } 
-        else if (global.armamento == Armamentos.arco) {
+        else if (global.armamento == ARMAMENTOS.ARCO) {
             image_index = 0;
             state = scr_personagem_arco;
         }
@@ -263,7 +264,11 @@ function scr_personagem_hit() {
 // ------------------------------------------------------------------------------
 function scr_player_colisao() {
     // Verifica se a parede existe na sala
-    var _parede = (variable_global_exists("sala") && variable_struct_exists(global.sala, "parede")) ? global.sala.parede : obj_wall;
+    var _parede = obj_wall;
+    if (variable_global_exists("sala") && variable_struct_exists(global.sala, "parede")) {
+        _parede = global.sala.parede;
+    }
+    
     aplicar_movimento_com_colisao(hveloc, vveloc, _parede);
 }
 

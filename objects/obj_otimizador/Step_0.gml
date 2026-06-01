@@ -1,3 +1,4 @@
+// feather disable GM2017
 // 1. Manda o alarme rodar de novo (Otimizado para rodar a cada 20 frames)
 alarm[0] = 20;
 
@@ -22,15 +23,15 @@ var _start_by = floor(_spawn_rect[1] / global.tamanho_bloco);
 var _end_by = floor(_spawn_rect[3] / global.tamanho_bloco);
 
 // 4. SPAWN: Itera pelos blocos visíveis e cria o que for necessário
-for (var bx = _start_bx; bx <= _end_bx; bx++) {
-    for (var by = _start_by; by <= _end_by; by++) {
-        var _key = string(bx) + "," + string(by);
+for (var _bx = _start_bx; _bx <= _end_bx; _bx++) {
+    for (var _by = _start_by; _by <= _end_by; _by++) {
+        var _key = string(_bx) + "," + string(_by);
         var _entidades = global.grid_entidades_mundo[? _key];
         
         if (!is_undefined(_entidades)) {
             var _size = ds_list_size(_entidades);
-            for (var i = 0; i < _size; i++) {
-                var _ent = _entidades[| i];
+            for (var _i = 0; _i < _size; _i++) {
+                var _ent = _entidades[| _i];
                 var _tipo = _ent[0];
                 var _dados = _ent[1];
                 var _px = _dados[0];
@@ -47,18 +48,21 @@ for (var bx = _start_bx; bx <= _end_bx; bx++) {
                         var _inst = noone;
                         switch (_tipo) {
                             case "estrutura":
-                                _inst = instance_create_depth(_px, _py, 0, _dados[3], { seed: _seed });
+                                // feather disable once GM2064
+                                _inst = instance_create_depth(_px, _py, 0, _dados[3], {});
+        // feather ignore GM2064
+								_inst.seed = _seed;
                                 _inst.nome = _dados[5];
                                 _inst.escala_mini = _dados[6];
                                 break;
                             case "arvore":
-                                _inst = instance_create_depth(_px, _py, 0, obj_arvore, { seed: _seed });
+                                _inst = instance_create_depth(_px, _py, 0, obj_arvore, {});
                                 break;
                             case "pedra":
-                                _inst = instance_create_depth(_px, _py, 0, obj_rock, { seed: _seed });
+                                _inst = instance_create_depth(_px, _py, 0, obj_rock, {});
                                 break;
                             case "fauna":
-                                _inst = instance_create_depth(_px, _py, 0, obj_bicho_ambiente, { seed: _seed });
+                                _inst = instance_create_depth(_px, _py, 0, obj_bicho_ambiente, {});
                                 _inst.sprite_index = _dados[3];
                                 _inst.vel_maxima = _dados[4];
                                 break;
@@ -100,6 +104,6 @@ while (!is_undefined(_key_inst)) {
 }
 
 // Limpa o mapa de ativas
-for (var i = 0; i < array_length(_to_remove); i++) {
-    ds_map_delete(global.instancias_ativas, _to_remove[i]);
+for (var _i = 0; _i < array_length(_to_remove); _i++) {
+    ds_map_delete(global.instancias_ativas, _to_remove[_i]);
 }

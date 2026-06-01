@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 _ind = 0;
 // Coloca o chão na camada mais profunda possível do universo do GameMaker!

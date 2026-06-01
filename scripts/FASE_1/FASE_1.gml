@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 global._cell_size = 64;
 global.total_rooms = 10; // Ajuste conforme necessário

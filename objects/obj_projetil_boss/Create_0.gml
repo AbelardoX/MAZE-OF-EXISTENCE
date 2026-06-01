@@ -1,5 +1,6 @@
+// feather disable GM2017
 damage = -1;
-target = -1;
+target = noone;
 seguidor = false;
 max_speed = -1;
 

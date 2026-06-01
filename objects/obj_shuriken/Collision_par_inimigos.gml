@@ -1,3 +1,4 @@
+// feather disable GM2017
 if (ds_list_find_index(hit_list, other.id) == -1) 
 {
     // Dano

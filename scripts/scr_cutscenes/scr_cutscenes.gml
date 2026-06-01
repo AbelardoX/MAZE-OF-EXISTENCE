@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Sistema Completo de Cutscenes (Core + Builder)
 
 // ============================================================

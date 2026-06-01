@@ -1,3 +1,4 @@
+// feather disable GM2017
 // ==============================================================================
 // REGIÃO 1: CONFIGURAÇÃO (DADOS E VETOR DE NÍVEIS)
 // ==============================================================================
@@ -77,7 +78,7 @@ function scr_raio(_row_index)
     if (global.level_up) exit; 
 
     // OBTÉM O NÍVEL ATUAL CORRETAMENTE BASEADO NA LINHA RECEBIDA
-    var _current_level = global.upgrades_vamp_grid[# Upgrades_vamp.level, _row_index];
+    var _current_level = global.upgrades_vamp_grid[# UPGRADES_VAMP.LEVEL, _row_index];
     
     // Se nível 0, não faz nada (segurança)
     if (_current_level <= 0) exit;
@@ -88,7 +89,7 @@ function scr_raio(_row_index)
     var _config = scr_lightning_config(); 
     
     // Chama a calculadora genérica universal
-    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, Upgrades_vamp.description);
+    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, UPGRADES_VAMP.DESCRIPTION);
 
     // ========================================================
     // --- 2. LÓGICA DO TIMER ---
@@ -114,8 +115,8 @@ function scr_raio(_row_index)
         var _cam_w = camera_get_view_width(view_camera[0]);
         var _cam_h = camera_get_view_height(view_camera[0]);
 
-        // Coleta inimigos (SUBSTÍTUA 'par_inimigos' PELO SEU OBJETO PAI)
-        with (par_inimigos) 
+        // Coleta inimigos (SUBSTÍTUA 'obj_par_inimigos' PELO SEU OBJETO PAI)
+        with (obj_par_inimigos) 
         {
             // Adiciona uma margem de 50 pixels fora da tela
             if (x > _cam_x - 50 && x < _cam_x + _cam_w + 50 && 
@@ -134,11 +135,11 @@ function scr_raio(_row_index)
             ds_list_shuffle(_targets_list);
 
             // Loop pela Quantidade de Raios calculada universalmente
-            for (var i = 0; i < _stats.quantity; i++)
+            for (var _i = 0; _i < _stats.quantity; _i++)
             {
                 // O operador '%' (módulo) garante que se tivermos mais raios que inimigos,
                 // a lista recomeça do zero (hit kill/múltiplos hits no mesmo inimigo)
-                var _target_enemy = _targets_list[| i % _total_targets];
+                var _target_enemy = _targets_list[| _i % _total_targets];
 
                 if (instance_exists(_target_enemy)) 
                 {

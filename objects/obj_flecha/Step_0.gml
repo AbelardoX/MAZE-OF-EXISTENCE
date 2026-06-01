@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 
 var _inst = instance_create_layer(x,y,"instances", obj_flecha_efeito);

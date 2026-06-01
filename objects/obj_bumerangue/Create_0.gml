@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Inicialização do Bumerangue
 /// [O QUE]: Define valores padrão e cria a lista de colisão.
 /// [COMO] :

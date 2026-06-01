@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Funções de IA genérica para inimigos
 
 function scr_inimigo_check_player(){

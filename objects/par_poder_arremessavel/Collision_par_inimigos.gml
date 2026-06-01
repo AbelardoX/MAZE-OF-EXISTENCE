@@ -1,3 +1,4 @@
+// feather disable GM2017
 var _damage = damage;
 other.vida -= _damage;
 

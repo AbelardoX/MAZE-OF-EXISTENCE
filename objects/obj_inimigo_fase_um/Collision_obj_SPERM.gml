@@ -1,16 +1,1 @@
-/// @description Insert description here
-// You can write your code in this editor
-
-//global.vida_sperm--;
-
-
-
-
-
-
-
-
-
-
-
-
+// feather disable GM2017

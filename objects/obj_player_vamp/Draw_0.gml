@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 draw_sprite_ext(spr_sombra,0,x,y+20,0.8,0.8,0,c_white,1);
 draw_self();

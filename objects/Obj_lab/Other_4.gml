@@ -1,10 +1,11 @@
+// feather disable GM2017
 // Inicializar variáveis
 randomize();
 window_set_fullscreen(true);
 
 // Obtém o índice da room atual
-var current_room = room;
-var room_name = room_get_name(room);
+var _current_room = room;
+var _room_name = room_get_name(room);
 
 if(global.dificuldade >= 7){
 global.dificuldade = 1;	
@@ -73,15 +74,15 @@ instance_create_layer(start_x * _cell_size + 32, start_y * _cell_size + 32, "Lay
 
 
 // Inicializar o labirinto com paredes
-for (var i = 0; i <= maze_width + 1; i++) {
-    for (var z = 0; z <= maze_height + 1; z++) {
-        ds_grid_set(global.maze, i, z, 0); // Inicializa como paredes
+for (var _i = 0; _i <= maze_width + 1; _i++) {
+    for (var _z = 0; _z <= maze_height + 1; _z++) {
+        ds_grid_set(global.maze, _i, _z, 0); // Inicializa como paredes
     }
 }
 
 // Função para verificar se as coordenadas estão dentro dos limites
-function is_within_bounds(nx, ny) {
-    return nx >= 0 && nx < maze_width && ny >= 0 && ny < maze_height;
+function is_within_bounds(_nx, _ny) {
+    return _nx >= 0 && _nx < maze_width && _ny >= 0 && _ny < maze_height;
 }
 
 
@@ -93,53 +94,53 @@ function prim_algorithm() {
     ds_stack_push(paths, start_y);
     ds_list_add(path_points, [start_x, start_y]);
 
-    var directions = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+    var _directions = [[1, 0], [0, 1], [-1, 0], [0, -1]];
 
-    for (var i = 0; i < 4; i++) {
-        var dx = directions[i][0];
-        var dy = directions[i][1];
-        var nx = start_x + dx;
-        var ny = start_y + dy;
-        if (is_within_bounds(nx, ny)) {
-            if (ds_grid_get(global.maze, nx, ny) == 0) {
-                ds_list_add(frontier, [nx, ny, start_x, start_y]);
+    for (var _i = 0; _i < 4; _i++) {
+        var _dx = _directions[_i][0];
+        var _dy = _directions[_i][1];
+        var _nx = start_x + _dx;
+        var _ny = start_y + _dy;
+        if (is_within_bounds(_nx, _ny)) {
+            if (ds_grid_get(global.maze, _nx, _ny) == 0) {
+                ds_list_add(frontier, [_nx, _ny, start_x, start_y]);
             }
         }
     }
 
     while (ds_list_size(frontier) > 0) {
-        var wall_index = irandom(ds_list_size(frontier) - 1);
-        var wall = ds_list_find_value(frontier, wall_index);
-        ds_list_delete(frontier, wall_index);
+        var _wall_index = irandom(ds_list_size(frontier) - 1);
+        var _wall = ds_list_find_value(frontier, _wall_index);
+        ds_list_delete(frontier, _wall_index);
 
-        var wx = wall[0];
-        var wy = wall[1];
-        var px = wall[2];
-        var py = wall[3];
+        var _wx = _wall[0];
+        var _wy = _wall[1];
+        var _px = _wall[2];
+        var _py = _wall[3];
 
-        var opposite_x = wx + (wx - px);
-        var opposite_y = wy + (wy - py);
+        var _opposite_x = _wx + (_wx - _px);
+        var _opposite_y = _wy + (_wy - _py);
 
-        if (is_within_bounds(opposite_x, opposite_y)) {
-            if (ds_grid_get(global.maze, opposite_x, opposite_y) == 0) {
-                ds_grid_set(global.maze, wx, wy, 1);
-                ds_grid_set(global.maze, opposite_x, opposite_y, 1);
+        if (is_within_bounds(_opposite_x, _opposite_y)) {
+            if (ds_grid_get(global.maze, _opposite_x, _opposite_y) == 0) {
+                ds_grid_set(global.maze, _wx, _wy, 1);
+                ds_grid_set(global.maze, _opposite_x, _opposite_y, 1);
 
-                for (var j = 0; j < 4; j++) {
-                    var dx = directions[j][0];
-                    var dy = directions[j][1];
-                    var nx = opposite_x + dx;
-                    var ny = opposite_y + dy;
-                    if (is_within_bounds(nx, ny)) {
-                        if (ds_grid_get(global.maze, nx, ny) == 0) {
-                            ds_list_add(frontier, [nx, ny, opposite_x, opposite_y]);
+                for (var _j = 0; _j < 4; _j++) {
+                    var _dx = _directions[_j][0];
+                    var _dy = _directions[_j][1];
+                    var _nx = _opposite_x + _dx;
+                    var _ny = _opposite_y + _dy;
+                    if (is_within_bounds(_nx, _ny)) {
+                        if (ds_grid_get(global.maze, _nx, _ny) == 0) {
+                            ds_list_add(frontier, [_nx, _ny, _opposite_x, _opposite_y]);
                         }
                     }
                 }
 
-                ds_stack_push(paths, opposite_x);
-                ds_stack_push(paths, opposite_y);
-                ds_list_add(path_points, [opposite_x, opposite_y]);
+                ds_stack_push(paths, _opposite_x);
+                ds_stack_push(paths, _opposite_y);
+                ds_list_add(path_points, [_opposite_x, _opposite_y]);
             }
         }
     }
@@ -147,61 +148,61 @@ function prim_algorithm() {
 
 // Adicionar Conexões Aleatórias
 
-function verifica_novo_caminho_mais_rapido(start_x, start_y, end_x, end_y, caminho_atual) {
+function verifica_novo_caminho_mais_rapido(_start_x, _start_y, _end_x, _end_y, _caminho_atual) {
     // Função para encontrar o caminho mais curto usando uma busca em largura (similar ao acha_caminho)
-    var novo_caminho = acha_caminho(start_x, start_y, end_x, end_y);
+    var _novo_caminho = acha_caminho(_start_x, _start_y, _end_x, _end_y);
 
     // Verificar se o novo caminho foi encontrado
-    if (novo_caminho != undefined) {
-        var comprimento_novo_caminho = array_length_1d(novo_caminho);
-        var comprimento_caminho_atual = array_length_1d(caminho_atual);
+    if (_novo_caminho != undefined) {
+        var _comprimento_novo_caminho = array_length(_novo_caminho);
+        var _comprimento_caminho_atual = array_length(_caminho_atual);
 
         // Comparar os comprimentos dos caminhos
-        if (comprimento_novo_caminho < comprimento_caminho_atual) {
+        if (_comprimento_novo_caminho < _comprimento_caminho_atual) {
             show_debug_message("Novo caminho mais curto encontrado!");
-            return novo_caminho;
+            return _novo_caminho;
         } else {
             show_debug_message("Nenhum caminho mais curto encontrado. Mantendo o caminho atual.");
-            return caminho_atual;
+            return _caminho_atual;
         }
     } else {
         show_debug_message("Nenhum novo caminho encontrado.");
-        return caminho_atual; // Retorna o caminho atual se nenhum novo caminho foi encontrado
+        return _caminho_atual; // Retorna o caminho atual se nenhum novo caminho foi encontrado
     }
 }
 
 // Função para desenhar o labirinto
 function draw_maze_obj_lab() {
-    for (var i = 0; i <= maze_width + 1; i++) {
-        for (var z = 0; z <= maze_height + 1; z++) {
-            if (ds_grid_get(global.maze, i, z) == 0) {
-                var has_top = (z > 0 && ds_grid_get(global.maze, i, z - 1) == 0);
-                var has_bottom = (z < maze_height && ds_grid_get(global.maze, i, z + 1) == 0);
+    for (var _i = 0; _i <= maze_width + 1; _i++) {
+        for (var _z = 0; _z <= maze_height + 1; _z++) {
+            if (ds_grid_get(global.maze, _i, _z) == 0) {
+                var _has_top = (_z > 0 && ds_grid_get(global.maze, _i, _z - 1) == 0);
+                var _has_bottom = (_z < maze_height && ds_grid_get(global.maze, _i, _z + 1) == 0);
 
-                var scale_x = _cell_size / sprite_get_width(spr_parede);
-                var scale_y = _cell_size / sprite_get_height(spr_parede);
+                var _scale_x = _cell_size / sprite_get_width(spr_parede);
+                var _scale_y = _cell_size / sprite_get_height(spr_parede);
 
-                if (has_bottom) {
-                    draw_sprite_ext(spr_parede_cima, 0, i * _cell_size, z * _cell_size, scale_x, scale_y, 0, c_white, 1);
-                } else if (has_top && has_bottom) {
-                    draw_sprite_ext(spr_parede_cima, 0, i * _cell_size, z * _cell_size, scale_x, scale_y, 0, c_white, 1);
+                if (_has_bottom) {
+                    draw_sprite_ext(spr_parede_cima, 0, _i * _cell_size, _z * _cell_size, _scale_x, _scale_y, 0, c_white, 1);
+                } else if (_has_top && _has_bottom) {
+                    draw_sprite_ext(spr_parede_cima, 0, _i * _cell_size, _z * _cell_size, _scale_x, _scale_y, 0, c_white, 1);
                 } else {
-                    draw_sprite_ext(spr_parede, 0, i * _cell_size, z * _cell_size, scale_x, scale_y, 0, c_white, 1);
+                    draw_sprite_ext(spr_parede, 0, _i * _cell_size, _z * _cell_size, _scale_x, _scale_y, 0, c_white, 1);
                 }
             } else {
-                var scale_x = _cell_size / sprite_get_width(spr_chao);
-                var scale_y = _cell_size / sprite_get_height(spr_chao);
-                draw_sprite_ext(spr_chao, 0, i * _cell_size, z * _cell_size, scale_x, scale_y, 0, c_white, 1);
+                var _scale_x = _cell_size / sprite_get_width(spr_chao);
+                var _scale_y = _cell_size / sprite_get_height(spr_chao);
+                draw_sprite_ext(spr_chao, 0, _i * _cell_size, _z * _cell_size, _scale_x, _scale_y, 0, c_white, 1);
             }
         }
     }
-    var scale_x = _cell_size / sprite_get_width(spr_start);
-    var scale_y = _cell_size / sprite_get_height(spr_start);
-    draw_sprite_ext(spr_start, 0, start_x * _cell_size, start_y * _cell_size, scale_x, scale_y, 0, c_white, 1);
+    var _scale_x = _cell_size / sprite_get_width(spr_start);
+    var _scale_y = _cell_size / sprite_get_height(spr_start);
+    draw_sprite_ext(spr_start, 0, start_x * _cell_size, start_y * _cell_size, _scale_x, _scale_y, 0, c_white, 1);
 
-    scale_x = _cell_size / sprite_get_width(spr_end);
-    scale_y = _cell_size / sprite_get_height(spr_end);
-    draw_sprite_ext(spr_end, 0, end_x * _cell_size -64 , end_y * _cell_size -64  , scale_x, scale_y, 0, c_white, 1);
+    _scale_x = _cell_size / sprite_get_width(spr_end);
+    _scale_y = _cell_size / sprite_get_height(spr_end);
+    draw_sprite_ext(spr_end, 0, end_x * _cell_size -64 , end_y * _cell_size -64  , _scale_x, _scale_y, 0, c_white, 1);
 }
 
 // Função para criar bombas em locais aleatórios de chão
@@ -209,24 +210,24 @@ function draw_maze_obj_lab() {
 
 // Função para criar instâncias de parede
 function create_wall_instances() {
-    for (var i = 0; i <= maze_width + 1; i++) {
-        for (var z = 0; z <= maze_height + 1; z++) {
-            if (ds_grid_get(global.maze, i, z) == 0) {
-                var has_top = (z > 0 && ds_grid_get(global.maze, i, z - 1) == 0);
-                var has_bottom = (z < maze_height && ds_grid_get(global.maze, i, z + 1) == 0);
+    for (var _i = 0; _i <= maze_width + 1; _i++) {
+        for (var _z = 0; _z <= maze_height + 1; _z++) {
+            if (ds_grid_get(global.maze, _i, _z) == 0) {
+                var _has_top = (_z > 0 && ds_grid_get(global.maze, _i, _z - 1) == 0);
+                var _has_bottom = (_z < maze_height && ds_grid_get(global.maze, _i, _z + 1) == 0);
 
                
-				 if (has_bottom) {
-                    var wall_instance = instance_create_layer(i * _cell_size, z * _cell_size, "instances", obj_wall);
-                    wall_instance.sprite_index = spr_parede_cima;
-                } else if (has_top && has_bottom) {
-                   var wall_instance = instance_create_layer(i * _cell_size, z * _cell_size, "instances", obj_wall);
-                    wall_instance.sprite_index = spr_parede_cima;
+				 if (_has_bottom) {
+                    var _wall_instance = instance_create_layer(_i * _cell_size, _z * _cell_size, "instances", obj_wall);
+                    _wall_instance.sprite_index = spr_parede_cima;
+                } else if (_has_top && _has_bottom) {
+                   var _wall_instance = instance_create_layer(_i * _cell_size, _z * _cell_size, "instances", obj_wall);
+                    _wall_instance.sprite_index = spr_parede_cima;
                 }else {
-                    instance_create_layer(i * _cell_size, z * _cell_size, "instances", obj_wall);
+                    instance_create_layer(_i * _cell_size, _z * _cell_size, "instances", obj_wall);
                 }
             } else {
-               instance_create_layer(i * _cell_size, z * _cell_size, "instances", obj_floor);
+               instance_create_layer(_i * _cell_size, _z * _cell_size, "instances", obj_floor);
             }
         }
     }
@@ -239,49 +240,49 @@ function create_wall_instances() {
 
 // Função para desenhar o caminho
 
-function remove_dead_ends(difficulty) {
-    var directions = [[1, 0], [0, 1], [-1, 0], [0, -1]];
-    var dead_ends = [];
+function remove_dead_ends(_difficulty) {
+    var _directions = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+    var _dead_ends = [];
 
     // Identificar todos os becos sem saída
-    for (var i = 1; i < maze_width - 1; i++) {
-        for (var j = 1; j < maze_height - 1; j++) {
-            if (ds_grid_get(global.maze, i, j) == 1) {
-                var open_sides = 0;
+    for (var _i = 1; _i < maze_width - 1; _i++) {
+        for (var _j = 1; _j < maze_height - 1; _j++) {
+            if (ds_grid_get(global.maze, _i, _j) == 1) {
+                var _open_sides = 0;
 
-                for (var d = 0; d < 4; d++) {
-                    var nx = i + directions[d][0];
-                    var ny = j + directions[d][1];
-
-                    if (is_within_bounds(nx, ny) && ds_grid_get(global.maze, nx, ny) == 1) {
-                        open_sides++;
+                for (var _d = 0; _d < 4; _d++) {
+                    var _nx = _i + _directions[_d][0];
+                    var _ny = _j + _directions[_d][1];
+                    if (is_within_bounds(_nx, _ny) && ds_grid_get(global.maze, _nx, _ny) == 1) {
+                        _open_sides++;
                     }
                 }
 
                 // Se há apenas uma abertura, é um beco sem saída
-                if (open_sides == 1) {
-                    array_push(dead_ends, [i, j]);
+                if (_open_sides == 1) {
+                    array_push(_dead_ends, [_i, _j]);
                 }
             }
         }
     }
 
     // Quebrar as paredes dos becos sem saída de acordo com a dificuldade
-    for (var k = 0; k < array_length_1d(dead_ends); k++) {
-        if (k >= difficulty) {
+    for (var _k = 0; _k < array_length(_dead_ends); _k++) {
+        if (_k >= _difficulty) {
             break;  // Limitar a quantidade de becos sem saída com base na dificuldade
         }
 
-        var dead_end = dead_ends[k];
-        var dx, dy;
+        var _dead_end = _dead_ends[_k];
+        var _dx = 0;
+        var _dy = 0;
         
         // Tentar encontrar uma parede adjacente para quebrar
-        for (var d = 0; d < 4; d++) {
-            dx = dead_end[0] + directions[d][0];
-            dy = dead_end[1] + directions[d][1];
+        for (var _d = 0; _d < 4; _d++) {
+            _dx = _dead_end[0] + _directions[_d][0];
+            _dy = _dead_end[1] + _directions[_d][1];
 
-            if (is_within_bounds(dx, dy) && ds_grid_get(global.maze, dx, dy) == 0) {
-                ds_grid_set(global.maze, dx, dy, 1);  // Quebra a parede
+            if (is_within_bounds(_dx, _dy) && ds_grid_get(global.maze, _dx, _dy) == 0) {
+                ds_grid_set(global.maze, _dx, _dy, 1);  // Quebra a parede
                 break;
             }
         }
@@ -294,7 +295,7 @@ prim_algorithm();
 
 remove_dead_ends(difficulty);
 create_wall_instances();
-for (var i = 0; i < global.dificuldade+1; i++) {
+for (var _i = 0; _i < global.dificuldade+1; _i++) {
     create_random_enemy();
 }
 if(global.dificuldade == 2){
@@ -302,6 +303,6 @@ create_random_enemy_folow();
 }
 
 // Criar bombas aleatórias
-for (var i = 0; i < 10; i++) {
+for (var _i = 0; _i < 10; _i++) {
     create_random_bomb();
 }

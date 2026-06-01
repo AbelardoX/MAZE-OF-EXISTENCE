@@ -1,1 +1,1 @@
-//other.direction = other.direction + irandom_range(150,210);
+// feather disable GM2017

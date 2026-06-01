@@ -1,10 +1,17 @@
+// feather disable GM2017
 // Variáveis iniciais (definidas pelo script de lançamento)
+start_x = x;
+start_y = y;
 target_x = 0;
 target_y = 0;
 damage = 0;
 radius = 0; // O raio real da explosão
-push = 0;
-splash_damage_multiplier = 0;
+push_force = 0;
+splash_multiplier = 0;
+
+flight_timer = 0;
+flight_duration = 1;
+timer_sugando = 0;
 
 state = "flying"; // Pode ser "flying" ou "exploding"
 

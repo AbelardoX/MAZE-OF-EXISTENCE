@@ -1,3 +1,4 @@
+// feather disable GM2017
 function ds_grid_add_row(){
 	///@arg ds_grid
  

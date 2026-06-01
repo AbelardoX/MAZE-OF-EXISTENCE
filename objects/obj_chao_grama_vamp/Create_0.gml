@@ -1,3 +1,4 @@
+// feather disable GM2017
 // Desliga a animação para não ficar piscando
 image_speed = 0;
 
@@ -13,7 +14,7 @@ if (random(100) < 50)
 {
     var _qtd_detalhes = irandom_range(1, 4); // Vai ter de 1 a 4 pedrinhas/flores
     
-    for (var i = 0; i < _qtd_detalhes; i++) 
+    for (var _i = 0; _i < _qtd_detalhes; _i++) 
     {
         // Escolhe o frame do detalhe (Frames 4 a 10)
         var _frame = choose(5, 6, 7, 8, 9, 10);

@@ -1,29 +1,30 @@
-function desenha_linha(path) {
-    var path_length = array_length_1d(path);
+// feather disable GM2017
+function desenha_linha(_path) {
+    var _path_length = array_length(_path);
 
     // Loop através do caminho
-    for (var i = 0; i < path_length - 1; i++) {
-        var start_x = path[i][0] * _cell_size + _cell_size / 2;
-        var start_y = path[i][1] * _cell_size + _cell_size / 2;
-        var end_x = path[i + 1][0] * _cell_size + _cell_size / 2;
-        var end_y = path[i + 1][1] * _cell_size + _cell_size / 2;
+    for (var _i = 0; _i < _path_length - 1; _i++) {
+        var _start_x = _path[_i][0] * _cell_size + _cell_size / 2;
+        var _start_y = _path[_i][1] * _cell_size + _cell_size / 2;
+        var _end_x = _path[_i + 1][0] * _cell_size + _cell_size / 2;
+        var _end_y = _path[_i + 1][1] * _cell_size + _cell_size / 2;
 
         // Calcular o ângulo da linha
-        var angle = point_direction(start_x, start_y, end_x, end_y);
+        var _angle = point_direction(_start_x, _start_y, _end_x, _end_y);
         
         // Criar a instância do sprite na posição do início do segmento
-        var traco_instance = instance_create_layer(start_x, start_y, "Layer_Linhas", obj_traco);
-		with (traco_instance) {
+        var _traco_instance = instance_create_layer(_start_x, _start_y, "Layer_Linhas", obj_traco);
+		with (_traco_instance) {
         // Definir o ângulo e o tamanho da instância
-		image_angle = angle;
+		image_angle = _angle;
         
         // Ajustar o comprimento do traço conforme a distância entre os pontos
-        var scale_x = point_distance(start_x, start_y, end_x, end_y) / sprite_width[spr_traco];
-		image_xscale = scale_x+0.1;
+        var _scale_x = point_distance(_start_x, _start_y, _end_x, _end_y) / sprite_width[spr_traco];
+		image_xscale = _scale_x+0.1;
 
         // Centralizar a instância
-		x = (start_x + end_x) / 2;
-        y = (start_y + end_y) / 2 ;
+		x = (_start_x + _end_x) / 2;
+        y = (_start_y + _end_y) / 2 ;
 		}
     }
 }

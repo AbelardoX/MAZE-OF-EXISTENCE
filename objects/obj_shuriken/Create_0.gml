@@ -1,3 +1,4 @@
+// feather disable GM2017
 // Inicializa as propriedades da shuriken
 angle = 0; // Ângulo inicial
 speed = 3; // Velocidade base

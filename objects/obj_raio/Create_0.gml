@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Inicialização do Raio
 /// [O QUE]: Define valores padrão e inicializa a flag de controle de dano.
 /// [COMO] : 

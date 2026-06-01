@@ -1,3 +1,4 @@
+// feather disable GM2017
 vida -= 10;
 show_debug_message(vida);
 var _quantis = choose(1, 2, 3, 4, 5, 6);

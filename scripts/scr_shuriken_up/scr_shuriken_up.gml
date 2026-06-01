@@ -1,3 +1,4 @@
+// feather disable GM2017
 // ==============================================================================
 // REGIÃO 1: CONFIGURAÇÃO (DADOS E VETOR DE NÍVEIS)
 // ==============================================================================
@@ -81,7 +82,7 @@ function scr_shuriken(_row_index)
     if (global.level_up) exit; 
 
     // OBTÉM O NÍVEL ATUAL CORRETAMENTE BASEADO NA LINHA RECEBIDA
-    var _current_level = global.upgrades_vamp_grid[# Upgrades_vamp.level, _row_index];
+    var _current_level = global.upgrades_vamp_grid[# UPGRADES_VAMP.LEVEL, _row_index];
     
     // Se nível 0, não faz nada (segurança)
     if (_current_level <= 0) exit;
@@ -101,7 +102,7 @@ function scr_shuriken(_row_index)
     
     // Chama a calculadora genérica universal (Passando referências corretas da grid e colunas)
     // Nota: Certifique-se de que a função 'scr_generic_calculate_stats' já foi criada.
-    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, Upgrades_vamp.description);
+    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, UPGRADES_VAMP.DESCRIPTION);
 
     // ========================================================
     // --- 2. LÓGICA DO TIMER (Sua lógica Delta_Time permanece aqui) ---
@@ -126,11 +127,11 @@ function scr_shuriken(_row_index)
         var _player_y = obj_player.y;
 
         // Loop pela quantidade calculada universalmente
-        for (var i = 0; i < _stats.quantity; i++) 
+        for (var _i = 0; _i < _stats.quantity; _i++) 
         {
             // Matemática: Divide 360 graus pela quantidade para espalhar igualmente
             // Ex: 2 shurikens = 0 e 180 graus. 3 shurikens = 0, 120, 240.
-            var _start_angle = i * (360 / _stats.quantity); 
+            var _start_angle = _i * (360 / _stats.quantity); 
             
             // Cria o Objeto Shuriken
             var _shuriken = instance_create_layer(_player_x, _player_y, "Instances", obj_shuriken);

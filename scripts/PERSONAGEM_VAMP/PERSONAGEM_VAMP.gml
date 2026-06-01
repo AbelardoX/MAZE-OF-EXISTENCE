@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 
 function scr_andando_vamp() {

@@ -1,5 +1,5 @@
+// feather disable GM2016
+// feather disable GM2017
 
-sprite_normal = spr_amoeba_azul;
-sprite_parado = spr_amoeba_azul_parada;
 event_inherited();
 

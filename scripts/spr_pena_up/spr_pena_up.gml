@@ -1,3 +1,4 @@
+// feather disable GM2017
 // ==============================================================================
 // REGIÃO 1: CONFIGURAÇÃO (DADOS E VETOR DE NÍVEIS) - Antigo scr_feather_calculate_stats
 // ==============================================================================
@@ -67,7 +68,7 @@ function scr_pena(_row_index)
     if (global.level_up) exit;
 
     // 1. Obter Nível Atual (Nota: Usamos a grid de ITENS PASSIVOS global.itens_vamp_grid)
-    var _current_level = global.itens_vamp_grid[# Itens_vamp.level, _row_index]; 
+    var _current_level = global.itens_vamp_grid[# ITENS_VAMP.LEVEL, _row_index]; 
 
     // Se nível 0, não faz nada (segurança)
     if (_current_level <= 0) exit;
@@ -99,7 +100,7 @@ function scr_pena(_row_index)
         // B. Chama a calculadora genérica específica para upgrades passivos 'one-time'
         // Ela calcula o bônus do nível ATUAL e já atualiza a descrição na grid correta.
         // Nota: Certifique-se de que 'scr_generic_calculate_passive_upgrade' já foi criada.
-        var _upgrade_stats = scr_generic_calculate_passive_upgrade(_config, _current_level, global.itens_vamp_grid, _row_index, Itens_vamp.description);
+        var _upgrade_stats = scr_generic_calculate_passive_upgrade(_config, _current_level, global.itens_vamp_grid, _row_index, ITENS_VAMP.DESCRIPTION);
 
         // ========================================================
         // --- 4. SUA LÓGICA ÚNICA DE APLICAÇÃO (Fica aqui!) ---

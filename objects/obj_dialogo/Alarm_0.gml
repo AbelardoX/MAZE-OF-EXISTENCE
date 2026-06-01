@@ -1,3 +1,4 @@
+// feather disable GM2017
 if(initialized = true){
 if(char_index < string_length(text_grid[# DialogInfo.TEXT, page])){
 	var _snd = choose(snd_fala,snd_fala2,snd_fala3);

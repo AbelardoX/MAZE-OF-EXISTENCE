@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Inicialização de Variáveis Globais (Garantia de Execução Única)
 
 // Função auxiliar para inicializar listas globais com segurança
@@ -17,14 +18,28 @@ initialize_global_list("lista_luzes");
 initialize_global_list("active_upgrades");
 
 // --- Definições de Tipos ---
-enum Armamentos {
-    espada,
-    arco,
-    Altura
+enum ARMAMENTOS {
+    ESPADA,
+    ARCO,
+    ALTURA
 }
 
+enum INFOS {
+    ITEM, QUANTIDADE, SPRITE, NOME, DESCRICAO, SALA_X, SALA_Y, POS_X, POS_Y,
+    DANO, ARMADURA, VELOCIDADE, CURA, TIPO, IMAGE_IND, PRECO, HEIGHT
+}
+
+// Enums de IDs de Itens
+enum ITENS_ATIVOS { BATATA, MACA, BANANA, UVA, VITAMINA, LEITE, LENGTH }
+enum ITENS_PASSIVOS { VELA, COBERTOR, BOTA, LENGTH }
+enum ITENS_ARMAS { GRAVETO, VASSOURA, ESPADA_MADEIRA, ESPADA_PLASTICO, ESPADA_OURO, ESPADA_MATA_FANTASMA, LENGTH }
+enum ITENS_PE { TENIS_VELHO, SAPATO_VELHO, PATINS, SKATE, TENIS_NOVO, SAPATO_NOVO, MEIA_VERMELHA, MEIA_AMARELA, LENGTH }
+
+// Enum de Materiais de Craft
+enum ITENS_CRAFT { MADEIRA, PEDRA, ERVA_VERMELHA, FRASCO_VAZIO, BARRA_FERRO, BARRA_OURO, COURO, LENGTH }
+
 // --- Configurações de Jogo ---
-global.armamento = Armamentos.espada;
+global.armamento = ARMAMENTOS.ESPADA;
 global.levels_pendentes = 0;
 global.debug = true;
 global.max_sanidade = 100;

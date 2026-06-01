@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @description Dano e Feedback Visual
 
 // 1. Aplica dano em área no primeiro frame de existência
@@ -8,16 +9,15 @@ if (!has_damaged && radius > 0) {
     var _hit_list = ds_list_create();
     
     // Encontra todos os inimigos no raio de colisão esférica
-    var _num_hit = collision_circle_list(x, y, radius, par_inimigos, false, true, _hit_list, false);
+    var _num_hit = collision_circle_list(x, y, radius, obj_par_inimigos, false, true, _hit_list, false);
     
     // Aplica dano a cada inimigo na lista
-    for (var i = 0; i < _num_hit; i++) {
-        var _enemy = _hit_list[| i];
+    for (var _i = 0; _i < _num_hit; _i++) {
+        var _enemy = _hit_list[| _i];
         
         // Aplica o dano (assumindo que seus inimigos têm vida e checam por colisões)
         // Se você usa o sistema de knockback/invencibilidade do player no inimigo,
-        // use o script de dano que você já tem para inimigos. Ex:
-        // with (_enemy) { vida -= other.damage; hit = true; empurrar_dir = point_direction(other.x, other.y, x, y); }
+        // use o script de dano que você já tem para inimigos.
         
         // Exemplo simplificado de dano:
         if (variable_instance_exists(_enemy, "vida")) {
@@ -27,11 +27,6 @@ if (!has_damaged && radius > 0) {
         }
     }
     
-    // Cria um efeito visual (popup de dano se você tiver)
-    // var _popup = instance_create_layer(x, y, "Instances", obj_dano);
-    // _popup.dano = damage;
-    // _popup.cor = c_yellow;
-
     // Destrói a lista temporária
     ds_list_destroy(_hit_list);
 }

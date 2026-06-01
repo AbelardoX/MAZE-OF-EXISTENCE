@@ -1,3 +1,4 @@
+// feather disable GM2017
 // Exemplo de Create Event
 damage = -1;
 velocidade = -1;

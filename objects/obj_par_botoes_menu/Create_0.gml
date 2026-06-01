@@ -1,3 +1,4 @@
+// feather disable GM2017
 escala_base = image_xscale;
 current_scale = escala_base;
 target_scale = escala_base;

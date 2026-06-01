@@ -1,3 +1,4 @@
+// feather disable GM2017
 if(hit){
 	state = scr_personagem_hit_vamp;
 }
@@ -31,8 +32,8 @@ alarm[0] = 50;
 
 
 // Itera sobre a lista de scripts ativos e os executa
-for (var i = 0; i < ds_list_size(global.active_upgrades); i++) {
-    var _script = global.active_upgrades[| i];
+for (var _i = 0; _i < ds_list_size(global.active_upgrades); _i++) {
+    var _script = global.active_upgrades[| _i];
     script_execute(_script); // Executa o script
 }
 }

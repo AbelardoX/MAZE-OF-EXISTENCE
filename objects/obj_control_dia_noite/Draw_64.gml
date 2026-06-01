@@ -1,3 +1,4 @@
+// feather disable GM2017
 // 1. Processa a renderização da surface de luzes primeiro
 day_night_render();
 

@@ -1,6 +1,10 @@
+// feather disable GM2016
+// feather disable GM2017
 
 event_inherited();
+sprite_normal = spr_amoeba_azul;
+sprite_parado = spr_amoeba_azul_parada;
 vida=15;
 state = scr_escolher_state_amoeba;
-sombra = spr_sombra;
+sombra_sprite = spr_sombra;
 lvl = 1;

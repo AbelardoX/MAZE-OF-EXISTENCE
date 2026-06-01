@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @description Lógica de Voo, Segurança e Pólen
 if (!instance_exists(obj_player)) exit;
 
@@ -17,9 +18,6 @@ if (_dist_player > _dist_seguranca) {
     // Reseta a lógica de movimento para definir um novo ponto
     timer_state = 0; 
     speed = 0;
-    
-    // Opcional: Efeito visual de teletransporte (ex: fumaça)
-    // instance_create_layer(x, y, "Instances", obj_efeito_teleporte);
     
     show_debug_message("Borboleta teletransportada por segurança.");
 }
@@ -54,7 +52,7 @@ if (hspeed != 0) {
 // ========================================================
 // 3. LÓGICA DE SOLTAR PÓLEN
 // ========================================================
-var _enemy_near = instance_nearest(x, y, par_inimigos); 
+var _enemy_near = instance_nearest(x, y, obj_par_inimigos); 
 
 if (_enemy_near != noone && distance_to_object(_enemy_near) < 50) {
     // Chance por frame de soltar pólen

@@ -1,3 +1,4 @@
+// feather disable GM2017
 if (event_data[? "message"] == "andar_slime") {
     
     // 1. Verifica se o jogador existe no mapa (muito importante para o jogo não "crashar" se o player morrer)

@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Retorna a estrutura de dados (Vetor de Skill) da BOLA
 function scr_bola_config()
 {
@@ -39,11 +40,11 @@ function scr_bola(_row_index)
 {
     if (global.level_up) exit; 
     var _bola_obj = obj_bola;
-    var _current_level = global.upgrades_vamp_grid[# Upgrades_vamp.level, _row_index];
+    var _current_level = global.upgrades_vamp_grid[# UPGRADES_VAMP.LEVEL, _row_index];
     if (_current_level <= 0) exit;
 
     var _config = scr_bola_config(); 
-    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, Upgrades_vamp.description);
+    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, UPGRADES_VAMP.DESCRIPTION);
 
     // Se chegou no nível 15, chama a função da bola que quica/estoura!
     if (_current_level >= 15) {
@@ -57,7 +58,7 @@ function scr_bola(_row_index)
     {
         global.ball_timer = 0; 
         var _all_enemies_list = ds_list_create();
-        with (par_inimigos) { ds_list_add(_all_enemies_list, id); }
+        with (obj_par_inimigos) { ds_list_add(_all_enemies_list, id); }
         
         var _shots_to_fire = min(_stats.projectile_count, ds_list_size(_all_enemies_list));
 
@@ -68,7 +69,7 @@ function scr_bola(_row_index)
         // ========================================================
         var _bolinhas_calculadas = 4 + floor(max(0, _current_level - 15) / 5);
 
-        for (var i = 0; i < _shots_to_fire; i++) 
+        for (var _i = 0; _i < _shots_to_fire; _i++) 
         {
             var _random_index = irandom(ds_list_size(_all_enemies_list) - 1);
             var _target_enemy = _all_enemies_list[| _random_index];

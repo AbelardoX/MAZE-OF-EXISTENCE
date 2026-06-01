@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 
 if (!is_open) exit;
@@ -9,19 +10,19 @@ var _my = device_mouse_y_to_gui(0);
 if (cooldown_timer > 0) cooldown_timer--;
 var _grid_height = ds_grid_height(global.grid_itens);
 // Loop pelos Slots (Inventário + Equipamentos)
-for (var i = 0; i < _grid_height; i++) {
+for (var _i = 0; _i < _grid_height; _i++) {
     // Calcula posição do slot (reutilizando a lógica de layout)
-    var _sx, _sy;
+    var _sx = 0, _sy = 0;
     
-    if (i < total_slots) {
+    if (_i < total_slots) {
         // Grid Principal
-        var _col = i % grid_cols;
-        var _row = i div grid_cols;
+        var _col = _i % grid_cols;
+        var _row = _i div grid_cols;
         _sx = inventory_x + grid_start_x + (_col * (slot_width + slot_buffer));
         _sy = inventory_y + grid_start_y + (_row * (slot_height + slot_buffer));
     } else {
         // Slots de Equipamento
-        var _eq_idx = i - total_slots;
+        var _eq_idx = _i - total_slots;
         _sx = inventory_x + equip_start_x;
         _sy = inventory_y + equip_start_y + (_eq_idx * (slot_height + slot_buffer));
     }
@@ -30,7 +31,7 @@ for (var i = 0; i < _grid_height; i++) {
     var _is_hover = point_in_rectangle(_mx, _my, _sx, _sy, _sx + slot_width, _sy + slot_height);
     
     if (_is_hover) {
-        selected_slot = i; // Marca qual slot está sob o mouse
+        selected_slot = _i; // Marca qual slot está sob o mouse
 
         // --- CLIQUE ESQUERDO: Selecionar / Mover ---
         if (mouse_check_button_pressed(mb_left) && cooldown_timer == 0) {
@@ -38,14 +39,14 @@ for (var i = 0; i < _grid_height; i++) {
             
             // Se não tem item na mão, pega o do slot
             if (selected_item == -1) {
-                if (global.grid_itens[# Infos.item, i] != -1) {
-                    selected_item = global.grid_itens[# Infos.item, i];
-                    selected_index = i;
+                if (global.grid_itens[# INFOS.ITEM, _i] != -1) {
+                    selected_item = global.grid_itens[# INFOS.ITEM, _i];
+                    selected_index = _i;
                 }
             } 
             // Se tem item na mão, tenta colocar ou trocar
             else {
-                inventory_swap_item(selected_index, i); // Função auxiliar para trocar
+                inventory_swap_item(selected_index, _i); // Função auxiliar para trocar
                 selected_item = -1;
                 selected_index = -1;
             }
@@ -53,12 +54,12 @@ for (var i = 0; i < _grid_height; i++) {
 
         // --- CLIQUE DIREITO / TECLA E: Equipar / Desequipar / Usar ---
         if ((mouse_check_button_pressed(mb_right) || keyboard_check_pressed(ord("E"))) && selected_item == -1) {
-            inventory_use_item(i); // Função auxiliar para usar/equipar
+            inventory_use_item(_i); // Função auxiliar para usar/equipar
         }
         
         // --- TECLA F: Dropar Item ---
         if (keyboard_check_pressed(ord("F"))) {
-            inventory_drop_item(i);
+            inventory_drop_item(_i);
         }
     }
 }
@@ -72,9 +73,9 @@ if (mouse_check_button_pressed(mb_left) && cooldown_timer == 0) {
     var _max_visiveis = 3;
     var _fim_loop = min(_receitas_total, craft_scroll + _max_visiveis);
 
-    for (var i = craft_scroll; i < _fim_loop; i++) {
+    for (var _i = craft_scroll; _i < _fim_loop; _i++) {
         
-        var _posicao_na_tela = i - craft_scroll;
+        var _posicao_na_tela = _i - craft_scroll;
         var _cx = inventory_x + craft_box_x;
         var _cy = inventory_y + craft_box_y + (_posicao_na_tela * (craft_pane_height + craft_buffer));
         
@@ -84,7 +85,7 @@ if (mouse_check_button_pressed(mb_left) && cooldown_timer == 0) {
         // Se clicou em cima do botão...
         if (point_in_rectangle(_mx, _my, _bx, _by, _bx + craft_btn_w, _by + craft_btn_h)) {
             
-            var _receita = global.receitas_craft[i];
+            var _receita = global.receitas_craft[_i];
             
             // Só faz o item se tiver os ingredientes
             if (player_has_all_ingredients(_receita)) {
@@ -92,8 +93,8 @@ if (mouse_check_button_pressed(mb_left) && cooldown_timer == 0) {
                 
                 // 1. Remove os ingredientes do inventário
                 var _total_reqs = array_length(_receita.ingredientes);
-                for (var j = 0; j < _total_reqs; j++) {
-                    var _req = _receita.ingredientes[j];
+                for (var _j = 0; _j < _total_reqs; _j++) {
+                    var _req = _receita.ingredientes[_j];
                     // Consome o item!
                     inventory_remove_item(_req.item, _req.qtd); 
                 }

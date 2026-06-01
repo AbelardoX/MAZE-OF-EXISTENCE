@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @description Lógica Principal (Step) ORGANIZADA
 depth = -y;
 // ========================================================
@@ -45,8 +46,13 @@ if (hit) {
 }
 
 // Executa o estado atual
-if (script_exists(state)) {
-    script_execute(state);
+if (state != -1) {
+    var _isValid = is_method(state);
+    if (!_isValid && is_real(state)) _isValid = script_exists(state);
+    
+    if (_isValid) {
+        script_execute(state);
+    }
 }
 
 // Atualiza posição do bloco de colisão auxiliar (se usar)
@@ -71,7 +77,6 @@ if (global.estamina <= 0 && !andar) {
 }
 // --- Morte ---
 if (global.vida <= 0) {
-    //game_restart();
 }
 
 // --- Sanidade e Luz ---
@@ -79,8 +84,8 @@ var _limite_escuridao = 0.5;
 var _recuperacao_sanidade = 0;
 var _qtd_luzes = ds_list_size(global.lista_luzes);
 
-for (var i = 0; i < _qtd_luzes; i++) {
-    var _luz = global.lista_luzes[| i];
+for (var _i = 0; _i < _qtd_luzes; _i++) {
+    var _luz = global.lista_luzes[| _i];
     if (instance_exists(_luz)) {
         var _distancia = point_distance(x, y, _luz.x, _luz.y);
         if (_distancia < _luz.luz_1) _recuperacao_sanidade = max(_recuperacao_sanidade, 0.09);
@@ -108,14 +113,14 @@ global.sanidade = clamp(global.sanidade, 0, 100);
 
 // Tecla 1 para Espada
 if (keyboard_check_pressed(ord("1"))) { 
-    global.armamento = Armamentos.espada; // Ou o valor numérico que você usa, ex: 0
+    global.armamento = ARMAMENTOS.ESPADA; // Ou o valor numérico que você usa, ex: 0
     dir_alfa = 1; 
     desenha_arma = true; 
 }
 
 // Tecla 2 para Arco
 if (keyboard_check_pressed(ord("2"))) { 
-    global.armamento = Armamentos.arco;   // Ou o valor numérico que você usa, ex: 1
+    global.armamento = ARMAMENTOS.ARCO;   // Ou o valor numérico que você usa, ex: 1
     dir_alfa = 1; 
     desenha_arma = true; 
 }
@@ -130,7 +135,7 @@ if (desenha_arma) {
 }
 // --- Coletar Itens e NPC ---
 var _item_perto = instance_nearest(x, y, obj_item);
-var _npc = instance_nearest(x, y, par_npc_vendedor_um);
+var _npc = instance_nearest(x, y, obj_par_npc_vendedor_um);
 desenha_botao = false; // Reseta a cada frame
 
 if (_item_perto != noone && distance_to_object(_item_perto) <= 25 && !global.inventario_cheio) {
@@ -173,19 +178,19 @@ else { piscando_alpha = (piscando_alpha == 1) ? 0 : 1; piscando_timer = 20; }
 var _upgrades_grid = global.upgrades_vamp_grid;
 var _upgrades_count = ds_grid_height(_upgrades_grid);
 
-for (var i = 0; i < _upgrades_count; i++)
+for (var _i = 0; _i < _upgrades_count; _i++)
     {
-    var _level = _upgrades_grid[# Upgrades_vamp.level, i];
+    var _level = _upgrades_grid[# UPGRADES_VAMP.LEVEL, _i];
     
     // Se nível > 0, tentamos executar
     if (_level > 0) {
-        var _script = _upgrades_grid[# Upgrades_vamp.Script, i];
+        var _script = _upgrades_grid[# UPGRADES_VAMP.SCRIPT, _i];
         
         // Verifica se o script existe e é uma função válida
         if (_script != -1 && script_exists(_script)) {
             // --- CONEXÃO UNIFICADA ---
-            // Executa o script passando 'i' (o índice da linha) como argumento 0.
-            script_execute(_script, i); 
+            // Executa o script passando '_i' (o índice da linha) como argumento 0.
+            script_execute(_script, _i); 
         }
     }
 }
@@ -194,18 +199,19 @@ for (var i = 0; i < _upgrades_count; i++)
 var _itens_grid = global.itens_vamp_grid;
 var _itens_count = ds_grid_height(_itens_grid);
 
-for (var k = 0; k < _itens_count; k++)
+for (var _k = 0; _k < _itens_count; _k++)
 {
-    var _level_item = _itens_grid[# Itens_vamp.level, k];
+    var _level_item = _itens_grid[# ITENS_VAMP.LEVEL, _k];
     
     // Se nível > 0, tentamos executar
     if (_level_item > 0) {
-        var _script_item = _itens_grid[# Itens_vamp.Script, k];
+        var _script_item = _itens_grid[# ITENS_VAMP.SCRIPT, _k];
         
-        if (_script_item != -1 && script_exists(_script_item)) {
+        if (_script_item != -1 && script_exists(real(_script_item))) {
             // --- CONEXÃO UNIFICADA ---
-            // Executa o script do item passando 'k' como argumento.
-            script_execute(_script_item, k);
+            // Executa o script do item passando '_k' como argumento.
+			// feather disable once GM1041
+            script_execute(_script_item, _k);
         }
     }
 }

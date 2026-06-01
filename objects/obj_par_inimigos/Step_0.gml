@@ -1,3 +1,4 @@
+// feather disable GM2017
 depth = -y;
 if(global.level_up == true){
 	alarm[0]++;

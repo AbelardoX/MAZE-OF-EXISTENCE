@@ -1,3 +1,4 @@
+// feather disable GM2017
  
 function level_up_tuto() {
     global.level_player += 1;
@@ -21,12 +22,12 @@ function level_up_tuto() {
 function calcular_critico_tuto() {
 	randomize();
     // A chance de crítico aumenta em 2% a cada nível (por exemplo)
-    var chance_critico = global.level_player * 1;
+    var _chance_critico = global.level_player * 1;
     
     // Gera um valor aleatório para decidir se o ataque é crítico ou não
-    var sorteio = irandom_range(1, 100);
+    var _sorteio = irandom_range(1, 100);
     
-    if (sorteio <= chance_critico) {
+    if (_sorteio <= _chance_critico) {
         // Se for crítico, aumenta o dano em 50% (pode ajustar o multiplicador se desejar)
         global.critico = 1; // Marcador de crítico
         global.ataque = global.dano_base[global.level_player] * 1.5;
@@ -38,9 +39,9 @@ function calcular_critico_tuto() {
 
 
 
-function ganhar_xp_tuto(xp_ganho) {
+function ganhar_xp_tuto(_xp_ganho) {
     // Adiciona o XP ganho ao XP global
-    global.xp += xp_ganho;
+    global.xp += _xp_ganho;
     
     // Laço para continuar verificando se o jogador tem XP suficiente para subir de nível
     while (true) {
@@ -105,10 +106,10 @@ function scr_andando_tuto() {
 
     // Transições
     if (_in.mouse_esq_press) {
-        if (global.armamento == Armamentos.espada) {
+        if (global.armamento == ARMAMENTOS.ESPADA) {
             image_index = 0;
             state = scr_ataque_player_tuto;
-        } else if (global.armamento == Armamentos.arco) {
+        } else if (global.armamento == ARMAMENTOS.ARCO) {
             image_index = 0;
             state = scr_personagem_arco_tuto;
         }

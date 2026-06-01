@@ -1,3 +1,4 @@
+// feather disable GM2017
 var _cl = camera_get_view_width(view_camera[0]);
 var _ca = camera_get_view_height(view_camera[0]);
 

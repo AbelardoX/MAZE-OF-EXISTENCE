@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Lógica do Tutorial por Passos
 
 // 1. Monitora Diálogos
@@ -75,8 +76,8 @@ switch (tutorial_step) {
             last_step = tutorial_step;
         }
         
-        // Critério de avanço: Trocou para o arco (Armamentos.arco = 1)
-        if (global.armamento == Armamentos.arco) {
+        // Critério de avanço: Trocou para o arco (ARMAMENTOS.ARCO = 1)
+        if (global.armamento == ARMAMENTOS.ARCO) {
             tutorial_step = 5;
         }
         break;

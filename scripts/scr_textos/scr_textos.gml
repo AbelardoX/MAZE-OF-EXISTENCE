@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Central de Diálogos do Jogo
 /// [O QUE]: Define o conteúdo de todos os diálogos baseado no nome do NPC/Estado.
 /// [COMO] : Usa um switch para selecionar o bloco de texto e adiciona linhas à grid de diálogo.
@@ -76,19 +77,19 @@ function scr_dialogs()
         case "V1":
             dialog_add("Vendedora", spr_retrato3_moca, 0, 
                 "*Abaixando a voz* Para você... tenho esse artefato que brilha sob a lua cheia. Interessado?");
-            par_npc_vendedor_um.abrir_venda = true;
+            obj_par_npc_vendedor_um.abrir_venda = true;
             break;
 
         case "V2":
             dialog_add("Vendedora", spr_retrato1_moca, 0, 
                 "*Franze a testa* Meus preços? Cada moeda reflete o sangue, suor e... bem, principalmente o suor que gastei pra conseguir!");
-            par_npc_vendedor_um.abrir_venda = true;
+            obj_par_npc_vendedor_um.abrir_venda = true;
             break;
 
         case "V3":
             dialog_add("Vendedora", spr_retrato3_moca, 0, 
                 "*Gira a sombrinha* Ah, isso é segredo do ofício... mas digamos que conheço rotas pouco convencionais!");
-            par_npc_vendedor_um.abrir_venda = true;
+            obj_par_npc_vendedor_um.abrir_venda = true;
             break;
 
 
@@ -252,7 +253,9 @@ function scr_dialogs()
             
             // Destrói o diálogo para evitar erro de grid vazia
             instance_destroy(); 
-            room_goto(Fase_vamp);
+            if (room_exists(Fase_vamp)) {
+                room_goto(Fase_vamp);
+            }
             break;
 
         case "Ficar_Tutorial":

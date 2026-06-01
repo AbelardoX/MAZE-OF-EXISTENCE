@@ -1,3 +1,4 @@
+// feather disable GM2017
 // Evento Create do obj_control_fase_bebe
 
 // Inicializar variáveis globais

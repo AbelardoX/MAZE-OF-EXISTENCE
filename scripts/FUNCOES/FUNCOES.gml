@@ -1,5 +1,4 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+// feather disable GM2017
 function fim_animation(){
 	var _sprite = sprite_index;
 	var _image = image_index;
@@ -8,7 +7,7 @@ function fim_animation(){
 	var _type = sprite_get_speed_type(sprite_index);
 	var _spd = sprite_get_speed(sprite_index)*image_speed;
 	if(_type == spritespeed_framespersecond)
-	    _spd = _spd/room_speed;
+	    _spd = _spd / game_get_speed(gamespeed_fps);
 	if(argument_count > 2) _spd = argument[2];
 	return _image + _spd >= sprite_get_number(_sprite);
 }
@@ -33,7 +32,16 @@ function obter_inputs_jogador() {
 /// @param _vveloc Velocidade vertical desejada
 /// @param _col_obj Objeto ou instância de colisão (padrão: global.sala.parede)
 function aplicar_movimento_com_colisao(_hveloc, _vveloc, _col_obj = undefined) {
-    var _obj = (_col_obj == undefined) ? (variable_global_exists("sala") ? global.sala.parede : obj_wall) : _col_obj;
+    var _obj = _col_obj;
+    
+    // Se nenhum objeto foi passado, tenta pegar a parede da sala atual ou o padrão
+    if (_obj == undefined) {
+        if (variable_global_exists("sala") && variable_struct_exists(global.sala, "parede")) {
+            _obj = global.sala.parede;
+        } else {
+            _obj = obj_wall;
+        }
+    }
 
     // Colisão Horizontal
     if (place_meeting(x + _hveloc, y, _obj)) {

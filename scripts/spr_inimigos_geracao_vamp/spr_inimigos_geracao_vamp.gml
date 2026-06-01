@@ -1,14 +1,15 @@
+// feather disable GM2017
 // ============================================================================
 // 7. FUNÇÃO DE SPAWN DE MONSTROS (Filhos Reais com Scaling)
 // ============================================================================
-function gerar_monstros_para_bloco(bx, by, bioma_atual, dist_minima) 
+function gerar_monstros_para_bloco(_bx, _by, _bioma_atual, _dist_minima) 
 {
-    var _bloco_id = "monstros_" + string(bx) + "," + string(by);
+    var _bloco_id = "monstros_" + string(_bx) + "," + string(_by);
     if (ds_map_exists(global.blocos_gerados, _bloco_id)) return;
     ds_map_add(global.blocos_gerados, _bloco_id, true);
 
-    var _centro_x = (bx + 0.5) * global.tamanho_bloco;
-    var _centro_y = (by + 0.5) * global.tamanho_bloco;
+    var _centro_x = (_bx + 0.5) * global.tamanho_bloco;
+    var _centro_y = (_by + 0.5) * global.tamanho_bloco;
 
     var _distancia_da_origem = point_distance(0, 0, _centro_x, _centro_y);
     var _distancia_por_level = 8000; 
@@ -17,7 +18,7 @@ function gerar_monstros_para_bloco(bx, by, bioma_atual, dist_minima)
     var _qtd_base = 0;
     var _obj_monstro = noone; 
     
-    switch (bioma_atual) 
+    switch (_bioma_atual) 
     {
         case "floresta":
             _qtd_base = irandom_range(3, 6);
@@ -58,7 +59,7 @@ function gerar_monstros_para_bloco(bx, by, bioma_atual, dist_minima)
         var _pos_y = _centro_y + random_range(-global.tamanho_bloco / 2 + 100, global.tamanho_bloco / 2 - 100);
 
         // PERFORMANCE: Spatial Hashing
-        if (!posicao_conflitante_geracao(_pos_x, _pos_y, dist_minima)) 
+        if (!posicao_conflitante_geracao(_pos_x, _pos_y, _dist_minima)) 
         {
             randomize();
             var _seed = random_get_seed();
@@ -66,7 +67,7 @@ function gerar_monstros_para_bloco(bx, by, bioma_atual, dist_minima)
             // VIRTUALIZAÇÃO: Apenas dados
             var _dados = [_pos_x, _pos_y, _seed, _obj_monstro, _escala_monstro, _hp_calculado, _dano_calculado, _level_da_area];
             ds_list_add(global.posicoes_monstros, _dados);
-            registrar_entidade_no_bloco(bx, by, "monstro", _dados);
+            registrar_entidade_no_bloco(_bx, _by, "monstro", _dados);
             registrar_posicao_geracao(_pos_x, _pos_y);
 
             _gerados++;
@@ -182,12 +183,12 @@ function process_night_waves() {
             global.wave_spawn_timers = array_create(_num_enemies, 0);
             
             // Spawn inicial imediato e definição dos primeiros timers
-            for (var i = 0; i < _num_enemies; i++) {
+            for (var _i = 0; _i < _num_enemies; _i++) {
                  // Define o próximo spawn para: Agora + Intervalo (em segundos)
                  // Usamos o tempo exato do timer para precisão
-                 global.wave_spawn_timers[i] = global.timer + _enemies_list[i][3];
+                 global.wave_spawn_timers[_i] = global.timer + _enemies_list[_i][3];
                  
-                 spawn_night_enemy(_enemies_list[i]);
+                 spawn_night_enemy(_enemies_list[_i]);
             }
         } else {
             // Se ainda não chegou a hora da próxima onda, sai do loop de verificação
@@ -201,10 +202,10 @@ function process_night_waves() {
         var _num_enemies = array_length(_current_enemies);
         
         // Loop por cada tipo de inimigo na onda atual
-        for (var i = 0; i < _num_enemies; i++) {
+        for (var _i = 0; _i < _num_enemies; _i++) {
             // Verifica se o tempo atual (global.timer) alcançou o tempo agendado para este spawn
-            if (global.timer >= global.wave_spawn_timers[i]) {
-                var _enemy_data = _current_enemies[i];
+            if (global.timer >= global.wave_spawn_timers[_i]) {
+                var _enemy_data = _current_enemies[_i];
                 
                 spawn_night_enemy(_enemy_data);
                 
@@ -214,7 +215,7 @@ function process_night_waves() {
                 var _variance = _spawn_interval_seconds * 0.1; 
                 var _next_spawn_time = global.timer + _spawn_interval_seconds + random_range(-_variance, _variance);
                 
-                global.wave_spawn_timers[i] = _next_spawn_time;
+                global.wave_spawn_timers[_i] = _next_spawn_time;
             }
         }
     }

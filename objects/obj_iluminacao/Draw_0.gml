@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @description Insert description here
 if(verificar_sala_escura(global.current_sala)){
 	global.encontrou_sala_escura = true;
@@ -14,24 +15,24 @@ surface_set_target(sombra_surface);
 	draw_set_alpha(1);
 
   // Definir o raio da visão ao redor do jogador
-    var raio_visao = global.raio_lanterna;
+    var _raio_visao = global.raio_lanterna;
 
     // Pegar as coordenadas do jogador na tela (ajustar de acordo com a câmera)
-    var x_jogador_gui = obj_player.x ;
-    var y_jogador_gui = obj_player.y ;
+    var _x_jogador_gui = obj_player.x ;
+    var _y_jogador_gui = obj_player.y ;
 
     // Desenhar o círculo de visão, removendo a escuridão ao redor do jogador
 	gpu_set_blendmode(bm_subtract);
-	draw_circle(x_jogador_gui, y_jogador_gui, raio_visao +irandom(2),false);
+	draw_circle(_x_jogador_gui, _y_jogador_gui, _raio_visao +irandom(2),false);
 	
 	draw_set_alpha(0.8);
-	draw_circle(x_jogador_gui, y_jogador_gui, raio_visao+30+irandom(2),false);
+	draw_circle(_x_jogador_gui, _y_jogador_gui, _raio_visao+30+irandom(2),false);
 	
 	draw_set_alpha(0.7);
-	draw_circle(x_jogador_gui, y_jogador_gui, raio_visao+60+irandom(2),false);
+	draw_circle(_x_jogador_gui, _y_jogador_gui, _raio_visao+60+irandom(2),false);
 	
 	draw_set_alpha(0.6);
-	draw_circle(x_jogador_gui, y_jogador_gui, raio_visao+90+irandom(2),false);
+	draw_circle(_x_jogador_gui, _y_jogador_gui, _raio_visao+90+irandom(2),false);
 	draw_set_alpha(1);
     gpu_set_blendmode(bm_normal);
 	

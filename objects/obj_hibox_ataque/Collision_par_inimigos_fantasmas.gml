@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 
 if (global.mata_fantasma == true) {

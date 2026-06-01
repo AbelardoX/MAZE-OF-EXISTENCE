@@ -1,3 +1,4 @@
+// feather disable GM2017
 // EVENTO CREATE - obj_estrutura
 escala = choose(2,2.2,2.5,3);
 image_xscale = escala;

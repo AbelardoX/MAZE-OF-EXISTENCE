@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @description Insert description here
 // You can write your code in this editor
 
@@ -29,7 +30,7 @@ max_vida = 15;
 empurrar_dir = 0;
 empurrar_veloc = 0;
 hit = false;
-sombra = spr_sombra;
+sombra_sprite = spr_sombra;
 escala = 1;
 
 

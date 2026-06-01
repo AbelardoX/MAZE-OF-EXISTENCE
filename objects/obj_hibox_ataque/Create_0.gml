@@ -1,3 +1,4 @@
+// feather disable GM2017
 alarm[0] = 1;
 
 image_xscale = 1.8;

@@ -1,7 +1,8 @@
+// feather disable GM2017
 depth = -y
-var distancia_player = point_distance(x, y, obj_player.x, obj_player.y);
+var _distancia_player = point_distance(x, y, obj_player.x, obj_player.y);
 
-if (distancia_player < distancia_criar) { // só spawna se o player estiver a menos de 2000 pixels
+if (_distancia_player < distancia_criar) { // só spawna se o player estiver a menos de 2000 pixels
     if (inimigos_spawnados < quantidade_total) {
         spawn_timer++;
 
@@ -9,13 +10,13 @@ if (distancia_player < distancia_criar) { // só spawna se o player estiver a me
             spawn_timer = 0;
             inimigos_spawnados++;
 
-            var angulo = random(360);
-            var raio = random_range(100, spawn_radius);
-            var px = x + lengthdir_x(raio, angulo);
-            var py = y + lengthdir_y(raio, angulo);
+            var _angulo = random(360);
+            var _raio = random_range(100, spawn_radius);
+            var _px = x + lengthdir_x(_raio, _angulo);
+            var _py = y + lengthdir_y(_raio, _angulo);
 
-            var inimigo = instance_create_depth(px, py, 0, obj_amoeba);
-			inimigo.grupo_id = grupo_id;
+            var _inimigo = instance_create_depth(_px, _py, 0, obj_amoeba);
+			_inimigo.grupo_id = grupo_id;
 
         }
     }

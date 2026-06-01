@@ -1,3 +1,4 @@
+// feather disable GM2017
 current_scale = lerp(current_scale, target_scale, lerp_speed);
 
 // Se o mouse estiver em cima, aplica o filtro mágico

@@ -1,3 +1,4 @@
+// feather disable GM2017
 if(initialized = false){
 	scr_dialogs();
 	initialized = true;

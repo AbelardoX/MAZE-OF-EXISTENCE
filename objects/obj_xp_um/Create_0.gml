@@ -1,3 +1,4 @@
+// feather disable GM2017
 image_xscale = 3;
 image_yscale = 3;
 base_xp = 20; 

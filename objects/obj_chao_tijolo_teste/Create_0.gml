@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 
 image_xscale = 112 / sprite_get_width(sprite_index);

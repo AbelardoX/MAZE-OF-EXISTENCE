@@ -1,3 +1,5 @@
+// feather disable GM2016
+// feather disable GM2017
 
 
 if(hit == true){

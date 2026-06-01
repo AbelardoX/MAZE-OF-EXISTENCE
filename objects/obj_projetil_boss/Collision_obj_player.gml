@@ -1,3 +1,4 @@
+// feather disable GM2017
 if(other.tomar_dano == true){
 global.vida -= damage;
 var _inst = instance_create_layer(x,y,"instances",obj_dano);

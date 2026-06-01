@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Executa a Ação Atual
 if (!cutscene_active) exit; // Se não estiver ativa, não faz nada
 

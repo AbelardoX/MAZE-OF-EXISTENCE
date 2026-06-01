@@ -1,3 +1,4 @@
+// feather disable GM2017
 randomize();
 image_index = irandom_range(1, 3);
 image_xscale = 3;

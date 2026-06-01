@@ -1,6 +1,7 @@
+// feather disable GM2017
 function relogio() {
     // --- Configuração ---
-    var _x = global.room_width / 2;
+    var _x = display_get_gui_width() / 2;
     var _y = 120;
     var _pointer_len = 32;
     var _color_pointer = c_red;
@@ -102,13 +103,13 @@ function mini_mapa_vamp() {
     var _end_by = ceil((obj_player.y + _max_dist) / global.tamanho_bloco);
 
     // Variável para checar o mapa
-    var _mapa_valido = variable_global_exists("mapa_biomas");
+    var _mapa_valido = variable_global_exists("mapa_biomas") && (global.mapa_biomas != undefined);
 
     if (_mapa_valido) {
-        for (var bx = _start_bx; bx <= _end_bx; bx++) {
-            for (var by = _start_by; by <= _end_by; by++) {
+        for (var _bx = _start_bx; _bx <= _end_bx; _bx++) {
+            for (var _by = _start_by; _by <= _end_by; _by++) {
                 
-                var _bloco_id = string(bx) + "," + string(by);
+                var _bloco_id = string(_bx) + "," + string(_by);
                 var _bioma = global.mapa_biomas[? _bloco_id];
 
                 if (!is_undefined(_bioma)) {
@@ -122,8 +123,8 @@ function mini_mapa_vamp() {
                     }
 
                     // Calcula onde o bloco começa e termina no mundo real
-                    var _wx1 = bx * global.tamanho_bloco;
-                    var _wy1 = by * global.tamanho_bloco;
+                    var _wx1 = _bx * global.tamanho_bloco;
+                    var _wy1 = _by * global.tamanho_bloco;
                     var _wx2 = _wx1 + global.tamanho_bloco;
                     var _wy2 = _wy1 + global.tamanho_bloco;
 
@@ -162,12 +163,12 @@ function mini_mapa_vamp() {
     // Array de listas para iterar
     var _lists_to_check = [global.posicoes_estruturas, global.posicoes_grupos_inimigos];
 
-    for (var l = 0; l < array_length(_lists_to_check); l++) {
-        var _list = _lists_to_check[l];
+    for (var _l = 0; _l < array_length(_lists_to_check); _l++) {
+        var _list = _lists_to_check[_l];
         var _size = ds_list_size(_list);
 
-        for (var i = 0; i < _size; i++) {
-            var _data = _list[| i]; 
+        for (var _i = 0; _i < _size; _i++) {
+            var _data = _list[| _i]; 
             
             // Dados da entidade (Básicos)
             var _ent_x = _data[0];
@@ -342,8 +343,8 @@ function mini_mapa_bebe() {
     // --- Loop de Salas ---
     var _total_rooms = array_length(global.salas_geradas);
     
-    for (var i = 0; i < _total_rooms; i++) {
-        var _room_data = global.salas_geradas[i];
+    for (var _i = 0; _i < _total_rooms; _i++) {
+        var _room_data = global.salas_geradas[_i];
         
         if (!is_array(_room_data)) continue;
 
@@ -367,8 +368,8 @@ function mini_mapa_bebe() {
             // Verifica Templos
             if (variable_global_exists("templos_salas_pos") && global.templos_salas_pos != undefined) {
                 var _len_t = array_length(global.templos_salas_pos);
-                for (var j = 0; j < _len_t; j++) {
-                    var _t_pos = global.templos_salas_pos[j];
+                for (var _j = 0; _j < _len_t; _j++) {
+                    var _t_pos = global.templos_salas_pos[_j];
                     if (_t_pos[0] == _rx && _t_pos[1] == _ry) {
                         _subimg = 1;
                         break;
@@ -378,7 +379,7 @@ function mini_mapa_bebe() {
 
             // Verifica Boss (Jardim)
             // Assumindo que global.sala_jardim pode ser uma coordenada [x,y] ou array de coordenadas
-            if (variable_global_exists("sala_jardim") && global.sala_jardim != undefined) {
+            if (variable_global_exists("sala_jardim") && is_array(global.sala_jardim)) {
                  // Verifica se é array de coordenadas ou apenas uma coordenada
                  if (array_length(global.sala_jardim) > 0) {
                      // Checagem simplificada: Se sala_jardim for apenas [x, y]
@@ -389,8 +390,8 @@ function mini_mapa_bebe() {
                      } else {
                          // Se for array de arrays [[x,y], [x,y]]
                          var _len_b = array_length(global.sala_jardim);
-                         for (var k = 0; k < _len_b; k++) {
-                             var _b_pos = global.sala_jardim[k];
+                         for (var _k = 0; _k < _len_b; _k++) {
+                             var _b_pos = global.sala_jardim[_k];
                              if (_b_pos[0] == _rx && _b_pos[1] == _ry) {
                                  _subimg = 2;
                                  break;

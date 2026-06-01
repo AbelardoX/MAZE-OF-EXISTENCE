@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 tiro = true;
 

@@ -1,3 +1,4 @@
+// feather disable GM2017
 // 1. Configurações
 var _escala_chao = 3; 
 var _tamanho_sprite = 32; 

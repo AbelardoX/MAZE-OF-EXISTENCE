@@ -1,3 +1,4 @@
+// feather disable GM2017
 if (!is_open) exit;
 
 var _gui_w = display_get_gui_width();
@@ -19,23 +20,23 @@ draw_sprite_ext(spr_iinventario, 0, inventory_x, inventory_y, scale, scale, 0, c
 // 2. DESENHO DOS SLOTS (Mochila e Equipamentos)
 // ============================================================================
 var _grid_height = ds_grid_height(global.grid_itens);
-for (var i = 0; i < _grid_height; i++) {
-    var _sx, _sy;
-    if (i < total_slots) {
-        var _col = i % grid_cols; var _row = i div grid_cols;
+for (var _i = 0; _i < _grid_height; _i++) {
+    var _sx = 0, _sy = 0;
+    if (_i < total_slots) {
+        var _col = _i % grid_cols; var _row = _i div grid_cols;
         _sx = inventory_x + grid_start_x + (_col * (slot_width + slot_buffer));
         _sy = inventory_y + grid_start_y + (_row * (slot_height + slot_buffer));
     } else {
-        var _eq_idx = i - total_slots;
+        var _eq_idx = _i - total_slots;
         _sx = inventory_x + equip_start_x;
         _sy = inventory_y + equip_start_y + (_eq_idx * (slot_height + slot_buffer));
     }
 
-    if (selected_slot == i) { draw_sprite_ext(spr_selecionado, 0, _sx, _sy, scale, scale, 0, c_white, 1); }
+    if (selected_slot == _i) { draw_sprite_ext(spr_selecionado, 0, _sx, _sy, scale, scale, 0, c_white, 1); }
 
-    var _spr = global.grid_itens[# Infos.sprite, i];
-    var _idx = global.grid_itens[# Infos.image_ind, i];
-    var _qtd = global.grid_itens[# Infos.quantidade, i];
+    var _spr = global.grid_itens[# INFOS.SPRITE, _i];
+    var _idx = global.grid_itens[# INFOS.IMAGE_IND, _i];
+    var _qtd = global.grid_itens[# INFOS.QUANTIDADE, _i];
 
     if (_spr != -1) {
         draw_sprite_ext(_spr, _idx, _sx, _sy, scale, scale, 0, c_white, 1);
@@ -48,17 +49,17 @@ for (var i = 0; i < _grid_height; i++) {
 
 // Item Arrastado
 if (selected_item != -1) {
-    var _drag_spr = global.grid_itens[# Infos.sprite, selected_index];
-    var _drag_idx = global.grid_itens[# Infos.image_ind, selected_index];
+    var _drag_spr = global.grid_itens[# INFOS.SPRITE, selected_index];
+    var _drag_idx = global.grid_itens[# INFOS.IMAGE_IND, selected_index];
     draw_sprite_ext(_drag_spr, _drag_idx, device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), scale, scale, 0, c_white, 0.8);
 }
 
 // Detalhes do Item e Stats
-if (selected_slot != -1 && global.grid_itens[# Infos.item, selected_slot] != -1) {
+if (selected_slot != -1 && global.grid_itens[# INFOS.ITEM, selected_slot] != -1) {
     draw_set_font(fnt_nomes_itens); draw_set_halign(fa_left);
-    draw_text_outlined(inventory_x + text_name_x, inventory_y + text_name_y, c_black, c_white, global.grid_itens[# Infos.nome, selected_slot]);
+    draw_text_outlined(inventory_x + text_name_x, inventory_y + text_name_y, c_black, c_white, global.grid_itens[# INFOS.NOME, selected_slot]);
     draw_set_font(fnt_descricao);
-    draw_text_ext(inventory_x + text_desc_x, inventory_y + text_desc_y, global.grid_itens[# Infos.descricao, selected_slot] + "\nPreço: " + string(global.grid_itens[# Infos.preco, selected_slot]), 20, 300);
+    draw_text_ext(inventory_x + text_desc_x, inventory_y + text_desc_y, global.grid_itens[# INFOS.DESCRICAO, selected_slot] + "\nPreço: " + string(global.grid_itens[# INFOS.PRECO, selected_slot]), 20, 300);
 }
 draw_player_stats_panel(inventory_x, inventory_y);
 
@@ -135,10 +136,10 @@ if (global.modo_debug_ui) {
 // LOOP DO CRAFT: Começa do 'craft_scroll' e vai só até o limite de visíveis!
 var _fim_loop = min(_receitas_total, craft_scroll + _max_visiveis);
 
-for (var i = craft_scroll; i < _fim_loop; i++) {
+for (var _i = craft_scroll; _i < _fim_loop; _i++) {
     
-    // O pulo do gato: A posição na tela não é 'i', é 'i - craft_scroll'
-    var _posicao_na_tela = i - craft_scroll;
+    // O pulo do gato: A posição na tela não é '_i', é '_i - craft_scroll'
+    var _posicao_na_tela = _i - craft_scroll;
     
     var _cx = inventory_x + craft_box_x;
     var _cy = inventory_y + craft_box_y + (_posicao_na_tela * (craft_pane_height + craft_buffer));
@@ -152,7 +153,7 @@ for (var i = craft_scroll; i < _fim_loop; i++) {
     draw_rectangle(_cx, _cy, _cx + craft_pane_width, _cy + craft_pane_height, true);
     draw_set_color(c_white);
 
-    var _receita = global.receitas_craft[i];
+    var _receita = global.receitas_craft[_i];
     var _disponivel = player_has_all_ingredients(_receita);
 
     // 1. Ícone do Item Resultado
@@ -165,8 +166,8 @@ for (var i = craft_scroll; i < _fim_loop; i++) {
     var _total_reqs = array_length(_receita.ingredientes);
     var _ing_start_x = _cx + 80; 
     
-    for (var j = 0; j < _total_reqs; j++) {
-        var _req = _receita.ingredientes[j];
+    for (var _j = 0; _j < _total_reqs; _j++) {
+        var _req = _receita.ingredientes[_j];
         
         // --- O CÓDIGO NOVO ENTRA AQUI ---
         var _dados_ing = crafting_get_item_dados(_req.item); 
@@ -175,7 +176,7 @@ for (var i = craft_scroll; i < _fim_loop; i++) {
         
         var _qtd_player = inventory_count_item(_req.item); 
         
-        var _icx = _ing_start_x + (j * 70);
+        var _icx = _ing_start_x + (_j * 70);
         var _icy = _cy + (craft_pane_height / 2) - (craft_ing_icon_size / 2);
         
         if (_spr_ing != noone) {

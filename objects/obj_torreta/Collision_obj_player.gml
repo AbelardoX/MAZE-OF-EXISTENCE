@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 if(other.tomar_dano == true){
 var _dir = point_direction(x,y,other.x,other.y);

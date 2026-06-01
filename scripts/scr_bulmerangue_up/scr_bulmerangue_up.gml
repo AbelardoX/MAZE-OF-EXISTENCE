@@ -1,3 +1,4 @@
+// feather disable GM2017
 // ==============================================================================
 // REGIÃO 1: CONFIGURAÇÃO (DADOS E VETOR DE NÍVEIS)
 // ==============================================================================
@@ -87,7 +88,7 @@ function scr_bumerangue(_row_index)
     if (global.level_up) exit; 
 
     // OBTÉM O NÍVEL ATUAL CORRETAMENTE BASEADO NA LINHA RECEBIDA
-    var _current_level = global.upgrades_vamp_grid[# Upgrades_vamp.level, _row_index];
+    var _current_level = global.upgrades_vamp_grid[# upgrades_vamp.level, _row_index];
     
     // Se nível 0, não faz nada (segurança)
     if (_current_level <= 0) exit;
@@ -99,7 +100,7 @@ function scr_bumerangue(_row_index)
     
     // Chama a calculadora genérica universal (Passando referências corretas da grid e colunas)
     // Nota: Certifique-se de que a função 'scr_generic_calculate_stats' já foi criada.
-    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, Upgrades_vamp.description);
+    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, upgrades_vamp.description);
 
     // ========================================================
     // --- 2. LÓGICA DO TIMER (Sua lógica Delta_Time permanece aqui) ---
@@ -126,9 +127,9 @@ function scr_bumerangue(_row_index)
         // Cria Fila de Prioridade para ordenar inimigos por distância
         var _priority_queue = ds_priority_create();
         
-        // Coleta inimigos (SUBSTÍTUA 'par_inimigos' SEU OBJETO PAI)
+        // Coleta inimigos (SUBSTÍTUA 'obj_par_inimigos' SEU OBJETO PAI)
         // Apenas dentro do alcance definido nos stats calculados universalmente
-        with (par_inimigos) 
+        with (obj_par_inimigos) 
         {
             var _dist = point_distance(x, y, _player_x, _player_y);
             // Usa o _stats.range calculado
@@ -146,7 +147,7 @@ function scr_bumerangue(_row_index)
             var _amount_to_throw = min(_stats.quantity, ds_priority_size(_priority_queue));
 
             // Loop de Criação
-            for (var i = 0; i < _amount_to_throw; i++) 
+            for (var _i = 0; _i < _amount_to_throw; _i++) 
             {
                 // Pega o inimigo mais próximo e remove da fila
                 var _target_id = ds_priority_delete_min(_priority_queue);

@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @description Inicializa Borboleta
 // Variáveis que serão sobrescritas pelo script gerenciador (scr_borboleta)
 damage = 0;

@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @description descansar
 // You can write your code in this editor
 if (alarm[4] == 0 && estado_cansado_ativo) {

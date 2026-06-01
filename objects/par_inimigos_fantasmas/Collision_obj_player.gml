@@ -1,3 +1,4 @@
+// feather disable GM2017
 // ========================================================
 // COLISÃO DO INIMIGO COM O PLAYER
 // (Coloque no evento de colisão do inimigo (ex: obj_amoeba) com obj_player)

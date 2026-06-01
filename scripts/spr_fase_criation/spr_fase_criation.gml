@@ -1,13 +1,15 @@
+// feather disable GM1044
+// feather disable GM2017
 // ============================================================================
 // INICIALIZAÇÃO DE VARIÁVEIS GLOBAIS E GRID
 // ============================================================================
 
 // Tamanho da grid para posicionar as salas
-var grid_size = global.total_rooms * 2;
-global.room_grid = ds_grid_create(grid_size, grid_size);
+var _grid_size = global.total_rooms * 2;
+global.room_grid = ds_grid_create(_grid_size, _grid_size);
 
-var start_x = grid_size div 2;
-var start_y = grid_size div 2;
+var _start_x = _grid_size div 2;
+var _start_y = _grid_size div 2;
 
 // Inicializa a grid com -1 (indicando que não há sala)
 ds_grid_clear(global.room_grid, -1);
@@ -15,20 +17,20 @@ global.armamento = 0;
 
 // Lista para armazenar as posições das salas
 global.room_positions = ds_list_create();
-ds_list_add(global.room_positions, [start_x, start_y]);
+ds_list_add(global.room_positions, [_start_x, _start_y]);
 
 global.destino_templo = noone;
 global.origem_templo = noone;
 
 // --- PREVENÇÃO DE CRASHES (JARDIM E TEMPLO) ---
-global.sala_jardim = noone;      // Inicializa como noone para validações seguras
+global.sala_jardim = [];      // Inicializa como array vazio para validações de tipo (Feather)
 global.templos_salas_pos = [];   // Inicializa array vazio
 // ----------------------------------------------
 
 global.sala_boss_brocolis = [];
 
 // Coloca a primeira sala no centro (0 indica a primeira sala)
-ds_grid_set(global.room_grid, start_x, start_y, 0);
+ds_grid_set(global.room_grid, _start_x, _start_y, 0);
 
 global.salas_criadas = [];
 global.current_sala = [0, 0];
@@ -61,12 +63,12 @@ global.salas_com_geladeira      = ds_map_create();
 global.salas_com_guarda_roupa   = ds_map_create();
 
 /// @desc Gerencia a criação inicial de inimigos e itens
-function gerar_inimigos_e_itens_para_o_nivel(salas_geradas, level) {
-    var quantidade_inimigos = 1 + (level);
-    var quantidade_itens = 2 + level;
+function gerar_inimigos_e_itens_para_o_nivel(_salas_geradas, _level) {
+    var _quantidade_inimigos = 1 + (_level);
+    var _quantidade_itens = 2 + _level;
     
-    criar_inimigos_em_salas_aleatorias_alet(salas_geradas);
-    create_slow_em_salas_aleatorias(salas_geradas, 3, quantidade_itens);
+    criar_inimigos_em_salas_aleatorias_alet(_salas_geradas);
+    create_slow_em_salas_aleatorias(_salas_geradas, 3, _quantidade_itens);
 }
 
 // ============================================================================
@@ -74,17 +76,17 @@ function gerar_inimigos_e_itens_para_o_nivel(salas_geradas, level) {
 // ============================================================================
 #region Pontos
 
-function coletar_ponto(ponto_x, ponto_y, current_sala) {
+function coletar_ponto(_ponto_x, _ponto_y, _current_sala) {
     global.tamanho_player += 0.1;
-    var sala_id = string(current_sala[0]) + "_" + string(current_sala[1]);
+    var _sala_id = string(_current_sala[0]) + "_" + string(_current_sala[1]);
 
-    if (ds_map_exists(global.salas_com_pontos, sala_id)) {
-        var lista_pontos = ds_map_find_value(global.salas_com_pontos, sala_id);
+    if (ds_map_exists(global.salas_com_pontos, _sala_id)) {
+        var _lista_pontos = ds_map_find_value(global.salas_com_pontos, _sala_id);
 
-        for (var i = 0; i < ds_list_size(lista_pontos); i++) {
-            var ponto_pos = ds_list_find_value(lista_pontos, i);
-            if (ponto_pos[0] == ponto_x && ponto_pos[1] == ponto_y) {
-                ds_list_delete(lista_pontos, i);
+        for (var _i = 0; _i < ds_list_size(_lista_pontos); _i++) {
+            var _ponto_pos = ds_list_find_value(_lista_pontos, _i);
+            if (_ponto_pos[0] == _ponto_x && _ponto_pos[1] == _ponto_y) {
+                ds_list_delete(_lista_pontos, _i);
                 break;
             }
         }
@@ -92,44 +94,44 @@ function coletar_ponto(ponto_x, ponto_y, current_sala) {
     instance_destroy();
 }
 
-function recriar_pontos_na_sala_atual(current_sala) {
-    var sala_id = string(current_sala[0]) + "_" + string(current_sala[1]);
+function recriar_pontos_na_sala_atual(_current_sala) {
+    var _sala_id = string(_current_sala[0]) + "_" + string(_current_sala[1]);
 
-    if (ds_map_exists(global.salas_com_pontos, sala_id)) {
-        var lista_pontos = ds_map_find_value(global.salas_com_pontos, sala_id);
+    if (ds_map_exists(global.salas_com_pontos, _sala_id)) {
+        var _lista_pontos = ds_map_find_value(global.salas_com_pontos, _sala_id);
 
-        for (var i = 0; i < ds_list_size(lista_pontos); i++) {
-            var ponto_pos = ds_list_find_value(lista_pontos, i);
-            instance_create_layer(ponto_pos[0], ponto_pos[1], "instances", obj_pontos);
+        for (var _i = 0; _i < ds_list_size(_lista_pontos); _i++) {
+            var _ponto_pos = ds_list_find_value(_lista_pontos, _i);
+            instance_create_layer(_ponto_pos[0], _ponto_pos[1], "instances", obj_pontos);
         }
     } 
 }
 
-function create_pontos_em_salas_aleatorias(salas_geradas, quantidade_salas, quantidade_pontos) {
-    var salas_selecionadas = [];
+function create_pontos_em_salas_aleatorias(_salas_geradas, _quantidade_salas, _quantidade_pontos) {
+    var _salas_selecionadas = [];
 
     // Selecionar salas aleatórias
-    for (var i = 0; i < quantidade_salas; i++) {
-        var sala_aleatoria;
+    for (var _i = 0; _i < _quantidade_salas; _i++) {
+        var _sala_aleatoria = 0;
         do {
-            sala_aleatoria = salas_geradas[irandom(array_length(salas_geradas) - 1)];
-        } until (!array_contains(salas_selecionadas, sala_aleatoria));
+            _sala_aleatoria = _salas_geradas[irandom(array_length(_salas_geradas) - 1)];
+        } until (!array_contains(_salas_selecionadas, _sala_aleatoria));
 
-        array_push(salas_selecionadas, sala_aleatoria);
+        array_push(_salas_selecionadas, _sala_aleatoria);
     }
 
     // Criar pontos nas salas selecionadas
-    for (var i = 0; i < array_length(salas_selecionadas); i++) {
-        var sala = salas_selecionadas[i];
-        var sala_id = string(sala[0]) + "_" + string(sala[1]);
-        var lista_pontos = ds_list_create();
+    for (var _i = 0; _i < array_length(_salas_selecionadas); _i++) {
+        var _sala = _salas_selecionadas[_i];
+        var _sala_id = string(_sala[0]) + "_" + string(_sala[1]);
+        var _lista_pontos = ds_list_create();
 
-        for (var j = 0; j < quantidade_pontos; j++) {
-            var ponto_x = irandom_range(128, room_width - 128);
-            var ponto_y = irandom_range(128, room_height - 128);
-            ds_list_add(lista_pontos, [ponto_x, ponto_y]);
+        for (var _j = 0; _j < _quantidade_pontos; _j++) {
+            var _ponto_x = irandom_range(128, room_width - 128);
+            var _ponto_y = irandom_range(128, room_height - 128);
+            ds_list_add(_lista_pontos, [_ponto_x, _ponto_y]);
         }
-        ds_map_add(global.salas_com_pontos, sala_id, lista_pontos);
+        ds_map_add(global.salas_com_pontos, _sala_id, _lista_pontos);
     }
 }
 #endregion
@@ -139,14 +141,14 @@ function create_pontos_em_salas_aleatorias(salas_geradas, quantidade_salas, quan
 // ============================================================================
 #region Vela
 
-function coletar_vela(ponto_x, ponto_y, current_sala) {
+function coletar_vela(_ponto_x, _ponto_y, _current_sala) {
     global.raio_lanterna += 150;
-    var sala_id = string(current_sala[0]) + "_" + string(current_sala[1]);
+    var _sala_id = string(_current_sala[0]) + "_" + string(_current_sala[1]);
 
-    if (ds_map_exists(global.salas_com_vela, sala_id)) {
-        var vela_pos = ds_map_find_value(global.salas_com_vela, sala_id);
-        if (vela_pos[0] == ponto_x && vela_pos[1] == ponto_y) {
-            ds_map_delete(global.salas_com_vela, sala_id);
+    if (ds_map_exists(global.salas_com_vela, _sala_id)) {
+        var _vela_pos = ds_map_find_value(global.salas_com_vela, _sala_id);
+        if (_vela_pos[0] == _ponto_x && _vela_pos[1] == _ponto_y) {
+            ds_map_delete(global.salas_com_vela, _sala_id);
         }
     }
     instance_destroy();
@@ -158,139 +160,145 @@ function coletar_vela(ponto_x, ponto_y, current_sala) {
 // ============================================================================
 #region Jardim e Templo
 
-function criar_templo_e_jardim(player_sala, salas_geradas) {
+function criar_templo_e_jardim(_player_sala, _salas_geradas) {
     // Inicialização segura
     if (!variable_global_exists("sala_jardim")) global.sala_jardim = [];
     if (!variable_global_exists("templos_salas_pos")) global.templos_salas_pos = [];
     
+    // feather disable once GM1041
     random_set_seed(global.seed_atual);
 
     // --- Passo 1: Criar o templo ---
-    var sala_mais_distante_templo = undefined;
-    var maior_distancia_templo = -1;
+    var _sala_mais_distante_templo = undefined;
+    var _maior_distancia_templo = -1;
 
-    for (var i = 0; i < array_length(salas_geradas); i++) {
-        var sala_atual = salas_geradas[i];
-        var distancia = point_distance(player_sala[0], player_sala[1], sala_atual[0], sala_atual[1]);
+    for (var _i = 0; _i < array_length(_salas_geradas); _i++) {
+        var _sala_atual = _salas_geradas[_i];
+        var _distancia = point_distance(real(_player_sala[0]), real(_player_sala[1]), real(_sala_atual[0]), real(_sala_atual[1]));
 
-        if (distancia > maior_distancia_templo) {
-            maior_distancia_templo = distancia;
-            sala_mais_distante_templo = sala_atual;
+        if (_distancia > _maior_distancia_templo) {
+            _maior_distancia_templo = _distancia;
+            _sala_mais_distante_templo = _sala_atual;
         }
     }
 
-    if (sala_mais_distante_templo == undefined) return;
+    if (_sala_mais_distante_templo == undefined) return;
 
-    var direcoes = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    var _direcoes = [[1, 0], [-1, 0], [0, 1], [0, -1]];
     // Embaralhar direções
-    for (var i = 0; i < array_length(direcoes); i++) {
-        var random_index = irandom(array_length(direcoes) - 1);
-        var temp = direcoes[i];
-        direcoes[i] = direcoes[random_index];
-        direcoes[random_index] = temp;
+    for (var _i = 0; _i < array_length(_direcoes); _i++) {
+        var _random_index = irandom(array_length(_direcoes) - 1);
+        var _temp = _direcoes[_i];
+        _direcoes[_i] = _direcoes[_random_index];
+        _direcoes[_random_index] = _temp;
     }
 
-    var nova_sala_templo = undefined;
+    var _nova_sala_templo = undefined;
 
-    for (var j = 0; j < array_length(direcoes); j++) {
-        var nova_posicao = [sala_mais_distante_templo[0] + direcoes[j][0], sala_mais_distante_templo[1] + direcoes[j][1]];
-        var direcao_valida = true;
+    for (var _j = 0; _j < array_length(_direcoes); _j++) {
+        var _nova_posicao = [_sala_mais_distante_templo[0] + _direcoes[_j][0], _sala_mais_distante_templo[1] + _direcoes[_j][1]];
+        var _direcao_valida = true;
 
-        for (var k = 0; k < array_length(salas_geradas); k++) {
-            if (salas_geradas[k][0] == nova_posicao[0] && salas_geradas[k][1] == nova_posicao[1]) {
-                direcao_valida = false;
+        for (var _k = 0; _k < array_length(_salas_geradas); _k++) {
+            if (_salas_geradas[_k][0] == _nova_posicao[0] && _salas_geradas[_k][1] == _nova_posicao[1]) {
+                _direcao_valida = false;
                 break;
             }
         }
 
-        if (direcao_valida) {
-            nova_sala_templo = nova_posicao;
+        if (_direcao_valida) {
+            _nova_sala_templo = _nova_posicao;
             break;
         }
     }
 
-    if (nova_sala_templo != undefined) {
-        array_push(salas_geradas, nova_sala_templo);
-        array_push(global.templos_salas_pos, nova_sala_templo);
+    if (_nova_sala_templo != undefined) {
+        array_push(_salas_geradas, _nova_sala_templo);
+        array_push(global.templos_salas_pos, _nova_sala_templo);
         global.templo_criado = true;
 
-        var nova_sala_info = criar_salas_lista(nova_sala_templo, array_length(global.salas_criadas) + 1);
-        array_push(global.salas_criadas, nova_sala_info);
+        var _nova_sala_info = criar_salas_lista(_nova_sala_templo, array_length(global.salas_criadas) + 1);
+        array_push(global.salas_criadas, _nova_sala_info);
     }
 
     // --- Passo 2: Criar o jardim ---
-    var sala_mais_distante_jardim = undefined;
-    var maior_distancia_jardim = -1;
+    var _sala_mais_distante_jardim = undefined;
+    var _maior_distancia_jardim = -1;
 
-    for (var i = 0; i < array_length(salas_geradas); i++) {
-        var sala_atual = salas_geradas[i];
-        var distancia_player = point_distance(player_sala[0], player_sala[1], sala_atual[0], sala_atual[1]);
-        var distancia_templo = point_distance(nova_sala_templo[0], nova_sala_templo[1], sala_atual[0], sala_atual[1]);
+    for (var _i = 0; _i < array_length(_salas_geradas); _i++) {
+        var _sala_atual = _salas_geradas[_i];
+        var _distancia_player = point_distance(real(_player_sala[0]), real(_player_sala[1]), real(_sala_atual[0]), real(_sala_atual[1]));
+        
+        // Adicionando verificação para _nova_sala_templo antes de usar point_distance
+        var _distancia_templo = 0;
+        if (_nova_sala_templo != undefined) {
+            _distancia_templo = point_distance(real(_nova_sala_templo[0]), real(_nova_sala_templo[1]), real(_sala_atual[0]), real(_sala_atual[1]));
+        }
 
-        if (distancia_player > maior_distancia_jardim && distancia_templo > 3) {
-            maior_distancia_jardim = distancia_player;
-            sala_mais_distante_jardim = sala_atual;
+        if (_distancia_player > _maior_distancia_jardim && _distancia_templo > 3) {
+            _maior_distancia_jardim = _distancia_player;
+            _sala_mais_distante_jardim = _sala_atual;
         }
     }
 
-    if (sala_mais_distante_jardim == undefined) return;
+    if (_sala_mais_distante_jardim == undefined) return;
 
     // Re-embaralhar direções
-    for (var i = 0; i < array_length(direcoes); i++) {
-        var random_index = irandom(array_length(direcoes) - 1);
-        var temp = direcoes[i];
-        direcoes[i] = direcoes[random_index];
-        direcoes[random_index] = temp;
+    for (var _i = 0; _i < array_length(_direcoes); _i++) {
+        var _random_index = irandom(array_length(_direcoes) - 1);
+        var _temp = _direcoes[_i];
+        _direcoes[_i] = _direcoes[_random_index];
+        _direcoes[_random_index] = _temp;
     }
 
-    var nova_sala_jardim = undefined;
+    var _nova_sala_jardim = undefined;
 
-    for (var j = 0; j < array_length(direcoes); j++) {
-        var nova_posicao = [sala_mais_distante_jardim[0] + direcoes[j][0], sala_mais_distante_jardim[1] + direcoes[j][1]];
-        var direcao_valida = true;
+    for (var _j = 0; _j < array_length(_direcoes); _j++) {
+        var _nova_posicao = [_sala_mais_distante_jardim[0] + _direcoes[_j][0], _sala_mais_distante_jardim[1] + _direcoes[_j][1]];
+        var _direcao_valida = true;
 
-        for (var k = 0; k < array_length(salas_geradas); k++) {
-            if (salas_geradas[k][0] == nova_posicao[0] && salas_geradas[k][1] == nova_posicao[1]) {
-                direcao_valida = false;
+        for (var _k = 0; _k < array_length(_salas_geradas); _k++) {
+            if (_salas_geradas[_k][0] == _nova_posicao[0] && _salas_geradas[_k][1] == _nova_posicao[1]) {
+                _direcao_valida = false;
                 break;
             }
         }
 
-        if (direcao_valida) {
-            nova_sala_jardim = nova_posicao;
+        if (_direcao_valida) {
+            _nova_sala_jardim = _nova_posicao;
             break;
         }
     }
 
-    if (nova_sala_jardim != undefined) {
-        array_push(salas_geradas, nova_sala_jardim);
-        global.sala_jardim = nova_sala_jardim;
+    if (_nova_sala_jardim != undefined) {
+        array_push(_salas_geradas, _nova_sala_jardim);
+        global.sala_jardim = _nova_sala_jardim;
 
-        var nova_sala_info = criar_salas_lista(nova_sala_jardim, array_length(global.salas_criadas) + 1);
-        array_push(global.salas_criadas, nova_sala_info);
+        var _nova_sala_info = criar_salas_lista(_nova_sala_jardim, array_length(global.salas_criadas) + 1);
+        array_push(global.salas_criadas, _nova_sala_info);
     }
 }
 
-function criar_templo_poder(_maze_width, _maze_height, _maze, w, h) {
+function criar_templo_poder(_maze_width, _maze_height, _maze, _w, _h) {
     // Paredes superior e inferior
-    for (var i = w; i < _maze_width - w; i++) {
-        ds_grid_set(_maze, i, w, 0);
-        ds_grid_set(_maze, i, _maze_height - w - 1, 0);
+    for (var _i = _w; _i < _maze_width - _w; _i++) {
+        ds_grid_set(_maze, _i, _w, 0);
+        ds_grid_set(_maze, _i, _maze_height - _w - 1, 0);
     }
 
     // Paredes laterais
-    for (var j = h; j < _maze_height - h; j++) {
-        ds_grid_set(_maze, h, j, 0);
-        ds_grid_set(_maze, _maze_width - h - 1, j, 0);
+    for (var _j = _h; _j < _maze_height - _h; _j++) {
+        ds_grid_set(_maze, _h, _j, 0);
+        ds_grid_set(_maze, _maze_width - _h - 1, _j, 0);
     }
 
     global.x_meio_superior = _maze_width / 2;
-    global.y_meio_superior = w;
+    global.y_meio_superior = _w;
     global.x_meio_inferior = _maze_width / 2;
-    global.y_meio_inferior = _maze_height - w - 1;
-    global.x_meio_esquerda = h;
+    global.y_meio_inferior = _maze_height - _w - 1;
+    global.x_meio_esquerda = _h;
     global.y_meio_esquerda = _maze_height / 2;
-    global.x_meio_direita = _maze_width - h - 1;
+    global.x_meio_direita = _maze_width - _h - 1;
     global.y_meio_direita = _maze_height / 2;
 }
 #endregion
@@ -300,85 +308,85 @@ function criar_templo_poder(_maze_width, _maze_height, _maze, w, h) {
 // ============================================================================
 #region Sala Escura
 
-function criar_salas_escuras(player_sala, salas_geradas, quantidade_salas) {
+function criar_salas_escuras(_player_sala, _salas_geradas, _quantidade_salas) {
     if (!variable_global_exists("salas_escuras")) global.salas_escuras = [];
 
-    var salas_escuras_criadas = 0;
+    var _salas_escuras_criadas = 0;
 
-    while (salas_escuras_criadas < quantidade_salas) {
-        var sala_mais_distante = undefined;
-        var maior_distancia = -1;
+    while (_salas_escuras_criadas < _quantidade_salas) {
+        var _sala_mais_distante = undefined;
+        var _maior_distancia = -1;
 
-        for (var i = 0; i < array_length(salas_geradas); i++) {
-            var sala_atual = salas_geradas[i];
-            var distancia = point_distance(player_sala[0], player_sala[1], sala_atual[0], sala_atual[1]);
+        for (var _i = 0; _i < array_length(_salas_geradas); _i++) {
+            var _sala_atual = _salas_geradas[_i];
+            var _distancia = point_distance(_player_sala[0], _player_sala[1], _sala_atual[0], _sala_atual[1]);
 
-            if (distancia > maior_distancia) {
-                var distancia_segura = true;
+            if (_distancia > _maior_distancia) {
+                var _distancia_segura = true;
 
-                for (var t = 0; t < array_length(global.salas_escuras); t++) {
-                    var templo_pos = global.salas_escuras[t];
-                    var distancia_templo = point_distance(sala_atual[0], sala_atual[1], templo_pos[0], templo_pos[1]);
+                for (var _t = 0; _t < array_length(global.salas_escuras); _t++) {
+                    var _templo_pos = global.salas_escuras[_t];
+                    var _distancia_templo = point_distance(_sala_atual[0], _sala_atual[1], _templo_pos[0], _templo_pos[1]);
 
-                    if (distancia_templo <= 3) {
-                        distancia_segura = false;
+                    if (_distancia_templo <= 3) {
+                        _distancia_segura = false;
                         break;
                     }
                 }
 
-                if (distancia_segura) {
-                    maior_distancia = distancia;
-                    sala_mais_distante = sala_atual;
+                if (_distancia_segura) {
+                    _maior_distancia = _distancia;
+                    _sala_mais_distante = _sala_atual;
                 }
             }
         }
 
-        if (sala_mais_distante == undefined) break;
+        if (_sala_mais_distante == undefined) break;
 
-        var direcoes = [[50, 0], [-50, 0], [0, 50], [0, -50]]; 
+        var _direcoes = [[50, 0], [-50, 0], [0, 50], [0, -50]]; 
         // Embaralhar direções
-        for (var i = 0; i < array_length(direcoes); i++) {
-            var random_index = irandom(array_length(direcoes) - 1);
-            var temp = direcoes[i];
-            direcoes[i] = direcoes[random_index];
-            direcoes[random_index] = temp;
+        for (var _i = 0; _i < array_length(_direcoes); _i++) {
+            var _random_index = irandom(array_length(_direcoes) - 1);
+            var _temp = _direcoes[_i];
+            _direcoes[_i] = _direcoes[_random_index];
+            _direcoes[_random_index] = _temp;
         }
 
-        var nova_sala = undefined;
+        var _nova_sala = undefined;
 
-        for (var j = 0; j < array_length(direcoes); j++) {
-            var nova_posicao = [sala_mais_distante[0] + direcoes[j][0], sala_mais_distante[1] + direcoes[j][1]];
-            var direcao_valida = true;
-            var adjacentes = 0;
+        for (var _j = 0; _j < array_length(_direcoes); _j++) {
+            var _nova_posicao = [_sala_mais_distante[0] + _direcoes[_j][0], _sala_mais_distante[1] + _direcoes[_j][1]];
+            var _direcao_valida = true;
+            var _adjacentes = 0;
 
-            for (var k = 0; k < array_length(salas_geradas); k++) {
-                if (salas_geradas[k][0] == nova_posicao[0] && salas_geradas[k][1] == nova_posicao[1]) {
-                    direcao_valida = false;
+            for (var _k = 0; _k < array_length(_salas_geradas); _k++) {
+                if (_salas_geradas[_k][0] == _nova_posicao[0] && _salas_geradas[_k][1] == _nova_posicao[1]) {
+                    _direcao_valida = false;
                     break;
                 }
             }
 
-            for (var d = 0; d < array_length(direcoes); d++) {
-                var adjacente_posicao = [nova_posicao[0] + direcoes[d][0], nova_posicao[1] + direcoes[d][1]];
-                for (var k = 0; k < array_length(salas_geradas); k++) {
-                    if (salas_geradas[k][0] == adjacente_posicao[0] && salas_geradas[k][1] == adjacente_posicao[1]) {
-                        adjacentes++;
+            for (var _d = 0; _d < array_length(_direcoes); _d++) {
+                var _adjacente_posicao = [_nova_posicao[0] + _direcoes[_d][0], _nova_posicao[1] + _direcoes[_d][1]];
+                for (var _k = 0; _k < array_length(_salas_geradas); _k++) {
+                    if (_salas_geradas[_k][0] == _adjacente_posicao[0] && _salas_geradas[_k][1] == _adjacente_posicao[1]) {
+                        _adjacentes++;
                     }
                 }
             }
 
-            if (direcao_valida && adjacentes <= 1) {
-                nova_sala = nova_posicao;
+            if (_direcao_valida && _adjacentes <= 1) {
+                _nova_sala = _nova_posicao;
                 break;
             }
         }
 
-        if (nova_sala != undefined) {
-            array_push(salas_geradas, nova_sala);
-            array_push(global.salas_escuras, nova_sala);
-            var nova_sala_info = criar_salas_lista(nova_sala, array_length(global.salas_criadas) + 1);
-            array_push(global.salas_criadas, nova_sala_info);
-            salas_escuras_criadas++;
+        if (_nova_sala != undefined) {
+            array_push(_salas_geradas, _nova_sala);
+            array_push(global.salas_escuras, _nova_sala);
+            var _nova_sala_info = criar_salas_lista(_nova_sala, array_length(global.salas_criadas) + 1);
+            array_push(global.salas_criadas, _nova_sala_info);
+            _salas_escuras_criadas++;
         } else {
             break;
         }
@@ -386,9 +394,9 @@ function criar_salas_escuras(player_sala, salas_geradas, quantidade_salas) {
 }
 #endregion
 
-function array_contains(array, sala) {
-    for (var i = 0; i < array_length(array); i++) {
-        if (array[i][0] == sala[0] && array[i][1] == sala[1]) {
+function array_contains(_array, _sala) {
+    for (var _i = 0; _i < array_length(_array); _i++) {
+        if (_array[_i][0] == _sala[0] && _array[_i][1] == _sala[1]) {
             return true;
         }
     }
@@ -400,85 +408,85 @@ function array_contains(array, sala) {
 // ============================================================================
 #region Paredes
 
-function criar_paredes_na_sala(sala_especifica, quantidade_paredes) {
-    var sala_id = string(sala_especifica[0]) + "_" + string(sala_especifica[1]);
-    var lista_paredes = ds_list_create();
+function criar_paredes_na_sala(_sala_especifica, _quantidade_paredes) {
+    var _sala_id = string(_sala_especifica[0]) + "_" + string(_sala_especifica[1]);
+    var _lista_paredes = ds_list_create();
 
-    for (var j = 0; j < quantidade_paredes; j++) {
-        var parede_x = irandom_range(256, room_width - 256);
-        var parede_y = irandom_range(256, room_height - 256);
+    for (var _j = 0; _j < _quantidade_paredes; _j++) {
+        var _parede_x = irandom_range(256, room_width - 256);
+        var _parede_y = irandom_range(256, room_height - 256);
 
-        ds_grid_set(global._maze, parede_x, parede_y, 1);
-        ds_list_add(lista_paredes, [parede_x, parede_y]);
+        ds_grid_set(global._maze, _parede_x, _parede_y, 1);
+        ds_list_add(_lista_paredes, [_parede_x, _parede_y]);
     }
-    ds_map_add(global.salas_com_paredes, sala_id, lista_paredes);
+    ds_map_add(global.salas_com_paredes, _sala_id, _lista_paredes);
 }
 
 function criar_paredes_intances(_maze_width, _maze_height, _maze, _cell_size) {
-    var sala = procurar_sala_por_numero(global.current_sala);
-    escrever_informacoes_sala(sala);
+    var _sala = procurar_sala_por_numero(global.current_sala);
+    escrever_informacoes_sala(_sala);
 
-    var direcao = 0;
-    for (var i = 0; i <= _maze_width; i++) {
-        for (var z = 0; z <= _maze_height; z++) {
+    var _direcao = 0;
+    for (var _i = 0; _i <= _maze_width; _i++) {
+        for (var _z = 0; _z <= _maze_height; _z++) {
             
-            if (ds_grid_get(_maze, i, z) == 0) {
-                var adjacente_cima = (z > 0 && ds_grid_get(_maze, i, z - 1) == 0);
-                var adjacente_baixo = (z < _maze_height - 1 && ds_grid_get(_maze, i, z + 1) == 0);
-                var adjacente_esquerda = (i > 0 && ds_grid_get(_maze, i - 1, z) == 0);
-                var adjacente_direita = (i < _maze_width - 1 && ds_grid_get(_maze, i + 1, z) == 0);
+            if (ds_grid_get(_maze, _i, _z) == 0) {
+                var _adjacente_cima = (_z > 0 && ds_grid_get(_maze, _i, _z - 1) == 0);
+                var _adjacente_baixo = (_z < _maze_height - 1 && ds_grid_get(_maze, _i, _z + 1) == 0);
+                var _adjacente_esquerda = (_i > 0 && ds_grid_get(_maze, _i - 1, _z) == 0);
+                var _adjacente_direita = (_i < _maze_width - 1 && ds_grid_get(_maze, _i + 1, _z) == 0);
                 
-                var image_index_in = 0;
+                var _image_index_in = 0;
 
                 // Lógica de tileset / bitmasking manual
-                if (!adjacente_cima && adjacente_baixo && adjacente_esquerda && !adjacente_direita) {
-                    image_index_in = 6;
-                } else if (adjacente_direita && adjacente_baixo && !adjacente_cima && !adjacente_esquerda) {
-                    image_index_in = 7;
-                } else if (!adjacente_direita && adjacente_baixo && adjacente_cima && adjacente_esquerda) {
-                    image_index_in = 11;
-                } else if (adjacente_direita && adjacente_baixo && adjacente_cima && !adjacente_esquerda) {
-                    image_index_in = 12;
-                } else if (adjacente_direita && !adjacente_baixo && adjacente_cima && !adjacente_esquerda) {
-                    image_index_in = 5;
-                } else if (!adjacente_direita && !adjacente_baixo && adjacente_cima && adjacente_esquerda) {
-                    image_index_in = 4;
-                } else if (!adjacente_direita && adjacente_baixo && adjacente_cima && !adjacente_esquerda) {
-                    image_index_in = 8;
-                } else if (!adjacente_direita && !adjacente_baixo && adjacente_cima && !adjacente_esquerda) {
-                    image_index_in = 8;
-                } else if (!adjacente_direita && adjacente_baixo && !adjacente_cima && !adjacente_esquerda) {
-                    image_index_in = 8;
+                if (!_adjacente_cima && _adjacente_baixo && _adjacente_esquerda && !_adjacente_direita) {
+                    _image_index_in = 6;
+                } else if (_adjacente_direita && _adjacente_baixo && !_adjacente_cima && !_adjacente_esquerda) {
+                    _image_index_in = 7;
+                } else if (!_adjacente_direita && _adjacente_baixo && _adjacente_cima && _adjacente_esquerda) {
+                    _image_index_in = 11;
+                } else if (_adjacente_direita && _adjacente_baixo && _adjacente_cima && !_adjacente_esquerda) {
+                    _image_index_in = 12;
+                } else if (_adjacente_direita && !_adjacente_baixo && _adjacente_cima && !_adjacente_esquerda) {
+                    _image_index_in = 5;
+                } else if (!_adjacente_direita && !_adjacente_baixo && _adjacente_cima && _adjacente_esquerda) {
+                    _image_index_in = 4;
+                } else if (!_adjacente_direita && _adjacente_baixo && _adjacente_cima && !_adjacente_esquerda) {
+                    _image_index_in = 8;
+                } else if (!_adjacente_direita && !_adjacente_baixo && _adjacente_cima && !_adjacente_esquerda) {
+                    _image_index_in = 8;
+                } else if (!_adjacente_direita && _adjacente_baixo && !_adjacente_cima && !_adjacente_esquerda) {
+                    _image_index_in = 8;
                 }
                 
                 // Bordas específicas
-                if (i == 0) {
-                    if (adjacente_cima && adjacente_baixo) image_index_in = 8;
-                } else if (i == _maze_width - 1 && z > 0 && z < _maze_height - 1 || i == _maze_width - 5 && z > 0 && z < _maze_height - 5) {
-                    if (adjacente_cima && adjacente_baixo) image_index_in = 9;
-                } else if (z == _maze_height - 1 && i > 0 && i < _maze_width - 1 || z == _maze_height - 5 && i > 0 && i < _maze_width - 5) {
-                    if (adjacente_direita && !adjacente_baixo && !adjacente_cima && adjacente_esquerda) image_index_in = 10;
+                if (_i == 0) {
+                    if (_adjacente_cima && _adjacente_baixo) _image_index_in = 8;
+                } else if (_i == _maze_width - 1 && _z > 0 && _z < _maze_height - 1 || _i == _maze_width - 5 && _z > 0 && _z < _maze_height - 5) {
+                    if (_adjacente_cima && _adjacente_baixo) _image_index_in = 9;
+                } else if (_z == _maze_height - 1 && _i > 0 && _i < _maze_width - 1 || _z == _maze_height - 5 && _i > 0 && _i < _maze_width - 5) {
+                    if (_adjacente_direita && !_adjacente_baixo && !_adjacente_cima && _adjacente_esquerda) _image_index_in = 10;
                 }
 
-                var wall_instance = instance_create_layer(i * _cell_size, z * _cell_size, "instances", sala.parede);
-                with (wall_instance) {
-                    x = i * _cell_size + (_cell_size / 2);
-                    y = z * _cell_size + (_cell_size / 2);
-                    image_index = image_index_in;
-                    image_angle = direcao;
+                var _wall_instance = instance_create_layer(_i * _cell_size, _z * _cell_size, "instances", real(_sala.parede));
+                with (_wall_instance) {
+                    x = _i * _cell_size + (_cell_size / 2);
+                    y = _z * _cell_size + (_cell_size / 2);
+                    image_index = _image_index_in;
+                    image_angle = _direcao;
                 }
                 
-                var wall_instance2 = instance_create_layer(i * _cell_size, z * _cell_size, "instances_floor", sala.chao);
-                with (wall_instance2) {
-                    x = i * _cell_size + (_cell_size / 2);
-                    y = z * _cell_size + (_cell_size / 2);
+                var _wall_instance2 = instance_create_layer(_i * _cell_size, _z * _cell_size, "instances_floor", real(_sala.chao));
+                with (_wall_instance2) {
+                    x = _i * _cell_size + (_cell_size / 2);
+                    y = _z * _cell_size + (_cell_size / 2);
                 }
                 
             } else {
-                var chao_instance = instance_create_layer(i * _cell_size, z * _cell_size, "instances_floor", sala.chao);
-                with (chao_instance) {
-                    x = i * _cell_size + (_cell_size / 2);
-                    y = z * _cell_size + (_cell_size / 2);
+                var _chao_instance = instance_create_layer(_i * _cell_size, _z * _cell_size, "instances_floor", real(_sala.chao));
+                with (_chao_instance) {
+                    x = _i * _cell_size + (_cell_size / 2);
+                    y = _z * _cell_size + (_cell_size / 2);
                     image_angle = choose(0, 90, 180, 270);
                 }
             }
@@ -487,66 +495,66 @@ function criar_paredes_intances(_maze_width, _maze_height, _maze, _cell_size) {
 }
 
 function criar_paredes_vermelha_intances(_maze_width, _maze_height, _maze, _cell_size) {
-    for (var i = 0; i < _maze_width; i++) {
-        for (var z = 0; z < _maze_height; z++) {
-            if (ds_grid_get(_maze, i, z) == 0) {
-                var adjacente_cima = (z > 0 && ds_grid_get(_maze, i, z - 1) == 0);
-                var adjacente_baixo = (z < _maze_height - 1 && ds_grid_get(_maze, i, z + 1) == 0);
-                var adjacente_esquerda = (i > 0 && ds_grid_get(_maze, i - 1, z) == 0);
-                var adjacente_direita = (i < _maze_width - 1 && ds_grid_get(_maze, i + 1, z) == 0);
+    for (var _i = 0; _i < _maze_width; _i++) {
+        for (var _z = 0; _z < _maze_height; _z++) {
+            if (ds_grid_get(_maze, _i, _z) == 0) {
+                var _adjacente_cima = (_z > 0 && ds_grid_get(_maze, _i, _z - 1) == 0);
+                var _adjacente_baixo = (_z < _maze_height - 1 && ds_grid_get(_maze, _i, _z + 1) == 0);
+                var _adjacente_esquerda = (_i > 0 && ds_grid_get(_maze, _i - 1, _z) == 0);
+                var _adjacente_direita = (_i < _maze_width - 1 && ds_grid_get(_maze, _i + 1, _z) == 0);
 
-                var image_index_in = 15;
+                var _image_index_in = 15;
 
                 // Lógica detalhada para paredes vermelhas
-                if (adjacente_cima && adjacente_baixo && !adjacente_esquerda && !adjacente_direita) {
-                    image_index_in = 0;
-                } else if (adjacente_esquerda && adjacente_direita && !adjacente_cima && !adjacente_baixo) {
-                    image_index_in = 1;
-                } else if (adjacente_cima && adjacente_direita && !adjacente_baixo && !adjacente_esquerda) {
-                    image_index_in = 7;
-                } else if (adjacente_direita && adjacente_baixo && !adjacente_cima && !adjacente_esquerda) {
-                    image_index_in = 10;
-                } else if (adjacente_baixo && adjacente_esquerda && !adjacente_cima && !adjacente_direita) {
-                    image_index_in = 9;
-                } else if (adjacente_esquerda && adjacente_cima && !adjacente_baixo && !adjacente_direita) {
-                    image_index_in = 8;
-                } else if (adjacente_cima && !adjacente_baixo && !adjacente_esquerda && !adjacente_direita) {
-                    image_index_in = 14;
-                } else if (adjacente_direita && !adjacente_cima && !adjacente_baixo && !adjacente_esquerda) {
-                    image_index_in = 11;
-                } else if (adjacente_baixo && !adjacente_cima && !adjacente_esquerda && !adjacente_direita) {
-                    image_index_in = 12;
-                } else if (adjacente_esquerda && !adjacente_cima && !adjacente_baixo && !adjacente_direita) {
-                    image_index_in = 13;
-                } else if (adjacente_esquerda && adjacente_cima && adjacente_direita && !adjacente_baixo) {
-                    image_index_in = 6;
-                } else if (adjacente_cima && adjacente_direita && adjacente_baixo && !adjacente_esquerda) {
-                    image_index_in = 5;
-                } else if (adjacente_direita && adjacente_baixo && adjacente_esquerda && !adjacente_cima) {
-                    image_index_in = 4;
-                } else if (adjacente_baixo && adjacente_esquerda && adjacente_cima && !adjacente_direita) {
-                    image_index_in = 3;
-                } else if (adjacente_cima && adjacente_baixo && adjacente_esquerda && adjacente_direita) {
-                    image_index_in = 2;
+                if (_adjacente_cima && _adjacente_baixo && !_adjacente_esquerda && !_adjacente_direita) {
+                    _image_index_in = 0;
+                } else if (_adjacente_esquerda && _adjacente_direita && !_adjacente_cima && !_adjacente_baixo) {
+                    _image_index_in = 1;
+                } else if (_adjacente_cima && _adjacente_direita && !_adjacente_baixo && !_adjacente_esquerda) {
+                    _image_index_in = 7;
+                } else if (_adjacente_direita && _adjacente_baixo && !_adjacente_cima && !_adjacente_esquerda) {
+                    _image_index_in = 10;
+                } else if (_adjacente_baixo && _adjacente_esquerda && !_adjacente_cima && !_adjacente_direita) {
+                    _image_index_in = 9;
+                } else if (_adjacente_esquerda && _adjacente_cima && !_adjacente_baixo && !_adjacente_direita) {
+                    _image_index_in = 8;
+                } else if (_adjacente_cima && !_adjacente_baixo && !_adjacente_esquerda && !_adjacente_direita) {
+                    _image_index_in = 14;
+                } else if (_adjacente_direita && !_adjacente_cima && !_adjacente_baixo && !_adjacente_esquerda) {
+                    _image_index_in = 11;
+                } else if (_adjacente_baixo && !_adjacente_cima && !_adjacente_esquerda && !_adjacente_direita) {
+                    _image_index_in = 12;
+                } else if (_adjacente_esquerda && !_adjacente_cima && !_adjacente_baixo && !_adjacente_direita) {
+                    _image_index_in = 13;
+                } else if (_adjacente_esquerda && _adjacente_cima && _adjacente_direita && !_adjacente_baixo) {
+                    _image_index_in = 6;
+                } else if (_adjacente_cima && _adjacente_direita && _adjacente_baixo && !_adjacente_esquerda) {
+                    _image_index_in = 5;
+                } else if (_adjacente_direita && _adjacente_baixo && _adjacente_esquerda && !_adjacente_cima) {
+                    _image_index_in = 4;
+                } else if (_adjacente_baixo && _adjacente_esquerda && _adjacente_cima && !_adjacente_direita) {
+                    _image_index_in = 3;
+                } else if (_adjacente_cima && _adjacente_baixo && _adjacente_esquerda && _adjacente_direita) {
+                    _image_index_in = 2;
                 }
 
-                var wall_instance = instance_create_layer(i * _cell_size, z * _cell_size, "instances", obj_wall_vermelha);
-                with (wall_instance) {
-                    x = i * _cell_size + (_cell_size / 2);
-                    y = z * _cell_size + (_cell_size / 2);
-                    image_index = image_index_in;
+                var _wall_instance = instance_create_layer(_i * _cell_size, _z * _cell_size, "instances", obj_wall_vermelha);
+                with (_wall_instance) {
+                    x = _i * _cell_size + (_cell_size / 2);
+                    y = _z * _cell_size + (_cell_size / 2);
+                    image_index = _image_index_in;
                 }
 
-                var chao = instance_create_layer(i * _cell_size, z * _cell_size, "instances_floor", obj_floor_carne);
-                with (chao) {
-                    x = i * _cell_size + (_cell_size / 2);
-                    y = z * _cell_size + (_cell_size / 2);
+                var _chao = instance_create_layer(_i * _cell_size, _z * _cell_size, "instances_floor", obj_floor_carne);
+                with (_chao) {
+                    x = _i * _cell_size + (_cell_size / 2);
+                    y = _z * _cell_size + (_cell_size / 2);
                 }
             } else {
-                var chao_instance = instance_create_layer(i * _cell_size, z * _cell_size, "instances_floor", obj_floor_carne);
-                with (chao_instance) {
-                    x = i * _cell_size + (_cell_size / 2);
-                    y = z * _cell_size + (_cell_size / 2);
+                var _chao_instance = instance_create_layer(_i * _cell_size, _z * _cell_size, "instances_floor", obj_floor_carne);
+                with (_chao_instance) {
+                    x = _i * _cell_size + (_cell_size / 2);
+                    y = _z * _cell_size + (_cell_size / 2);
                 }
             }
         }
@@ -554,45 +562,45 @@ function criar_paredes_vermelha_intances(_maze_width, _maze_height, _maze, _cell
 }
 
 function criar_parede_circular() {
-    var room_w = global.room_width;
-    var room_h = global.room_height;
+    var _room_w = global.room_width;
+    var _room_h = global.room_height;
 
     // Cantos
     instance_create_layer(64, 64, "instances", obj_wall_carne_circular);
     
-    var wall_circular_2 = instance_create_layer(room_w - global._cell_size, 64, "instances", obj_wall_carne_circular);
-    with (wall_circular_2) sprite_index = spr_carne_cirular3;
+    var _wall_circular_2 = instance_create_layer(_room_w - global._cell_size, 64, "instances", obj_wall_carne_circular);
+    with (_wall_circular_2) sprite_index = spr_carne_cirular3;
 
-    var wall_circular_3 = instance_create_layer(64, room_h - global._cell_size, "instances", obj_wall_carne_circular);
-    with (wall_circular_3) sprite_index = spr_carne_cirular4;
+    var _wall_circular_3 = instance_create_layer(64, _room_h - global._cell_size, "instances", obj_wall_carne_circular);
+    with (_wall_circular_3) sprite_index = spr_carne_cirular4;
 
-    var wall_circular_4 = instance_create_layer(room_w - global._cell_size, room_h - global._cell_size, "instances", obj_wall_carne_circular);
-    with (wall_circular_4) sprite_index = spr_carne_cirular2;
+    var _wall_circular_4 = instance_create_layer(_room_w - global._cell_size, _room_h - global._cell_size, "instances", obj_wall_carne_circular);
+    with (_wall_circular_4) sprite_index = spr_carne_cirular2;
 }
 
-function recriar_paredes_na_sala_atual(current_sala) {
-    var sala_id = string(current_sala[0]) + "_" + string(current_sala[1]);
+function recriar_paredes_na_sala_atual(_current_sala) {
+    var _sala_id = string(_current_sala[0]) + "_" + string(_current_sala[1]);
 
-    if (ds_map_exists(global.salas_com_paredes, sala_id)) {
-        var lista_paredes = ds_map_find_value(global.salas_com_paredes, sala_id);
+    if (ds_map_exists(global.salas_com_paredes, _sala_id)) {
+        var _lista_paredes = ds_map_find_value(global.salas_com_paredes, _sala_id);
 
-        for (var i = 0; i < ds_list_size(lista_paredes); i++) {
-            var parede_pos = ds_list_find_value(lista_paredes, i);
-            ds_grid_set(global._maze, parede_pos[0], parede_pos[1], 1);
+        for (var _i = 0; _i < ds_list_size(_lista_paredes); _i++) {
+            var _parede_pos = ds_list_find_value(_lista_paredes, _i);
+            ds_grid_set(global._maze, _parede_pos[0], _parede_pos[1], 1);
         }
     } 
 }
 
 function criar_paredes_borda(_maze_width, _maze_height, _maze) {
     // Paredes superior e inferior
-    for (var i = 0; i <= _maze_width; i++) {
-        ds_grid_set(_maze, i, 0, 0);
-        ds_grid_set(_maze, i, _maze_height - 1, 0);
+    for (var _i = 0; _i <= _maze_width; _i++) {
+        ds_grid_set(_maze, _i, 0, 0);
+        ds_grid_set(_maze, _i, _maze_height - 1, 0);
     }
     // Paredes laterais
-    for (var j = 0; j <= _maze_height; j++) {
-        ds_grid_set(_maze, 0, j, 0);
-        ds_grid_set(_maze, _maze_width - 1, j, 0);
+    for (var _j = 0; _j <= _maze_height; _j++) {
+        ds_grid_set(_maze, 0, _j, 0);
+        ds_grid_set(_maze, _maze_width - 1, _j, 0);
     }
     
     // Correção: uso de == para comparação
@@ -604,9 +612,9 @@ function criar_paredes_borda(_maze_width, _maze_height, _maze) {
 
 #region Chao
 function criar_chao_room_inteira(_maze_width, _maze_height, _maze) {
-    for (var i = 0; i < _maze_width; i++) {
-        for (var j = 0; j < _maze_height; j++) {
-            ds_grid_set(_maze, i, j, 1); // 1 indica chão
+    for (var _i = 0; _i < _maze_width; _i++) {
+        for (var _j = 0; _j < _maze_height; _j++) {
+            ds_grid_set(_maze, _i, _j, 1); // 1 indica chão
         }
     }
 }
@@ -617,112 +625,113 @@ function criar_chao_room_inteira(_maze_width, _maze_height, _maze) {
 // ============================================================================
 #region Slow Tapete
 
-function recriar_slow_na_sala_atual(current_sala) {
-    var sala_id = string(current_sala[0]) + "_" + string(current_sala[1]);
+function recriar_slow_na_sala_atual(_current_sala) {
+    var _sala_id = string(_current_sala[0]) + "_" + string(_current_sala[1]);
 
-    if (ds_map_exists(global.salas_com_slow, sala_id)) {
-        var lista_pontos = ds_map_find_value(global.salas_com_slow, sala_id);
+    if (ds_map_exists(global.salas_com_slow, _sala_id)) {
+        var _lista_pontos = ds_map_find_value(global.salas_com_slow, _sala_id);
 
-        for (var i = 0; i < ds_list_size(lista_pontos); i++) {
-            var ponto_pos = ds_list_find_value(lista_pontos, i);
-            instance_create_layer(ponto_pos[0], ponto_pos[1], "Instances_Abaixo_moveis", global.slow);
+        for (var _i = 0; _i < ds_list_size(_lista_pontos); _i++) {
+            var _ponto_pos = ds_list_find_value(_lista_pontos, _i);
+            instance_create_layer(_ponto_pos[0], _ponto_pos[1], "Instances_Abaixo_moveis", global.slow);
         }
     } 
 }
 
-function create_slow_em_salas_aleatorias(salas_geradas, quantidade_salas, quantidade_slow) {
-    var salas_selecionadas = [];
+function create_slow_em_salas_aleatorias(_salas_geradas, _quantidade_salas, _quantidade_slow) {
+    var _salas_selecionadas = [];
 
-    for (var i = 0; i < quantidade_salas; i++) {
-        var sala_aleatoria;
+    for (var _i = 0; _i < _quantidade_salas; _i++) {
+        var _sala_aleatoria = 0;
         do {
-            sala_aleatoria = salas_geradas[irandom(array_length(salas_geradas) - 1)];
-        } until (!array_contains(salas_selecionadas, sala_aleatoria));
+            _sala_aleatoria = _salas_geradas[irandom(array_length(_salas_geradas) - 1)];
+        } until (!array_contains(_salas_selecionadas, _sala_aleatoria));
 
-        array_push(salas_selecionadas, sala_aleatoria);
+        array_push(_salas_selecionadas, _sala_aleatoria);
     }
 
-    for (var i = 0; i < array_length(salas_selecionadas); i++) {
-        var sala = salas_selecionadas[i];
-        var sala_id = string(sala[0]) + "_" + string(sala[1]);
-        var lista_pontos = ds_list_create();
+    for (var _i = 0; _i < array_length(_salas_selecionadas); _i++) {
+        var _sala = _salas_selecionadas[_i];
+        var _sala_id = string(_sala[0]) + "_" + string(_sala[1]);
+        var _lista_pontos = ds_list_create();
 
-        for (var j = 0; j < quantidade_slow; j++) {
-            var ponto_valido = false;
-            var ponto_x, ponto_y;
+        for (var _j = 0; _j < _quantidade_slow; _j++) {
+            var _ponto_valido = false;
+            var _ponto_x = 0, _ponto_y = 0;
 
             do {
-                ponto_x = irandom_range(128, room_width - 128);
-                ponto_y = irandom_range(128, room_height - 128);
-                ponto_valido = true;
+                _ponto_x = irandom_range(128, room_width - 128);
+                _ponto_y = irandom_range(128, room_height - 128);
+                _ponto_valido = true;
 
-                for (var k = 0; k < ds_list_size(lista_pontos); k++) {
-                    var ponto_existente = ds_list_find_value(lista_pontos, k);
-                    var distancia = point_distance(ponto_x, ponto_y, ponto_existente[0], ponto_existente[1]);
-                    if (distancia < 100) {
-                        ponto_valido = false;
+                for (var _k = 0; _k < ds_list_size(_lista_pontos); _k++) {
+                    var _ponto_existente = ds_list_find_value(_lista_pontos, _k);
+                    var _distancia = point_distance(_ponto_x, _ponto_y, _ponto_existente[0], _ponto_existente[1]);
+                    if (_distancia < 100) {
+                        _ponto_valido = false;
                         break;
                     }
                 }
-            } until (ponto_valido);
+            } until (_ponto_valido);
 
-            ds_list_add(lista_pontos, [ponto_x, ponto_y]);
+            ds_list_add(_lista_pontos, [_ponto_x, _ponto_y]);
         }
-        ds_map_add(global.salas_com_slow, sala_id, lista_pontos);
+        ds_map_add(global.salas_com_slow, _sala_id, _lista_pontos);
     }
 }
 #endregion
 
 #region Escada
-function recriar_escada_na_sala_atual(current_sala) {
-    var sala_id = string(current_sala[0]) + "_" + string(current_sala[1]);
+function recriar_escada_na_sala_atual(_current_sala) {
+    var _sala_id = string(_current_sala[0]) + "_" + string(_current_sala[1]);
 
-    if (ds_map_exists(global.salas_com_escada_porao, sala_id)) {
-        var vela_pos = ds_map_find_value(global.salas_com_escada_porao, sala_id);
-        instance_create_layer(vela_pos[0], vela_pos[1], "Instances_moveis", obj_escada_porao);
+    if (ds_map_exists(global.salas_com_escada_porao, _sala_id)) {
+        var _vela_pos = ds_map_find_value(global.salas_com_escada_porao, _sala_id);
+        instance_create_layer(_vela_pos[0], _vela_pos[1], "Instances_moveis", obj_escada_porao);
     }
 }
 
-function create_escada_porao_em_fundos(salas_geradas) {
+function create_escada_porao_em_fundos(_salas_geradas) {
+    // feather disable once GM1041
     random_set_seed(global.seed_atual);
     
-    for (var i = 0; i < array_length(salas_geradas); i++) {
-        var sala = salas_geradas[i];
-        var sala_detalhes = procurar_sala_por_numero(sala);
+    for (var _i = 0; _i < array_length(_salas_geradas); _i++) {
+        var _sala = _salas_geradas[_i];
+        var _sala_detalhes = procurar_sala_por_numero(_sala);
 
-        if (sala_detalhes.tipo == "fundos") {
-            var sala_id = string(sala[0]) + "_" + string(sala[1]);
-            var margem = global._cell_size;
-            var lado = irandom(3);
-            var escada_x, escada_y;
+        if (_sala_detalhes.tipo == "fundos") {
+            var _sala_id = string(_sala[0]) + "_" + string(_sala[1]);
+            var _margem = global._cell_size;
+            var _lado = irandom(3);
+            var _escada_x = 0, _escada_y = 0;
 
-            switch (lado) {
+            switch (_lado) {
                 case 0: // Esquerda
-                    escada_x = margem - 5;
-                    escada_y = (irandom(1) == 0) ? irandom_range(margem, (room_height / 2) - 100) : irandom_range((room_height / 2) + 100, room_height - margem);
+                    _escada_x = _margem - 5;
+                    _escada_y = (irandom(1) == 0) ? irandom_range(_margem, (room_height / 2) - 100) : irandom_range((room_height / 2) + 100, room_height - _margem);
                     global.direcao_escada_porao = 1;
                     global.direcao_escada = 1;
                     break;
                 case 1: // Direita
-                    escada_x = room_width - margem + 5;
-                    escada_y = (irandom(1) == 0) ? irandom_range(margem, (room_height / 2) - 100) : irandom_range((room_height / 2) + 100, room_height - margem);
+                    _escada_x = room_width - _margem + 5;
+                    _escada_y = (irandom(1) == 0) ? irandom_range(_margem, (room_height / 2) - 100) : irandom_range((room_height / 2) + 100, room_height - _margem);
                     global.direcao_escada_porao = 0;
                     global.direcao_escada = 2;
                     break;
                 case 2: // Cima
-                    escada_y = margem + 37;
-                    escada_x = (irandom(1) == 0) ? irandom_range(margem, (room_width / 2) - 100) : irandom_range((room_width / 2) + 100, room_width - margem);
+                    _escada_y = _margem + 37;
+                    _escada_x = (irandom(1) == 0) ? irandom_range(_margem, (room_width / 2) - 100) : irandom_range((room_width / 2) + 100, room_width - _margem);
                     global.direcao_escada_porao = 2;
                     global.direcao_escada = 4;
                     break;
                 case 3: // Baixo
-                    escada_y = room_height - margem - 37;
-                    escada_x = (irandom(1) == 0) ? irandom_range(margem, (room_width / 2) - 100) : irandom_range((room_width / 2) + 100, room_width - margem);
+                    _escada_y = room_height - _margem - 37;
+                    _escada_x = (irandom(1) == 0) ? irandom_range(_margem, (room_width / 2) - 100) : irandom_range((room_width / 2) + 100, room_width - _margem);
                     global.direcao_escada_porao = 3;
                     global.direcao_escada = 3;
                     break;
             }
-            ds_map_add(global.salas_com_escada_porao, sala_id, [escada_x, escada_y]);
+            ds_map_add(global.salas_com_escada_porao, _sala_id, [_escada_x, _escada_y]);
         }
     }
 }
@@ -733,216 +742,217 @@ function create_escada_porao_em_fundos(salas_geradas) {
 // ============================================================================
 #region Inimigos
 
-function recriar_inimigos_na_sala_atual(current_sala) {
-    var sala_id = string(current_sala[0]) + "_" + string(current_sala[1]);
+function recriar_inimigos_na_sala_atual(_current_sala) {
+    var _sala_id = string(_current_sala[0]) + "_" + string(_current_sala[1]);
 
-    if (ds_map_exists(global.salas_com_fantasma, sala_id)) {
-        var lista_pontos = ds_map_find_value(global.salas_com_fantasma, sala_id);
+    if (ds_map_exists(global.salas_com_fantasma, _sala_id)) {
+        var _lista_pontos = ds_map_find_value(global.salas_com_fantasma, _sala_id);
 
-        for (var i = 0; i < ds_list_size(lista_pontos); i++) {
-            var ponto_pos = ds_list_find_value(lista_pontos, i);
-            instance_create_layer(ponto_pos[0], ponto_pos[1], "instances", obj_inimigo_fantasma);
+        for (var _i = 0; _i < ds_list_size(_lista_pontos); _i++) {
+            var _ponto_pos = ds_list_find_value(_lista_pontos, _i);
+            instance_create_layer(_ponto_pos[0], _ponto_pos[1], "instances", obj_inimigo_fantasma);
         }
     } 
 }
 
-function create_inimigos_em_salas_escuras(quantidade_inimigos) {
-    for (var i = 0; i < array_length(global.salas_escuras); i++) {
-        var sala = global.salas_escuras[i];
-        var sala_id = string(sala[0]) + "_" + string(sala[1]);
-        var lista_inimigo = ds_list_create();
+function create_inimigos_em_salas_escuras(_quantidade_inimigos) {
+    for (var _i = 0; _i < array_length(global.salas_escuras); _i++) {
+        var _sala = global.salas_escuras[_i];
+        var _sala_id = string(_sala[0]) + "_" + string(_sala[1]);
+        var _lista_inimigo = ds_list_create();
 
-        for (var j = 0; j < quantidade_inimigos; j++) {
-            var inimigo_x = irandom_range(128, room_width - 128);
-            var inimigo_y = irandom_range(128, room_height - 128);
-            ds_list_add(lista_inimigo, [inimigo_x, inimigo_y]);
+        for (var _j = 0; _j < _quantidade_inimigos; _j++) {
+            var _inimigo_x = irandom_range(128, room_width - 128);
+            var _inimigo_y = irandom_range(128, room_height - 128);
+            ds_list_add(_lista_inimigo, [_inimigo_x, _inimigo_y]);
         }
-        ds_map_add(global.salas_com_fantasma, sala_id, lista_inimigo);
+        ds_map_add(global.salas_com_fantasma, _sala_id, _lista_inimigo);
     }
 }
 
-function recriar_amoebas_na_sala_atual(current_sala) {
-    var sala_id = string(current_sala[0]) + "_" + string(current_sala[1]);
+function recriar_amoebas_na_sala_atual(_current_sala) {
+    var _sala_id = string(_current_sala[0]) + "_" + string(_current_sala[1]);
 
-    if (ds_map_exists(global.salas_com_amoeba, sala_id)) {
-        var lista_pontos = ds_map_find_value(global.salas_com_amoeba, sala_id);
+    if (ds_map_exists(global.salas_com_amoeba, _sala_id)) {
+        var _lista_pontos = ds_map_find_value(global.salas_com_amoeba, _sala_id);
 
-        for (var i = 0; i < ds_list_size(lista_pontos); i++) {
-            var ponto_pos = ds_list_find_value(lista_pontos, i);
-            instance_create_layer(ponto_pos[0], ponto_pos[1], "instances", obj_amoeba);
+        for (var _i = 0; _i < ds_list_size(_lista_pontos); _i++) {
+            var _ponto_pos = ds_list_find_value(_lista_pontos, _i);
+            instance_create_layer(_ponto_pos[0], _ponto_pos[1], "instances", obj_amoeba);
         }
     } 
 }
 
-function create_amoeba_em_salas_aleatorias(salas_geradas, quantidade_salas, quantidade_pontos) {
-    var salas_selecionadas = [];
+function create_amoeba_em_salas_aleatorias(_salas_geradas, _quantidade_salas, _quantidade_pontos) {
+    var _salas_selecionadas = [];
 
-    for (var i = 0; i < quantidade_salas; i++) {
-        var sala_aleatoria;
+    for (var _i = 0; _i < _quantidade_salas; _i++) {
+        var _sala_aleatoria = 0;
         do {
-            sala_aleatoria = salas_geradas[irandom(array_length(salas_geradas) - 1)];
-        } until (!array_contains(salas_selecionadas, sala_aleatoria));
+            _sala_aleatoria = _salas_geradas[irandom(array_length(_salas_geradas) - 1)];
+        } until (!array_contains(_salas_selecionadas, _sala_aleatoria));
 
-        array_push(salas_selecionadas, sala_aleatoria);
+        array_push(_salas_selecionadas, _sala_aleatoria);
     }
 
-    for (var i = 0; i < array_length(salas_selecionadas); i++) {
-        var sala = salas_selecionadas[i];
-        var sala_id = string(sala[0]) + "_" + string(sala[1]);
-        var lista_pontos = ds_list_create();
+    for (var _i = 0; _i < array_length(_salas_selecionadas); _i++) {
+        var _sala = _salas_selecionadas[_i];
+        var _sala_id = string(_sala[0]) + "_" + string(_sala[1]);
+        var _lista_pontos = ds_list_create();
 
-        for (var j = 0; j < quantidade_pontos; j++) {
-            var ponto_x = irandom_range(128, room_width - 128);
-            var ponto_y = irandom_range(128, room_height - 128);
-            ds_list_add(lista_pontos, [ponto_x, ponto_y]);
+        for (var _j = 0; _j < _quantidade_pontos; _j++) {
+            var _ponto_x = irandom_range(128, room_width - 128);
+            var _ponto_y = irandom_range(128, room_height - 128);
+            ds_list_add(_lista_pontos, [_ponto_x, _ponto_y]);
         }
-        ds_map_add(global.salas_com_amoeba, sala_id, lista_pontos);
+        ds_map_add(global.salas_com_amoeba, _sala_id, _lista_pontos);
     }
 }
 
-function recriar_inimigos_na_sala_atual_alet(current_sala) {
-    var sala_id = string(current_sala[0]) + "_" + string(current_sala[1]);
+function recriar_inimigos_na_sala_atual_alet(_current_sala) {
+    var _sala_id = string(_current_sala[0]) + "_" + string(_current_sala[1]);
 
-    if (ds_map_exists(global.salas_com_inimigos, sala_id)) {
-        var lista_inimigos = ds_map_find_value(global.salas_com_inimigos, sala_id);
+    if (ds_map_exists(global.salas_com_inimigos, _sala_id)) {
+        var _lista_inimigos = ds_map_find_value(global.salas_com_inimigos, _sala_id);
 
-        for (var i = 0; i < ds_list_size(lista_inimigos); i++) {
-            var inimigo_info = ds_list_find_value(lista_inimigos, i);
+        for (var _i = 0; _i < ds_list_size(_lista_inimigos); _i++) {
+            var _inimigo_info = ds_list_find_value(_lista_inimigos, _i);
             
-            var inimigo = instance_create_layer(inimigo_info[2], inimigo_info[3], "instances", inimigo_info[1]);
+            var _inimigo = instance_create_layer(_inimigo_info[2], _inimigo_info[3], "instances", _inimigo_info[1]);
             
-            inimigo.inimigo_id      = inimigo_info[0];
-            inimigo.vida            = inimigo_info[4];
-            inimigo.dano            = inimigo_info[5];
-            inimigo.veloc_perse     = inimigo_info[6];
-            inimigo.dist_aggro      = inimigo_info[7];
-            inimigo.dist_desaggro   = inimigo_info[8];
-            inimigo.escala          = inimigo_info[9];
-            inimigo.veloc           = inimigo_info[10];
-            inimigo.max_vida        = inimigo_info[11];
+            _inimigo.inimigo_id      = _inimigo_info[0];
+            _inimigo.vida            = _inimigo_info[4];
+            _inimigo.dano            = _inimigo_info[5];
+            _inimigo.veloc_perse     = _inimigo_info[6];
+            _inimigo.dist_aggro      = _inimigo_info[7];
+            _inimigo.dist_desaggro   = _inimigo_info[8];
+            _inimigo.escala          = _inimigo_info[9];
+            _inimigo.veloc           = _inimigo_info[10];
+            _inimigo.max_vida        = _inimigo_info[11];
         }
     }
 }
 
-function shuffle_array(array) {
-    for (var i = array_length(array) - 1; i > 0; i--) {
-        var j = irandom(i);
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+function shuffle_array(_array) {
+    for (var _i = array_length(_array) - 1; _i > 0; _i--) {
+        var _j = irandom(_i);
+        var _temp = _array[_i];
+        _array[_i] = _array[_j];
+        _array[_j] = _temp;
     }
-    return array;
+    return _array;
 }
 
-function criar_inimigos_em_salas_aleatorias_alet(salas_geradas) {
+function criar_inimigos_em_salas_aleatorias_alet(_salas_geradas) {
     randomize();
-    var inimigos_faceis = [obj_amoeba];
-    var inimigos_medios = [obj_amoeba_azul, obj_amoeba_laranja];
-    var inimigos_dificeis = [obj_amoeba_vermelha, obj_amoeba_rosa, obj_torreta];
+    var _inimigos_faceis = [obj_amoeba];
+    var _inimigos_medios = [obj_amoeba_azul, obj_amoeba_laranja];
+    var _inimigos_dificeis = [obj_amoeba_vermelha, obj_amoeba_rosa, obj_torreta];
     
-    var lvl = global.level_fase - 1;
-    var quantidade_inimigos = lvl + 2;
-    var quantidade_salas = lvl + 2;
-    var inimigo_id = 0;
+    var _lvl = global.level_fase - 1;
+    var _quantidade_inimigos = _lvl + 2;
+    var _quantidade_salas = _lvl + 2;
+    var _inimigo_id = 0;
 
-    if (array_length(salas_geradas) < quantidade_salas) {
-        quantidade_salas = array_length(salas_geradas);
+    if (array_length(_salas_geradas) < _quantidade_salas) {
+        _quantidade_salas = array_length(_salas_geradas);
     }
     
-    salas_geradas = shuffle_array(salas_geradas);
-    var salas_selecionadas = salas_geradas;
+    var _salas_geradas_shuffled = shuffle_array(_salas_geradas);
+    var _salas_selecionadas = _salas_geradas_shuffled;
 
-    for (var i = 0; i < array_length(salas_selecionadas); i++) {
-        var sala = salas_selecionadas[i];
-        var sala_id = string(sala[0]) + "_" + string(sala[1]);
-        var lista_inimigos = ds_list_create();
+    for (var _i = 0; _i < array_length(_salas_selecionadas); _i++) {
+        var _sala = _salas_selecionadas[_i];
+        var _sala_id = string(_sala[0]) + "_" + string(_sala[1]);
+        var _lista_inimigos = ds_list_create();
 
-        var inimigos_facil_qtd = quantidade_inimigos * (max(5 - lvl, 1) / 5);
-        var inimigos_medio_qtd = quantidade_inimigos * (lvl > 2 ? min((lvl - 2) / 6, 0.3) : 0);
-        var inimigos_dificil_qtd = quantidade_inimigos * (lvl > 5 ? min((lvl - 5) / 10, 0.2) : 0);
+        var _inimigos_facil_qtd = _quantidade_inimigos * (max(5 - _lvl, 1) / 5);
+        var _inimigos_medio_qtd = _quantidade_inimigos * (_lvl > 2 ? min((_lvl - 2) / 6, 0.3) : 0);
+        var _inimigos_dificil_qtd = _quantidade_inimigos * (_lvl > 5 ? min((_lvl - 5) / 10, 0.2) : 0);
 
         // Helper interno para salvar
-        var salvar_inimigo = function(_lista, _id, _tipo, _x, _y, _vida, _dano, _vp, _da, _dd, _esc, _vel, _vmax) {
-             ds_list_add(_lista, [_id, _tipo, _x, _y, _vida, _dano, _vp, _da, _dd, _esc, _vel, _vmax]);
+        var _salvar_inimigo = function(__lista, __id, __tipo, __x, __y, __vida, __dano, __vp, __da, __dd, __esc, __vel, __vmax) {
+             ds_list_add(__lista, [__id, __tipo, __x, __y, __vida, __dano, __vp, __da, __dd, __esc, __vel, __vmax]);
         };
 
         // Criar fáceis
-        for (var j = 0; j < inimigos_facil_qtd; j++) {
-            var ix = irandom_range(128, room_width - 128);
-            var iy = irandom_range(128, room_height - 128);
-            var itype = inimigos_faceis[irandom(array_length(inimigos_faceis) - 1)];
-            inimigo_id++;
+        for (var _j = 0; _j < _inimigos_facil_qtd; _j++) {
+            var _ix = irandom_range(128, room_width - 128);
+            var _iy = irandom_range(128, room_height - 128);
+            var _itype = _inimigos_faceis[irandom(array_length(_inimigos_faceis) - 1)];
+            _inimigo_id++;
             
-            var inst = instance_create_layer(ix, iy, "instances", itype);
-            inst.vida = 10 + (lvl * 2);
-            inst.dano = 5 + lvl;
-            inst.veloc_perse = 1;
-            inst.dist_aggro = 200;
-            inst.dist_desaggro = 300;
-            inst.escala = 3;
-            inst.veloc = 0.8;
-            inst.inimigo_id = inimigo_id;
-            inst.max_vida = 10 + (lvl * 2);
+            var _inst = instance_create_layer(_ix, _iy, "instances", _itype);
+            _inst.vida = 10 + (_lvl * 2);
+            _inst.dano = 5 + _lvl;
+            _inst.veloc_perse = 1;
+            _inst.dist_aggro = 200;
+            _inst.dist_desaggro = 300;
+            _inst.escala = 3;
+            _inst.veloc = 0.8;
+            _inst.inimigo_id = _inimigo_id;
+            _inst.max_vida = 10 + (_lvl * 2);
             
-            salvar_inimigo(lista_inimigos, inimigo_id, itype, ix, iy, inst.vida, inst.dano, inst.veloc_perse, inst.dist_aggro, inst.dist_desaggro, inst.escala, inst.veloc, inst.max_vida);
+            _salvar_inimigo(_lista_inimigos, _inimigo_id, _itype, _ix, _iy, _inst.vida, _inst.dano, _inst.veloc_perse, _inst.dist_aggro, _inst.dist_desaggro, _inst.escala, _inst.veloc, _inst.max_vida);
         }
 
         // Criar médios
-        for (var j = 0; j < inimigos_medio_qtd; j++) {
-            var ix = irandom_range(128, room_width - 128);
-            var iy = irandom_range(128, room_height - 128);
-            var itype = inimigos_medios[irandom(array_length(inimigos_medios) - 1)];
-            inimigo_id++;
+        for (var _j = 0; _j < _inimigos_medio_qtd; _j++) {
+            var _ix = irandom_range(128, room_width - 128);
+            var _iy = irandom_range(128, room_height - 128);
+            var _itype = _inimigos_medios[irandom(array_length(_inimigos_medios) - 1)];
+            _inimigo_id++;
 
-            var inst = instance_create_layer(ix, iy, "instances", itype);
-            inst.vida = 20 + (lvl * 3);
-            inst.dano = 10 + (lvl * 1.5);
-            inst.veloc_perse = 3;
-            inst.dist_aggro = 400;
-            inst.dist_desaggro = 500;
-            inst.escala = 4;
-            inst.veloc = 3;
-            inst.inimigo_id = inimigo_id;
-            inst.max_vida = 20 + (lvl * 3);
+            var _inst = instance_create_layer(_ix, _iy, "instances", _itype);
+            _inst.vida = 20 + (_lvl * 3);
+            _inst.dano = 10 + (_lvl * 1.5);
+            _inst.veloc_perse = 3;
+            _inst.dist_aggro = 400;
+            _inst.dist_desaggro = 500;
+            _inst.escala = 4;
+            _inst.veloc = 3;
+            _inst.inimigo_id = _inimigo_id;
+            _inst.max_vida = 20 + (_lvl * 3);
 
-            salvar_inimigo(lista_inimigos, inimigo_id, itype, ix, iy, inst.vida, inst.dano, inst.veloc_perse, inst.dist_aggro, inst.dist_desaggro, inst.escala, inst.veloc, inst.max_vida);
+            _salvar_inimigo(_lista_inimigos, _inimigo_id, _itype, _ix, _iy, _inst.vida, _inst.dano, _inst.veloc_perse, _inst.dist_aggro, _inst.dist_desaggro, _inst.escala, _inst.veloc, _inst.max_vida);
         }
 
         // Criar difíceis
-        for (var j = 0; j < inimigos_dificil_qtd; j++) {
-            var ix = irandom_range(128, room_width - 128);
-            var iy = irandom_range(128, room_height - 128);
-            var itype = inimigos_dificeis[irandom(array_length(inimigos_dificeis) - 1)];
-            inimigo_id++;
+        for (var _j = 0; _j < _inimigos_dificil_qtd; _j++) {
+            var _ix = irandom_range(128, room_width - 128);
+            var _iy = irandom_range(128, room_height - 128);
+            var _itype = _inimigos_dificeis[irandom(array_length(_inimigos_dificeis) - 1)];
+            _inimigo_id++;
 
-            var inst = instance_create_layer(ix, iy, "instances", itype);
-            inst.vida = 30 + (lvl * 5);
-            inst.dano = 15 + (lvl * 2);
-            inst.veloc_perse = 5;
-            inst.dist_aggro = 700;
-            inst.dist_desaggro = 800;
-            inst.escala = 5;
-            inst.veloc = 5;
-            inst.inimigo_id = inimigo_id;
-            inst.max_vida = 30 + (lvl * 5);
+            var _inst = instance_create_layer(_ix, _iy, "instances", _itype);
+            _inst.vida = 30 + (_lvl * 5);
+            _inst.dano = 15 + (_lvl * 2);
+            _inst.veloc_perse = 5;
+            _inst.dist_aggro = 700;
+            _inst.dist_desaggro = 800;
+            _inst.escala = 5;
+            _inst.veloc = 5;
+            _inst.inimigo_id = _inimigo_id;
+            _inst.max_vida = 30 + (_lvl * 5);
 
-            salvar_inimigo(lista_inimigos, inimigo_id, itype, ix, iy, inst.vida, inst.dano, inst.veloc_perse, inst.dist_aggro, inst.dist_desaggro, inst.escala, inst.veloc, inst.max_vida);
+            _salvar_inimigo(_lista_inimigos, _inimigo_id, _itype, _ix, _iy, _inst.vida, _inst.dano, _inst.veloc_perse, _inst.dist_aggro, _inst.dist_desaggro, _inst.escala, _inst.veloc, _inst.max_vida);
         }
 
-        ds_map_add(global.salas_com_inimigos, sala_id, lista_inimigos);
+        ds_map_add(global.salas_com_inimigos, _sala_id, _lista_inimigos);
     }   
 }
 
-function remover_inimigo_por_id(sala, inimigo_id) {
-    var sala_id = string(sala[0]) + "_" + string(sala[1]);
+function remover_inimigo_por_id(_sala, _inimigo_id) {
+    var _sala_id = string(_sala[0]) + "_" + string(_sala[1]);
+    var _map = global.salas_com_inimigos;
 
-    if (ds_map_exists(global.salas_com_inimigos, sala_id)) {
-        var lista_inimigos = ds_map_find_value(global.salas_com_inimigos, sala_id);
+    if (ds_map_exists(_map, _sala_id)) {
+        var _lista_inimigos = ds_map_find_value(_map, _sala_id);
         
-        for (var i = 0; i < ds_list_size(lista_inimigos); i++) {
-            var inimigo_info = ds_list_find_value(lista_inimigos, i);
-            if (inimigo_info[0] == inimigo_id) {
-                ds_list_delete(lista_inimigos, i); 
+        for (var _i = 0; _i < ds_list_size(_lista_inimigos); _i++) {
+            var _inimigo_info = ds_list_find_value(_lista_inimigos, _i);
+            if (_inimigo_info[0] == _inimigo_id) {
+                ds_list_delete(_lista_inimigos, _i); 
                 break;
             }
         }
@@ -951,40 +961,40 @@ function remover_inimigo_por_id(sala, inimigo_id) {
 #endregion
 
 #region Torreta
-function create_torretas_em_salas_aleatorias(salas_geradas, quantidade_salas, quantidade_pontos) {
-    var salas_selecionadas = [];
+function create_torretas_em_salas_aleatorias(_salas_geradas, _quantidade_salas, _quantidade_pontos) {
+    var _salas_selecionadas = [];
 
-    for (var i = 0; i < quantidade_salas; i++) {
-        var sala_aleatoria;
+    for (var _i = 0; _i < _quantidade_salas; _i++) {
+        var _sala_aleatoria = 0;
         do {
-            sala_aleatoria = salas_geradas[irandom(array_length(salas_geradas) - 1)];
-        } until (!array_contains(salas_selecionadas, sala_aleatoria));
-        array_push(salas_selecionadas, sala_aleatoria);
+            _sala_aleatoria = _salas_geradas[irandom(array_length(_salas_geradas) - 1)];
+        } until (!array_contains(_salas_selecionadas, _sala_aleatoria));
+        array_push(_salas_selecionadas, _sala_aleatoria);
     }
 
-    for (var i = 0; i < array_length(salas_selecionadas); i++) {
-        var sala = salas_selecionadas[i];
-        var sala_id = string(sala[0]) + "_" + string(sala[1]);
-        var lista_pontos = ds_list_create();
+    for (var _i = 0; _i < array_length(_salas_selecionadas); _i++) {
+        var _sala = _salas_selecionadas[_i];
+        var _sala_id = string(_sala[0]) + "_" + string(_sala[1]);
+        var _lista_pontos = ds_list_create();
 
-        for (var j = 0; j < quantidade_pontos; j++) {
-            var ponto_x = irandom_range(128, room_width - 128);
-            var ponto_y = irandom_range(128, room_height - 128);
-            ds_list_add(lista_pontos, [ponto_x, ponto_y]);
+        for (var _j = 0; _j < _quantidade_pontos; _j++) {
+            var _ponto_x = irandom_range(128, room_width - 128);
+            var _ponto_y = irandom_range(128, room_height - 128);
+            ds_list_add(_lista_pontos, [_ponto_x, _ponto_y]);
         }
-        ds_map_add(global.salas_com_torretas, sala_id, lista_pontos);
+        ds_map_add(global.salas_com_torretas, _sala_id, _lista_pontos);
     }
 }
 
-function recriar_torreta_na_sala_atual(current_sala) {
-    var sala_id = string(current_sala[0]) + "_" + string(current_sala[1]);
+function recriar_torreta_na_sala_atual(_current_sala) {
+    var _sala_id = string(_current_sala[0]) + "_" + string(_current_sala[1]);
 
-    if (ds_map_exists(global.salas_com_torretas, sala_id)) {
-        var lista_pontos = ds_map_find_value(global.salas_com_torretas, sala_id);
+    if (ds_map_exists(global.salas_com_torretas, _sala_id)) {
+        var _lista_pontos = ds_map_find_value(global.salas_com_torretas, _sala_id);
 
-        for (var i = 0; i < ds_list_size(lista_pontos); i++) {
-            var ponto_pos = ds_list_find_value(lista_pontos, i);
-            instance_create_layer(ponto_pos[0], ponto_pos[1], "instances", obj_torreta);
+        for (var _i = 0; _i < ds_list_size(_lista_pontos); _i++) {
+            var _ponto_pos = ds_list_find_value(_lista_pontos, _i);
+            instance_create_layer(_ponto_pos[0], _ponto_pos[1], "instances", obj_torreta);
         }
     } 
 }
@@ -994,62 +1004,62 @@ function recriar_torreta_na_sala_atual(current_sala) {
 // GERAÇÃO PROCEDURAL
 // ============================================================================
 
-function conta_salas_adjacentes(salas, sala_atual) {
-    var direcoes = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-    var contador = 0;
+function conta_salas_adjacentes(_salas, _sala_atual) {
+    var _direcoes = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    var _contador = 0;
 
-    for (var d = 0; d < 4; d++) {
-        var adjacente_x = sala_atual[0] + direcoes[d][0];
-        var adjacente_y = sala_atual[1] + direcoes[d][1];
+    for (var _d = 0; _d < 4; _d++) {
+        var _adjacente_x = _sala_atual[0] + _direcoes[_d][0];
+        var _adjacente_y = _sala_atual[1] + _direcoes[_d][1];
 
-        for (var i = 0; i < array_length(salas); i++) {
-            if (salas[i][0] == adjacente_x && salas[i][1] == adjacente_y) {
-                contador++;
+        for (var _i = 0; _i < array_length(_salas); _i++) {
+            if (_salas[_i][0] == _adjacente_x && _salas[_i][1] == _adjacente_y) {
+                _contador++;
             }
         }
     }
-    return contador;
+    return _contador;
 }
 
-function gera_salas_procedurais(num_salas) {
-    random_set_seed(global.seed_atual);
-    var salas = [];
-    var sala_atual = [0, 0];
-    array_push(salas, sala_atual);
-    criar_salas_lista(sala_atual, 0);
+function gera_salas_procedurais(_num_salas) {
+    if (global.seed_atual != noone) random_set_seed(real(global.seed_atual));
+    var _salas = [];
+    var _sala_atual = [0, 0];
+    array_push(_salas, _sala_atual);
+    criar_salas_lista(_sala_atual, 0);
 
-    var direcoes = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-    var tentativas_max = 100;
+    var _direcoes = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    var _tentativas_max = 100;
 
-    for (var i = 1; i < num_salas; i++) {
-        var nova_sala;
-        var encontrou = false;
-        var tentativas = 0;
+    for (var _i = 1; _i < _num_salas; _i++) {
+        var _nova_sala = 0;
+        var _encontrou = false;
+        var _tentativas = 0;
 
-        while (!encontrou && tentativas < tentativas_max) {
-            var sala_anterior = salas[irandom(array_length(salas) - 1)];
+        while (!_encontrou && _tentativas < _tentativas_max) {
+            var _sala_anterior = _salas[irandom(array_length(_salas) - 1)];
 
-            if (conta_salas_adjacentes(salas, sala_anterior) < 3) {
-                var direcao = direcoes[irandom(3)];
-                nova_sala = [sala_anterior[0] + direcao[0], sala_anterior[1] + direcao[1]];
-                encontrou = true;
+            if (conta_salas_adjacentes(_salas, _sala_anterior) < 3) {
+                var _direcao = _direcoes[irandom(3)];
+                _nova_sala = [_sala_anterior[0] + _direcao[0], _sala_anterior[1] + _direcao[1]];
+                _encontrou = true;
 
-                for (var j = 0; j < array_length(salas); j++) {
-                    if (salas[j][0] == nova_sala[0] && salas[j][1] == nova_sala[1]) {
-                        encontrou = false;
+                for (var _j = 0; _j < array_length(_salas); _j++) {
+                    if (_salas[_j][0] == _nova_sala[0] && _salas[_j][1] == _nova_sala[1]) {
+                        _encontrou = false;
                         break;
                     }
                 }
             }
-            tentativas++;
+            _tentativas++;
         }
 
-        if (encontrou) {
-            array_push(salas, nova_sala);
-            criar_salas_lista(nova_sala, i + 1);
+        if (_encontrou) {
+            array_push(_salas, _nova_sala);
+            criar_salas_lista(_nova_sala, _i + 1);
         }
     }
-    return salas;
+    return _salas;
 }
 
 function cria_salas_e_objetos(_maze_width, _maze_height, _maze, _cell_size) {
@@ -1062,70 +1072,76 @@ function cria_salas_e_objetos(_maze_width, _maze_height, _maze, _cell_size) {
 // SISTEMA DE PORTAS
 // ============================================================================
 
-function criar_portas_gerais_templo(sala_atual, salas_geradas) {
-    for (var i = 0; i < array_length(salas_geradas); i++) {
-        var sala_vizinha = salas_geradas[i];
-        if (is_array(sala_vizinha)) {
-            var x_vizinho = sala_vizinha[0];
-            var y_vizinho = sala_vizinha[1];
+function criar_portas_gerais_templo(_sala_atual, _salas_geradas) {
+    for (var _i = 0; _i < array_length(_salas_geradas); _i++) {
+        var _sala_vizinha = _salas_geradas[_i];
+        if (is_array(_sala_vizinha)) {
+            var _x_vizinho = _sala_vizinha[0];
+            var _y_vizinho = _sala_vizinha[1];
 
             // Direita
-            if (x_vizinho == sala_atual[0] + 1 && y_vizinho == sala_atual[1]) {
-                var pd1 = instance_position(global.room_width - 32, (global.room_height / 2), global.sala.parede);
-                if (pd1 != noone) instance_destroy(pd1);
-                var pd2 = instance_position(global.room_width + 32, (global.room_height / 2), global.sala.parede);
-                if (pd2 != noone) instance_destroy(pd2);
+            if (_x_vizinho == _sala_atual[0] + 1 && _y_vizinho == _sala_atual[1]) {
+               
+                var _pd1 = instance_position(global.room_width - 32, (global.room_height / 2), global.sala.parede);
+                if (_pd1 != noone) instance_destroy(_pd1);
+               
+                var _pd2 = instance_position(global.room_width + 32, (global.room_height / 2), global.sala.parede);
+                if (_pd2 != noone) instance_destroy(_pd2);
 
-                var porta_direita = instance_create_layer(global.room_width - 10, (global.room_height / 2), "instances", obj_next_room);
-                with (porta_direita) {
-                    room_destino = sala_vizinha;
-                    room_origem = sala_atual;
+                var _porta_direita = instance_create_layer(global.room_width - 10, (global.room_height / 2), "instances", obj_next_room);
+                with (_porta_direita) {
+                    room_destino = _sala_vizinha;
+                    room_origem = _sala_atual;
                     direcao = 2;
                     image_yscale = 4;
                     visible = false;
                 }
             }
             // Esquerda
-            if (x_vizinho == sala_atual[0] - 1 && y_vizinho == sala_atual[1]) {
-                var pe = instance_position(0, (global.room_height / 2), global.sala.parede);
-                if (pe != noone) instance_destroy(pe);
+            if (_x_vizinho == _sala_atual[0] - 1 && _y_vizinho == _sala_atual[1]) {
+               
+                var _pe = instance_position(0, (global.room_height / 2), global.sala.parede);
+                if (_pe != noone) instance_destroy(_pe);
 
-                var porta_esquerda = instance_create_layer(10, (global.room_height / 2), "instances", obj_next_room);
-                with (porta_esquerda) {
+                var _porta_esquerda = instance_create_layer(10, (global.room_height / 2), "instances", obj_next_room);
+                with (_porta_esquerda) {
                     image_yscale = 4;
                     visible = false;
-                    room_destino = sala_vizinha;
-                    room_origem = sala_atual;
+                    room_destino = _sala_vizinha;
+                    room_origem = _sala_atual;
                     direcao = 4;
                 }
             }
             // Cima
-            if (x_vizinho == sala_atual[0] && y_vizinho == sala_atual[1] + 1) {
-                var pa = instance_position((global.room_width / 2) + 16, 32, global.sala.parede);
-                if (pa != noone) instance_destroy(pa);
+            if (_x_vizinho == _sala_atual[0] && _y_vizinho == _sala_atual[1] + 1) {
+               
+                var _pa = instance_position((global.room_width / 2) + 16, 32, global.sala.parede);
+                if (_pa != noone) instance_destroy(_pa);
 
-                var porta_acima = instance_create_layer((global.room_width / 2), 10, "instances", obj_next_room);
-                with (porta_acima) {
+                var _porta_acima = instance_create_layer((global.room_width / 2), 10, "instances", obj_next_room);
+                with (_porta_acima) {
                     image_xscale = 3;
-                    room_destino = sala_vizinha;
-                    room_origem = sala_atual;
+                    room_destino = _sala_vizinha;
+                    room_origem = _sala_atual;
                     direcao = 1;
                     visible = false;
                 }
             }
             // Baixo
-            if (x_vizinho == sala_atual[0] && y_vizinho == sala_atual[1] - 1) {
-                var pb1 = instance_position((global.room_width / 2) + 16, global.room_height + 32, global.sala.parede);
-                if (pb1 != noone) instance_destroy(pb1);
-                var pb2 = instance_position((global.room_width / 2) + 16, global.room_height + 32, global.sala.parede); // Verifique se essa lógica duplicada é intencional
-                if (pb2 != noone) instance_destroy(pb2);
+            if (_x_vizinho == _sala_atual[0] && _y_vizinho == _sala_atual[1] - 1) {
+               
+                var _pb1 = instance_position((global.room_width / 2) + 16, global.room_height + 32, global.sala.parede);
+                if (_pb1 != noone) instance_destroy(_pb1);
+               
+                var _pb2 = instance_position((global.room_width / 2) + 16, global.room_height + 32, global.sala.parede); // Verifique se essa lógica duplicada é intencional
+                if (_pb2 != noone) instance_destroy(_pb2);
 
-                var porta_abaixo = instance_create_layer((global.room_width / 2), global.room_height - 10, "instances", obj_next_room);
-                with (porta_abaixo) {
+                var _porta_abaixo = instance_create_layer((global.room_width / 2), global.room_height - 10, "instances", obj_next_room);
+                with (_porta_abaixo) {
                     visible = false;
                     image_xscale = 3;
-                    room_destino = sala_vizinha;
-                    room_origem = sala_atual;
+                    room_destino = _sala_vizinha;
+                    room_origem = _sala_atual;
                     direcao = 3;
                 }
             }
@@ -1133,71 +1149,71 @@ function criar_portas_gerais_templo(sala_atual, salas_geradas) {
     }
 }
 
-function criar_portas_gerais(sala_atual, salas_geradas) {
-    var sala = procurar_sala_por_numero(global.current_sala);
+function criar_portas_gerais(_sala_atual, _salas_geradas) {
+    var _sala = procurar_sala_por_numero(global.current_sala);
 
-    for (var i = 0; i < array_length(salas_geradas); i++) {
-        var sala_vizinha = salas_geradas[i];
+    for (var _i = 0; _i < array_length(_salas_geradas); _i++) {
+        var _sala_vizinha = _salas_geradas[_i];
 
-        if (is_array(sala_vizinha)) {
-            var x_vizinho = sala_vizinha[0];
-            var y_vizinho = sala_vizinha[1];
+        if (is_array(_sala_vizinha)) {
+            var _x_vizinho = _sala_vizinha[0];
+            var _y_vizinho = _sala_vizinha[1];
 
             // Direita
-            if (x_vizinho == sala_atual[0] + 1 && y_vizinho == sala_atual[1]) {
-                var pd1 = instance_position(global.room_width - 1, (global.room_height / 2), sala.parede);
-                if (pd1 != noone) instance_destroy(pd1);
-                var pd2 = instance_position(global.room_width + 32, (global.room_height / 2), sala.parede);
-                if (pd2 != noone) instance_destroy(pd2);
+            if (_x_vizinho == _sala_atual[0] + 1 && _y_vizinho == _sala_atual[1]) {
+                var _pd1 = instance_position(global.room_width - 1, (global.room_height / 2), _sala.parede);
+                if (_pd1 != noone) instance_destroy(_pd1);
+                var _pd2 = instance_position(global.room_width + 32, (global.room_height / 2), _sala.parede);
+                if (_pd2 != noone) instance_destroy(_pd2);
 
-                var porta_direita = instance_create_layer(global.room_width - 5, (global.room_height / 2), "instances", obj_next_room);
-                with (porta_direita) {
+                var _porta_direita = instance_create_layer(global.room_width - 5, (global.room_height / 2), "instances", obj_next_room);
+                with (_porta_direita) {
                     image_angle -= 90;
                     image_yscale = -1;
-                    room_destino = sala_vizinha;
-                    room_origem = sala_atual;
+                    room_destino = _sala_vizinha;
+                    room_origem = _sala_atual;
                     direcao = 2;
                 }
             }
             // Esquerda
-            if (x_vizinho == sala_atual[0] - 1 && y_vizinho == sala_atual[1]) {
-                var pe = instance_position(0, (global.room_height / 2), sala.parede);
-                if (pe != noone) instance_destroy(pe);
+            if (_x_vizinho == _sala_atual[0] - 1 && _y_vizinho == _sala_atual[1]) {
+                var _pe = instance_position(0, (global.room_height / 2), _sala.parede);
+                if (_pe != noone) instance_destroy(_pe);
 
-                var porta_esquerda = instance_create_layer(5, (global.room_height / 2), "instances", obj_next_room);
-                with (porta_esquerda) {
+                var _porta_esquerda = instance_create_layer(5, (global.room_height / 2), "instances", obj_next_room);
+                with (_porta_esquerda) {
                     image_angle += 90;
                     image_yscale = -1;
-                    room_destino = sala_vizinha;
-                    room_origem = sala_atual;
+                    room_destino = _sala_vizinha;
+                    room_origem = _sala_atual;
                     direcao = 4;
                 }
             }
             // Cima
-            if (x_vizinho == sala_atual[0] && y_vizinho == sala_atual[1] + 1) {
-                var pa = instance_position((global.room_width / 2) + 16, 32, sala.parede);
-                if (pa != noone) instance_destroy(pa);
+            if (_x_vizinho == _sala_atual[0] && _y_vizinho == _sala_atual[1] + 1) {
+                var _pa = instance_position((global.room_width / 2) + 16, 32, _sala.parede);
+                if (_pa != noone) instance_destroy(_pa);
 
-                var porta_acima = instance_create_layer((global.room_width / 2) + 32, 10, "instances", obj_next_room);
-                with (porta_acima) {
+                var _porta_acima = instance_create_layer((global.room_width / 2) + 32, 10, "instances", obj_next_room);
+                with (_porta_acima) {
                     image_yscale = -1;
-                    room_destino = sala_vizinha;
-                    room_origem = sala_atual;
+                    room_destino = _sala_vizinha;
+                    room_origem = _sala_atual;
                     direcao = 1;
                 }
             }
             // Baixo
-            if (x_vizinho == sala_atual[0] && y_vizinho == sala_atual[1] - 1) {
-                var pb1 = instance_position((global.room_width / 2) + 16, global.room_height - 10, sala.parede);
-                if (pb1 != noone) instance_destroy(pb1);
-                var pb2 = instance_position((global.room_width / 2) + 16, global.room_height + 32, sala.parede);
-                if (pb2 != noone) instance_destroy(pb2);
+            if (_x_vizinho == _sala_atual[0] && _y_vizinho == _sala_atual[1] - 1) {
+                var _pb1 = instance_position((global.room_width / 2) + 16, global.room_height - 10, _sala.parede);
+                if (_pb1 != noone) instance_destroy(_pb1);
+                var _pb2 = instance_position((global.room_width / 2) + 16, global.room_height + 32, _sala.parede);
+                if (_pb2 != noone) instance_destroy(_pb2);
 
-                var porta_abaixo = instance_create_layer((global.room_width / 2) + 32, global.room_height - 10, "instances", obj_next_room);
-                with (porta_abaixo) {
+                var _porta_abaixo = instance_create_layer((global.room_width / 2) + 32, global.room_height - 10, "instances", obj_next_room);
+                with (_porta_abaixo) {
                     image_xscale = 1;
-                    room_destino = sala_vizinha;
-                    room_origem = sala_atual;
+                    room_destino = _sala_vizinha;
+                    room_origem = _sala_atual;
                     direcao = 3;
                 }
             }
@@ -1217,20 +1233,22 @@ function recriar_bosses() {
     }
 }
 
-function carregar_sala(sala_atual, sala_origem_array) {
+function carregar_sala(_sala_atual, _sala_origem_array) {
     clear_room(); 
-    random_set_seed(global.seed_atual);
-    global.current_sala = sala_atual;
-    global.sala_passada = sala_origem_array;
+    if (global.seed_atual != noone) random_set_seed(real(global.seed_atual));
+    global.current_sala = _sala_atual;
+    global.sala_passada = _sala_origem_array;
     
-    cria_salas_e_objetos(global._maze_width, global._maze_height, global._maze, global._cell_size);
-    criar_portas_gerais(sala_atual, global.salas_geradas);
+    cria_salas_e_objetos(real(global._maze_width), real(global._maze_height), global._maze, real(global._cell_size));
+    
+    var _salas = is_array(global.salas_geradas) ? global.salas_geradas : [];
+    criar_portas_gerais(_sala_atual, _salas);
     recriar_pontos_na_sala_atual(global.current_sala);
     
     // Recriar mobílias
-    furniture_respawn_in_room(sala_atual, global.salas_com_escrivaninha, obj_mesa_1);
-    furniture_respawn_in_room(sala_atual, global.salas_com_geladeira, obj_geladeira);
-    furniture_respawn_in_room(sala_atual, global.salas_com_guarda_roupa, obj_guarda_roupa);
+    furniture_respawn_in_room(_sala_atual, global.salas_com_escrivaninha);
+    furniture_respawn_in_room(_sala_atual, global.salas_com_geladeira);
+    furniture_respawn_in_room(_sala_atual, global.salas_com_guarda_roupa);
     
     recriar_inimigos_na_sala_atual(global.current_sala);
     recriar_slow_na_sala_atual(global.current_sala);
@@ -1241,27 +1259,29 @@ function carregar_sala(sala_atual, sala_origem_array) {
     sala_tuto(); 
 }
 
-function carregar_sala_templo(sala_atual, sala_origem_array, direcao) {
+function carregar_sala_templo(_sala_atual, _sala_origem_array, _direcao) {
     clear_room(); 
-    carregar_templo(direcao);
-    global.sala_passada = sala_origem_array;
-    global.current_sala = sala_atual;
-    criar_portas_gerais_templo(sala_atual, global.salas_geradas);
+    carregar_templo(_direcao);
+    global.sala_passada = _sala_origem_array;
+    global.current_sala = _sala_atual;
+    
+    var _salas = is_array(global.salas_geradas) ? global.salas_geradas : [];
+    criar_portas_gerais_templo(_sala_atual, _salas);
 }
 
-function criar_random_pontos(quantidade) {
-    for (var i = 0; i < quantidade; i++) {
-        var ponto_x, ponto_y;
-        var tentativas = 0;
-        var max_tentativas = 100;
+function criar_random_pontos(_quantidade) {
+    for (var _i = 0; _i < _quantidade; _i++) {
+        var _ponto_x = 0, _ponto_y = 0;
+        var _tentativas = 0;
+        var _max_tentativas = 100;
 
         do {
-            ponto_x = irandom_range(64, room_width - 64);
-            ponto_y = irandom_range(64, room_height - 64);
-            tentativas++;
-        } until (!position_meeting(ponto_x, ponto_y, obj_wall_carne) || tentativas >= max_tentativas);
+            _ponto_x = irandom_range(64, room_width - 64);
+            _ponto_y = irandom_range(64, room_height - 64);
+            _tentativas++;
+        } until (!position_meeting(_ponto_x, _ponto_y, obj_wall_carne) || _tentativas >= _max_tentativas);
         
-        instance_create_layer(ponto_x, ponto_y, "instances", obj_pontos);
+        instance_create_layer(_ponto_x, _ponto_y, "instances", obj_pontos);
     }
 }
 

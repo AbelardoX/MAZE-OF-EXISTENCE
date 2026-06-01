@@ -18,10 +18,7 @@
     "name": "INIMIGOS",
     "path": "folders/Objects/FASE_BEBE_ALL/INIMIGOS.yy",
   },
-  "parentObjectId": {
-    "name": "par_inimigos",
-    "path": "objects/par_inimigos/par_inimigos.yy",
-  },
+  "parentObjectId": null,
   "persistent": false,
   "physicsAngularDamping": 0.1,
   "physicsDensity": 0.5,

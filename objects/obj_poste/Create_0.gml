@@ -1,3 +1,4 @@
+// feather disable GM2017
 raio = 600;
 
 luz_1 = raio;

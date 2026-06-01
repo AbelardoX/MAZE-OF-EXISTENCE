@@ -1,3 +1,4 @@
+// feather disable GM2017
 timer = 5000;
 damage = 10;
 push = 1;
@@ -20,7 +21,7 @@ velocidade_movimento = 6; // Quão rápido a bola voa (ajuste aqui)
 alvo = noone; // Variável para guardar o inimigo alvo
 
 // Encontra o inimigo mais próximo ao nascer
-// Certifique-se de que 'par_inimigos' é o objeto pai correto
-if (instance_exists(par_inimigos)) {
-    alvo = instance_nearest(x, y, par_inimigos);
+// Certifique-se de que 'obj_par_inimigos' é o objeto pai correto
+if (instance_exists(obj_par_inimigos)) {
+    alvo = instance_nearest(x, y, obj_par_inimigos);
 }

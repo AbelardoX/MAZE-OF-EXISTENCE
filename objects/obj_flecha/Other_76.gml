@@ -1,3 +1,4 @@
+// feather disable GM2017
 // Evento BROADCAST MESSAGE da Flecha
 if (event_data[? "message"] == "som_flecha") {
     

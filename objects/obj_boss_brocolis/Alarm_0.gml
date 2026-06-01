@@ -1,3 +1,4 @@
+// feather disable GM2017
 if (repete_contador > 0) {
     // Se houver mais repetições, habilita a criação de ondas
     onda = true;

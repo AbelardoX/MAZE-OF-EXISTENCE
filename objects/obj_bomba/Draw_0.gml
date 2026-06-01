@@ -1,3 +1,4 @@
+// feather disable GM2017
 // 1. Desenha Sombra no chão (x, y reais)
 draw_sprite_ext(spr_sombra, 0, x, y, 0.5, 0.5, 0, c_white, 0.5);
 

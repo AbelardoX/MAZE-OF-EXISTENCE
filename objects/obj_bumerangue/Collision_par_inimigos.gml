@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Aplica Dano e Verifica Perfuração
 /// [O QUE]: Causa dano apenas se o inimigo ainda não foi atingido neste voo, aplica knockback e gerencia a contagem de perfuração (pierce).
 /// [COMO] : 

@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Gerenciador de Mundo (Chunks, Inimigos e Terreno)
 /// [O QUE]: Controla a geração procedural do mapa, o spawn contínuo de inimigos nas bordas, a renderização do chão infinito e ferramentas de debug.
 /// [COMO] :

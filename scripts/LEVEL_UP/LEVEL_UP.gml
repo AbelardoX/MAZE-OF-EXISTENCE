@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Inicialização de Status e XP
 /// [O QUE]: Define os atributos base do player e prepara as listas de upgrade.
 
@@ -46,14 +47,14 @@ function level_upp()
     var _grid_weapons = global.upgrades_vamp_grid;
     var _total_weapons = ds_grid_height(_grid_weapons);
     
-    for (var i = 0; i < _total_weapons; i++) 
+    for (var _i = 0; _i < _total_weapons; _i++) 
     {
-        var _config_scr = _grid_weapons[# Upgrades_vamp.ConfigScript, i];
+        var _config_scr = _grid_weapons[# UPGRADES_VAMP.CONFIG_SCRIPT, _i];
         
         if (_config_scr != -1 && script_exists(_config_scr)) 
         {
-            var _curr_lvl_weapon = _grid_weapons[# Upgrades_vamp.level, i];
-            var _skill_data = _config_scr(); 
+            var _curr_lvl_weapon = _grid_weapons[# UPGRADES_VAMP.LEVEL, _i];
+            var _skill_data = script_execute(_config_scr); 
             var _max_lvl = array_length(_skill_data.niveis);
             
             var _next_level = _curr_lvl_weapon + 1;
@@ -89,12 +90,12 @@ function level_upp()
             }
             
             var _card_info = {
-                nome: _grid_weapons[# Upgrades_vamp.Name, i],
+                nome: _grid_weapons[# UPGRADES_VAMP.NAME, _i],
                 sprite: _sprite_final,
-                description: _desc_final, 
+                DESCRIPTION: _desc_final, 
                 next_level: _next_level,
                 type: 0, 
-                id_grid: i 
+                id_grid: _i 
             };
             
             ds_list_add(_pool, _card_info);
@@ -107,14 +108,16 @@ function level_upp()
     var _grid_items = global.itens_vamp_grid;
     var _total_items = ds_grid_height(_grid_items);
     
-    for (var k = 0; k < _total_items; k++) 
+    for (var _k = 0; _k < _total_items; _k++) 
     {
-        var _config_scr_item = _grid_items[# Itens_vamp.ConfigScript, k];
+        var _config_scr_item = _grid_items[# ITENS_VAMP.CONFIG_SCRIPT, _k];
         
-        if (_config_scr_item != -1 && script_exists(_config_scr_item)) 
+        if (_config_scr_item != -1 && script_exists(asset_get_index(_config_scr_item))) 
         {
-            var _curr_lvl_item = _grid_items[# Itens_vamp.level, k];
-            var _item_data = _config_scr_item();
+            var _curr_lvl_item = _grid_items[# ITENS_VAMP.LEVEL, _k];
+            // Executa o script e garante que o retorno seja tratado como um struct de dados
+			// feather disable once GM1041
+            var _item_data = script_execute(asset_get_index(_config_scr_item));
             var _max_lvl_item = array_length(_item_data.niveis);
             
             var _next_level_item = _curr_lvl_item + 1;
@@ -128,12 +131,12 @@ function level_upp()
             if (_ciclos_item > 0) _desc_final_item += "\n[Ciclo " + string(_ciclos_item + 1) + "]";
             
             var _item_card_info = {
-                nome: _grid_items[# Itens_vamp.Name, k],
+                nome: _grid_items[# ITENS_VAMP.NAME, _k],
                 sprite: variable_struct_exists(_item_data.stats_base, "sprite_icon") ? _item_data.stats_base.sprite_icon : -1,
-                description: _desc_final_item, 
+                DESCRIPTION: _desc_final_item, 
                 next_level: _next_level_item,
                 type: 1, 
-                id_grid: k 
+                id_grid: _k 
             };
             
             ds_list_add(_pool, _item_card_info);
@@ -148,9 +151,9 @@ function level_upp()
     var _pool_size = ds_list_size(_pool);
     var _picks = min(global.upgrade_num, _pool_size); 
     
-    for (var j = 0; j < _picks; j++) 
+    for (var _j = 0; _j < _picks; _j++) 
     {
-        ds_list_add(global.upgrades_vamp_list, _pool[| j]);
+        ds_list_add(global.upgrades_vamp_list, _pool[| _j]);
     }
 
     ds_list_destroy(_pool);

@@ -1,3 +1,4 @@
+// feather disable GM2017
 if(global.level_up == true){
 	image_speed = 0;
 	speed = 0;

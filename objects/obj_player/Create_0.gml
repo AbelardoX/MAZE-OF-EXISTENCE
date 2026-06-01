@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @description Inicialização do Player
 // ========================================================
 // 1. MACROS E CONFIGURAÇÕES
@@ -29,7 +30,7 @@ if (!variable_global_exists("level_player"))  global.level_player = 1;
 if (!variable_global_exists("tamanho_player")) global.tamanho_player = 1;
 
 // --- Equipamento ---
-if (!variable_global_exists("armamento"))     global.armamento = Armamentos.espada;
+if (!variable_global_exists("armamento"))     global.armamento = ARMAMENTOS.ESPADA;
 if (!variable_global_exists("mata_fantasma")) global.mata_fantasma = false;
 
 // --- Controle de Estado Global ---

@@ -1,3 +1,4 @@
+// feather disable GM2017
 poder_correr =false;
 poder_dash = false;
 poder_lanterna = false;

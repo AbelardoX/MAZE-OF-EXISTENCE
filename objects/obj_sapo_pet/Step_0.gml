@@ -1,3 +1,4 @@
+// feather disable GM2017
 // --- Pausa e Checagem de Player ---
 if (global.level_up) exit;
 if (!instance_exists(obj_player)) { image_speed = 0; exit; }
@@ -88,7 +89,7 @@ switch (state)
         }
 
         // 4. Procura Inimigo
-        var _nearest = instance_nearest(x, y, par_inimigos);
+        var _nearest = instance_nearest(x, y, obj_par_inimigos);
         if (_nearest != noone) {
             if (point_distance(x, y, _nearest.x, _nearest.y) < range) {
                 target_enemy = _nearest;

@@ -1,3 +1,4 @@
+// feather disable GM2017
 function desenhar_sombra() {
     // --- Configuração Inicial ---
     var _alpha_sombra = 0;

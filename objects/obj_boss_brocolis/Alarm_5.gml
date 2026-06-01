@@ -1,15 +1,16 @@
+// feather disable GM2017
 /// @description Insert description here
 // You can write your code in this editor
 // Código no alarm[5] para disparar projéteis múltiplos
 if (ataque_ativo) {
-    var proj_x = x;  // Posição inicial do projétil no eixo X (a posição atual do chefe)
-    var proj_y = y;  // Posição inicial do projétil no eixo Y (a posição atual do chefe)
-    var dir = point_direction(x, y, obj_player.x, obj_player.y);  // Direção para onde o projétil será disparado (direção do jogador)
+    var _proj_x = x;  // Posição inicial do projétil no eixo X (a posição atual do chefe)
+    var _proj_y = y;  // Posição inicial do projétil no eixo Y (a posição atual do chefe)
+    var _dir = point_direction(x, y, obj_player.x, obj_player.y);  // Direção para onde o projétil será disparado (direção do jogador)
 
     // Criar o projétil e definir suas propriedades
-    var proj = instance_create_layer(proj_x, proj_y, "instances", obj_projetil_boss);
-    with (proj) {
-        direction = dir;  // Define a direção do projétil
+    var _proj = instance_create_layer(_proj_x, _proj_y, "instances", obj_projetil_boss);
+    with (_proj) {
+        direction = _dir;  // Define a direção do projétil
         speed = 8;  // Velocidade do projétil
         damage = 10;  // Dano causado pelo projétil
     }

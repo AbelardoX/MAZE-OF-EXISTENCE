@@ -1,3 +1,4 @@
+// feather disable GM2017
 
    resetar_variaveis_globais();
     global.current_level += 1;

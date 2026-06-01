@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Retorna a estrutura de dados (Vetor de Skill) da BOMBA (Arremesso)
 function scr_bomb_config()
 {
@@ -43,11 +44,11 @@ function scr_bomba(_row_index)
     // --- VARIÁVEL QUE DEFINE QUAL OBJETO VAI NASCER ---
     var _bomb_obj = obj_bomba;
 
-    var _current_level = global.upgrades_vamp_grid[# Upgrades_vamp.level, _row_index];
+    var _current_level = global.upgrades_vamp_grid[# UPGRADES_VAMP.LEVEL, _row_index];
     if (_current_level <= 0) exit;
 
     var _config = scr_bomb_config(); 
-    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, Upgrades_vamp.description);
+    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, UPGRADES_VAMP.DESCRIPTION);
 
     // ========================================================
     // --- O DESVIO DA EVOLUÇÃO (NÍVEL 15) ---
@@ -69,7 +70,7 @@ function scr_bomba(_row_index)
         var _player_y = obj_player.y;
         var _targets_list = ds_list_create();
 
-        with (par_inimigos) 
+        with (obj_par_inimigos) 
         {
             if (point_distance(x, y, _player_x, _player_y) <= 1000) {
                 ds_list_add(_targets_list, id);
@@ -82,9 +83,9 @@ function scr_bomba(_row_index)
         {
             var _priority_queue = ds_priority_create();
             
-            for(var k = 0; k < _total_targets; k++)
+            for(var _k = 0; _k < _total_targets; _k++)
             {
-                var _enemy = _targets_list[| k];
+                var _enemy = _targets_list[| _k];
                 var _dist = point_distance(_player_x, _player_y, _enemy.x, _enemy.y);
                 ds_priority_add(_priority_queue, _enemy, _dist);
             }
@@ -95,7 +96,7 @@ function scr_bomba(_row_index)
 
             var _bombs_to_throw = min(_total_bombs_to_throw, _total_targets);
 
-            for (var i = 0; i < _bombs_to_throw; i++) 
+            for (var _i = 0; _i < _bombs_to_throw; _i++) 
             {
                 var _target_id = ds_priority_delete_min(_priority_queue);
 

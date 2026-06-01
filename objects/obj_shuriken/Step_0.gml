@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Movimento Orbital e Timer
 /// [O QUE]: Atualiza a posição da shuriken baseada no ângulo atual e no raio, mantendo-a presa ao player.
 /// [COMO] : 
@@ -30,8 +31,10 @@ else
         if (current_angle >= 360) current_angle -= 360;
 
         // Trigonometria: Calcula posição ao redor do player
-        x = obj_player.x + lengthdir_x(orbit_radius, current_angle);
-        y = obj_player.y + lengthdir_y(orbit_radius, current_angle);
+        // feather disable once GM1041
+        x = real(obj_player.x) + lengthdir_x(real(orbit_radius), real(current_angle));
+        // feather disable once GM1041
+        y = real(obj_player.y) + lengthdir_y(real(orbit_radius), real(current_angle));
         
         // Rotação do próprio sprite (visual)
         image_angle += 15;

@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Configuração do Mapa e Geração Procedural
 /// [O QUE]: Define o tipo de bioma (Vamp/Bebe), configura parâmetros de spawn de estruturas e reposiciona o player ao retornar de uma sub-área.
 /// [COMO] : 

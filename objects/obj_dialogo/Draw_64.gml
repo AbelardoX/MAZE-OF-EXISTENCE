@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Renderização da Interface de Diálogo
 /// [O QUE]: Desenha a caixa de texto, retrato e nome baseados no lado (Esquerda/Direita). Gerencia o menu de escolhas se necessário.
 /// [COMO] : 
@@ -91,19 +92,19 @@ if (initialized == true)
         // --- Desenho das Opções ---
         draw_set_font(fnt_escolhas);
         
-        for (var i = 0; i < op_num; i++) 
+        for (var _i = 0; _i < op_num; _i++) 
         {
-            var _string_w = string_width(op[i]);
-            var _current_y = _op_y - (_op_sep * i); // Desenha de baixo para cima
+            var _string_w = string_width(op[_i]);
+            var _current_y = _op_y - (_op_sep * _i); // Desenha de baixo para cima
             
             // Fundo da Opção
             draw_sprite_ext(spr_bloco, 0, _op_x, _current_y, (_string_w + _op_border * 2) / 16, 1, 0, c_white, 1);
             
             // Texto da Opção
-            draw_text(_op_x + _op_border, _current_y - 3, op[i]);
+            draw_text(_op_x + _op_border, _current_y - 3, op[_i]);
             
             // Seletor (Setinha)
-            if (op_selected == i) 
+            if (op_selected == _i) 
             {
                 draw_sprite(spr_seletor, 0, 15, _current_y + 15);
             }

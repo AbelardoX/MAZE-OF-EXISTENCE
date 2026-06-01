@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Inicialização do Sistema de Diálogo
 /// [O QUE]: Cria a grid de armazenamento de texto e inicializa as variáveis de controle de fluxo, digitação e menu de opções.
 /// [COMO] : 

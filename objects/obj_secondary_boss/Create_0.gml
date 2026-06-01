@@ -1,3 +1,4 @@
+// feather disable GM2017
 boss_invocado = false;      // Controla se o boss já foi chamado
 distancia_interacao = 100;   // Distância em pixels para o botão 'F' funcionar
 

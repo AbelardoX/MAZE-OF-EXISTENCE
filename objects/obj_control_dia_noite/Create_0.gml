@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Configuração do Ciclo Dia/Noite
 /// [O QUE]: Inicializa as variáveis globais de controle de tempo e a estrutura de dados (Struct) do ciclo de iluminação.
 /// [COMO] :

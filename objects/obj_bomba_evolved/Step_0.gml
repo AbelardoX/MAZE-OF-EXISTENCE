@@ -1,3 +1,4 @@
+// feather disable GM2017
 switch (state) 
 {
     // ============================================================
@@ -27,13 +28,16 @@ switch (state)
             image_yscale = _final_scale * 4;
             
             // Variáveis novas para o Buraco Negro
+            // feather disable once GM2016
             timer_sugando = 0; 
             exploded = false; 
         } 
         else 
         {
-            x = lerp(start_x, target_x, _progress);
-            y = lerp(start_y, target_y, _progress);
+            // feather disable once GM1041
+            x = lerp(real(start_x), real(target_x), real(_progress));
+            // feather disable once GM1041
+            y = lerp(real(start_y), real(target_y), real(_progress));
             z = sin(_progress * pi) * 150; 
             
             var _base_scale = radius / base_bomb_size;
@@ -53,11 +57,11 @@ switch (state)
         
         // 2. Efeito de Sucção Contínuo (Acontece todo frame)
         var _enemies_in_range = ds_list_create();
-        var _count = collision_circle_list(x, y, radius, par_inimigos, false, true, _enemies_in_range, false);
+        var _count = collision_circle_list(x, y, radius, obj_par_inimigos, false, true, _enemies_in_range, false);
         
-        for (var i = 0; i < _count; i++) 
+        for (var _i = 0; _i < _count; _i++) 
         {
-            var _enemy = _enemies_in_range[| i];
+            var _enemy = _enemies_in_range[| _i];
             if (instance_exists(_enemy)) 
             {
                 // Calcula direção DO INIMIGO PARA A BOMBA (Isso que faz puxar!)
@@ -88,11 +92,11 @@ switch (state)
                 
                 // Dá o dano final (o dano calculado no status) em quem sobrou na área
                 var _final_hit_list = ds_list_create();
-                var _final_count = collision_circle_list(x, y, radius, par_inimigos, false, true, _final_hit_list, false);
+                var _final_count = collision_circle_list(x, y, radius, obj_par_inimigos, false, true, _final_hit_list, false);
                 
-                for (var j = 0; j < _final_count; j++) 
+                for (var _j = 0; _j < _final_count; _j++) 
                 {
-                    var _final_enemy = _final_hit_list[| j];
+                    var _final_enemy = _final_hit_list[| _j];
                     if (instance_exists(_final_enemy)) {
                         _final_enemy.vida -= damage;
                         

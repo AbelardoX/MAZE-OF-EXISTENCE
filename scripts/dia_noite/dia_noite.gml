@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Controle Unificado de Dia/Noite (Lógica + Renderização)
 
 /// @desc Processa a lógica de passagem de tempo e luz ambiente.
@@ -92,9 +93,9 @@ function day_night_render()
 
     var _list_size = ds_list_size(global.lista_luzes);
 
-    for (var i = 0; i < _list_size; i++) 
+    for (var _i = 0; _i < _list_size; _i++) 
     {
-        var _light_inst = global.lista_luzes[| i];
+        var _light_inst = global.lista_luzes[| _i];
         
         if (instance_exists(_light_inst)) 
         {

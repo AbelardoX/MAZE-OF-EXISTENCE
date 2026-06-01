@@ -1,3 +1,4 @@
+// feather disable GM2017
 function scr_torreta_check_player(){
 	if(distance_to_object(obj_player) <= dist_aggro){
 		state = scr_amoeba_perseguir;
@@ -21,22 +22,22 @@ function scr_torreta_colisao(){
 function atirar_torreta(){
 	
     // Obtém a posição do obj_sperm
-    var alvo_x = obj_player.x;
-    var alvo_y = obj_player.y;
+    var _alvo_x = obj_player.x;
+    var _alvo_y = obj_player.y;
     
     // Direção do inimigo para o obj_sperm
-    var direcao = point_direction(x, y, alvo_x, alvo_y);
+    var _direcao = point_direction(x, y, _alvo_x, _alvo_y);
     
   
-    image_angle = direcao -180;  // Subtrai 90 graus para alinhar o "frente" do retângulo corretamente
+    image_angle = _direcao -180;  // Subtrai 90 graus para alinhar o "frente" do retângulo corretamente
 
 
 
 
 if(tiro == true){
-var tiros = instance_create_layer(x,y,"instances",obj_tiro);
-with(tiros){
-	direction =  direcao ;
+var _tiros = instance_create_layer(x,y,"instances",obj_tiro);
+with(_tiros){
+	direction =  _direcao ;
 }
 tiro = false;
 }

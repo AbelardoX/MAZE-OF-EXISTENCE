@@ -1,101 +1,91 @@
+// feather disable GM2017
 // Helper para gerar o ID da sala consistentemente
 function get_room_id(_room_coords) {
     return string(_room_coords[0]) + "_" + string(_room_coords[1]);
 }
 
 // --- FUNÇÃO 1: RECRIAR (Respawn) ---
-// Recria qualquer mobília baseada no mapa global e objeto fornecido
-function furniture_respawn_in_room(_current_sala_coords, _global_map, _obj_index) {
-    var _sala_id = get_room_id(_current_sala_coords);
-
-    // Verifica se existem dados salvos para esta sala neste mapa específico
+// Recria qualquer mobília baseada no mapa global de dados
+function furniture_respawn_in_room(_room_coords, _global_map) {
+    var _sala_id = get_room_id(_room_coords);
+    
     if (ds_map_exists(_global_map, _sala_id)) {
-        var _list_points = ds_map_find_value(_global_map, _sala_id);
-
-        for (var i = 0; i < ds_list_size(_list_points); i++) {
-            var _data = ds_list_find_value(_list_points, i);
-            var _px = _data[0];
-            var _py = _data[1];
-            var _is_open = _data[2];
-
-            // Cria o objeto genérico passado no argumento _obj_index
-            var _inst = instance_create_layer(_px, _py, "Instances_moveis", _obj_index);
-            
-            // Aplica o estado salvo
-            _inst.aberto = _is_open;
-        }
-    }
-}
-
-// --- FUNÇÃO 2: ATUALIZAR ESTADO (Save State) ---
-// Marca qualquer mobília como aberta/fechada no mapa global
-function furniture_update_state(_x, _y, _current_sala_coords, _global_map, _is_open) {
-    var _sala_id = get_room_id(_current_sala_coords);
-
-    if (ds_map_exists(_global_map, _sala_id)) {
-        var _list_points = ds_map_find_value(_global_map, _sala_id);
-
-        for (var i = 0; i < ds_list_size(_list_points); i++) {
-            var _data = ds_list_find_value(_list_points, i);
-
-            // Encontra a mobília pela posição X e Y
-            if (_data[0] == _x && _data[1] == _y) {
-                _data[2] = _is_open; // Atualiza o estado
-                ds_list_replace(_list_points, i, _data);
-                break; 
-            }
-        }
-        // Não é estritamente necessário replace o mapa se a lista é a mesma referência, 
-        // mas garante integridade em algumas versões do GM.
-        ds_map_replace(_global_map, _sala_id, _list_points);
-    }
-}
-
-// --- FUNÇÃO 3: GERAR (Create/Procedural) ---
-// Gera posições para qualquer mobília, com filtro opcional de tipo de sala
-function furniture_generate_positions(_salas_geradas, _global_map, _amount, _required_room_type = undefined) {
-    randomize();
-
-    for (var i = 0; i < array_length(_salas_geradas); i++) {
-        var _sala_coords = _salas_geradas[i];
+        var _list = _global_map[? _sala_id];
+        var _size = ds_list_size(_list);
         
-        // Se um tipo de sala for exigido (ex: "cozinha"), verifica antes
-        if (_required_room_type != undefined) {
-            var _sala_detalhes = procurar_sala_por_numero(_sala_coords);
-            if (_sala_detalhes.tipo != _required_room_type) continue; // Pula se não for o tipo certo
+        for (var _i = 0; _i < _size; _i++) {
+            var _data = _list[| _i]; // [_obj, _x, _y, _grupo_id]
+            var _inst = instance_create_layer(_data[1], _data[2], "Instances", _data[0]);
+            _inst.grupo_id = _data[3]; // Restaura o ID do grupo se for mobília coletiva
         }
+    }
+}
 
-        var _sala_id = get_room_id(_sala_coords);
+// --- FUNÇÃO 2: SALVAR (Persistência) ---
+// Salva a posição e tipo de todos os objetos de um tipo na sala atual
+function furniture_save_state(_room_coords, _global_map, _object_type) {
+    var _sala_id = get_room_id(_room_coords);
+    
+    // Se já existia uma lista para esta sala, destrói para atualizar
+    if (ds_map_exists(_global_map, _sala_id)) {
+        ds_list_destroy(_global_map[? _sala_id]);
+    }
+    
+    var _list_furniture = ds_list_create();
+    
+    with (_object_type) {
+        // Salva [Objeto, X, Y, ID do Grupo]
+        ds_list_add(_list_furniture, [object_index, x, y, variable_instance_exists(id, "grupo_id") ? grupo_id : noone]);
+    }
+
+    // Só salva no mapa global se criou alguma mobília
+    if (ds_list_size(_list_furniture) > 0) {
+        ds_map_add(_global_map, _sala_id, _list_furniture);
+    } else {
+        ds_list_destroy(_list_furniture); // Limpa memória se vazia
+    }
+}
+
+// --- FUNÇÃO 3: GERADOR DE POSIÇÕES (Procedural) ---
+// Define onde ficarão as mobílias em cada sala pela primeira vez
+function furniture_generate_positions(_salas_geradas, _global_map, _qtd_max, _tipo_especifico = "qualquer") {
+    var _total_rooms = array_length(_salas_geradas);
+    
+    for (var _i = 0; _i < _total_rooms; _i++) {
+        var _coords = _salas_geradas[_i];
+        var _sala_id = get_room_id(_coords);
+        
+        // Se esta sala já tem mobília definida na database global, não gera de novo
+        if (ds_map_exists(_global_map, _sala_id)) continue;
+
+        var _sala_info = procurar_sala_por_numero(_coords);
+        
+        // Filtro opcional por tipo de sala (ex: só gera geladeira se for cozinha)
+        if (_tipo_especifico != "qualquer" && _sala_info.tipo != _tipo_especifico) continue;
+
         var _list_furniture = ds_list_create();
+        var _qtd = irandom_range(1, _qtd_max);
 
-        for (var j = 0; j < _amount; j++) {
-            var _px, _py, _valid;
-            var _attempts = 0;
+        for (var _j = 0; _j < _qtd; _j++) {
+            // Sorteia posição livre na grid da sala
+            // (Ajuste os valores de 64 e room_width conforme seu tile e tamanho de sala)
+            var _px = irandom_range(128, room_width - 128);
+            var _py = irandom_range(128, room_height - 128);
+            
+            // Aqui você sorteia qual objeto de mobília colocar
+            var _obj_sorteado = noone;
+            
+            if (_global_map == global.salas_com_geladeira)    _obj_sorteado = obj_geladeira;
+            if (_global_map == global.salas_com_guarda_roupa) _obj_sorteado = obj_guarda_roupa;
+            if (_global_map == global.salas_com_escrivaninha) _obj_sorteado = obj_mesa_1;
 
-            // Tenta achar uma posição válida (com limite de tentativas para evitar loop infinito)
-            do {
-                _px = irandom_range(300, room_width - 300);
-                _py = irandom_range(300, room_height - 300);
-                _valid = true;
-                _attempts++;
-
-                // Verifica distância de outras mobílias desta lista
-                for (var k = 0; k < ds_list_size(_list_furniture); k++) {
-                    var _existing = ds_list_find_value(_list_furniture, k);
-                    if (point_distance(_px, _py, _existing[0], _existing[1]) < 100) {
-                        _valid = false;
-                        break;
-                    }
-                }
-            } until (_valid || _attempts > 50);
-
-            if (_valid) {
-                // Adiciona: [X, Y, Aberto(false)]
-                ds_list_add(_list_furniture, [_px, _py, false]);
+            if (_obj_sorteado != noone) {
+                // Salva [Objeto, X, Y, noone]
+                ds_list_add(_list_furniture, [_obj_sorteado, _px, _py, noone]);
             }
         }
 
-        // Só adiciona ao mapa se realmente criou alguma mobília
+        // Só salva no mapa global se criou alguma mobília
         if (ds_list_size(_list_furniture) > 0) {
             ds_map_add(_global_map, _sala_id, _list_furniture);
         } else {

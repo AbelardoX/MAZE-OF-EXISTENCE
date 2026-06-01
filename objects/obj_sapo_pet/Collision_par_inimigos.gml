@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Aplica o "Tapa"
 // Só causa dano se estiver no meio do Dash e ainda não tiver batido
 if (state == "dash" && !has_hit) 

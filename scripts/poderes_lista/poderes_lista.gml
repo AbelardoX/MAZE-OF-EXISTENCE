@@ -1,28 +1,29 @@
+// feather disable GM2017
 // ==============================================================================
 // REGIÃO 1: ENUMS E DEFINIÇÕES GLOBAIS (INFRAESTRUTURA)
 // ==============================================================================
 #region DEFINIÇÕES
 
 /// @desc Definição das colunas das tabelas de itens passivos
-enum Itens_vamp {
-    Name,
-    ConfigScript,   // NOVO: Link para o script de config (scr_XXX_config)
-    Script,         // NOVO: Link para o script executor (scr_XXX)
-    frequency,
-    description,
-    level,
-    Length
+enum ITENS_VAMP {
+    NAME,
+    CONFIG_SCRIPT,   // NOVO: Link para o script de config (scr_XXX_config)
+    SCRIPT,         // NOVO: Link para o script executor (scr_XXX)
+    FREQUENCY,
+    DESCRIPTION,
+    LEVEL,
+    LENGTH
 }
 
 /// @desc Definição das colunas das tabelas de upgrades ativos
-enum Upgrades_vamp {
-    Name,
-    ConfigScript,   // NOVO: Link para o script de config (scr_XXX_config)
-    Script,         // Link para o script executor (scr_XXX)
-    frequency,
-    description,
-    level,
-    Length
+enum UPGRADES_VAMP {
+    NAME,
+    CONFIG_SCRIPT,   // NOVO: Link para o script de config (scr_XXX_config)
+    SCRIPT,         // Link para o script executor (scr_XXX)
+    FREQUENCY,
+    DESCRIPTION,
+    LEVEL,
+    LENGTH
 }
 
 // --- MACRO: Struct de Status Padrão Universal ---
@@ -58,7 +59,9 @@ enum Upgrades_vamp {
 /// @desc Calcula os stats finais de uma skill ATIVA e atualiza a descrição na grid automaticamente.
 /// @param _skill_config O Struct retornado pela função scr_XXX_config()
 /// @param _current_level O nível atual da skill (pego da grid)
+/// @param _grid A grid onde os dados estão salvos
 /// @param _row_index O índice da linha desta skill na grid (recebido do controle)
+/// @param _col_desc A coluna da descrição na grid
 /// @desc Calcula os stats finais e atualiza a descrição (AGORA INFINITO)
 function scr_generic_calculate_stats(_skill_config, _current_level, _grid, _row_index, _col_desc)
 {
@@ -67,8 +70,8 @@ function scr_generic_calculate_stats(_skill_config, _current_level, _grid, _row_
     
     var _base_defined = _skill_config.stats_base;
     var _names = variable_struct_get_names(_base_defined);
-    for (var i = 0; i < array_length(_names); i++) {
-        var _name = _names[i];
+    for (var _i = 0; _i < array_length(_names); _i++) {
+        var _name = _names[_i];
         variable_struct_set(_stats, _name, variable_struct_get(_base_defined, _name));
     }
     
@@ -79,10 +82,10 @@ function scr_generic_calculate_stats(_skill_config, _current_level, _grid, _row_
     var _max_defined_levels = array_length(_levels_array);
     
     // ATENÇÃO: Removemos a trava de limite máximo. Ele vai contar até o nível atual, seja ele 15, 50 ou 1000.
-    for (var i = 0; i < _current_level; i++)
+    for (var _i = 0; _i < _current_level; _i++)
     {
         // O módulo '%' garante que se tivermos 6 níveis, o índice 6 vira 0, o 7 vira 1, etc.
-        var _nivel_info = _levels_array[i % _max_defined_levels];
+        var _nivel_info = _levels_array[_i % _max_defined_levels];
         
         if (variable_struct_exists(_nivel_info, "upgrade") && is_method(_nivel_info.upgrade)) {
              _nivel_info.upgrade(_stats);
@@ -113,19 +116,20 @@ function scr_generic_calculate_stats(_skill_config, _current_level, _grid, _row_
 
     return _stats;
 }
-/// @desc Retorna a estrutura de dados (Vetor de Skill) da BOLA
 
 /// @desc Calcula o upgrade do nível ATUAL e atualiza a grid de descrição de itens PASSIVOS.
 /// @desc (Específico para itens passivos que aplicam bônus 'one-time' ao subir de nível)
 /// @param _item_config O Struct retornado pela função scr_XXX_config()
-/// @param _current_level O nível atual do item (pego da grid)
-/// @param _row_index O índice da linha deste item na grid
-function scr_generic_calculate_passive_upgrade(_item_config, _current_level, _row_index)
+/// @param _current_level O nível atual da skill (pego da grid)
+/// @param _grid A grid onde os dados estão salvos
+/// @param _row_index O índice da linha desta skill na grid (recebido do controle)
+/// @param _col_desc A coluna da descrição na grid
+function scr_generic_calculate_passive_upgrade(_item_config, _current_level, _grid, _row_index, _col_desc)
 {
     // Retorna cópia base simples para passivos
     var _stats = variable_clone(_item_config.stats_base);
     
-    if (_current_level == 0) return _stats;
+    if (_col_desc == 0) return _stats;
 
     var _levels_array = _item_config.niveis;
     var _max_defined_levels = array_length(_levels_array);
@@ -148,7 +152,7 @@ function scr_generic_calculate_passive_upgrade(_item_config, _current_level, _ro
         _desc_grid = _levels_array[_current_level].desc; 
     }
     
-    global.itens_vamp_grid[# Itens_vamp.description, _row_index] = _desc_grid;
+    _grid[# _col_desc, _row_index] = _desc_grid;
 
     return _stats;
 }
@@ -161,29 +165,29 @@ function scr_generic_calculate_passive_upgrade(_item_config, _current_level, _ro
 #region AUXILIARES
 
 /// @desc Cria estrutura de poder básico (MANTIDO)
-function criar_poder(nome, nivel, dano, coletado, ID, objeto) 
+function criar_poder(_nome, _nivel, _dano, _coletado, ID, _objeto) 
 {
     return {
-        poder_nome: nome,
-        poder_nivel: nivel,
-        dano: dano,
-        coletado: coletado,
+        poder_nome: _nome,
+        poder_nivel: _nivel,
+        _dano: _dano,
+        _coletado: _coletado,
         ID: ID,
-        objeto: objeto
+        _objeto: _objeto
     };
 }
 
 /// @desc Busca poder pelo ID na lista (MANTIDO)
-function procurar_poder(id_procurado)
+function procurar_poder(_id_procurado)
 {
     var _tamanho = ds_list_size(global.lista_poderes_basicos);
     var _objeto_encontrado = noone; // Variável local segura
 
-    for (var i = 0; i < _tamanho; i++) 
+    for (var _i = 0; _i < _tamanho; _i++) 
     {
-        var _poder = global.lista_poderes_basicos[| i];
+        var _poder = global.lista_poderes_basicos[| _i];
         
-        if (_poder.ID == id_procurado) 
+        if (_poder.id == _id_procurado) 
         {
             _objeto_encontrado = _poder;
             break;
@@ -193,46 +197,54 @@ function procurar_poder(id_procurado)
 }
 
 /// @desc Adiciona Item Passivo na Grid (Redimensiona automátiocamente)
-/// @param _config_script O Link para o script scr_XXX_config
+/// @param {String} _name O nome do item
+/// @param {Asset.GMScript|Function|Real} _config_script O Link para o script scr_XXX_config
+/// @param {Asset.GMScript|Function|Real} _script O Link para o script executor
+/// @param {Real} _frequency Frequência de sorteio
+/// @param {Real} _level Nível inicial
 function ds_grid_add_item_vamp(_name, _config_script, _script, _frequency, _level)
 {
     var _grid = global.itens_vamp_grid;
     var _old_height = ds_grid_height(_grid);
-    
+
     // Aumenta a grid em 1 linha
-    ds_grid_resize(_grid, Itens_vamp.Length, _old_height + 1);
+    ds_grid_resize(_grid, ITENS_VAMP.LENGTH, _old_height + 1);
     var _y = _old_height;
 
-    _grid[# Itens_vamp.Name,         _y] = _name;
-    _grid[# Itens_vamp.ConfigScript, _y] = _config_script; // Link de Dados
-    _grid[# Itens_vamp.Script,       _y] = _script;        // Link de Execução
-    _grid[# Itens_vamp.frequency,    _y] = _frequency;
+    _grid[# ITENS_VAMP.NAME,         _y] = _name;
+    _grid[# ITENS_VAMP.CONFIG_SCRIPT, _y] = _config_script; // Link de Dados
+    _grid[# ITENS_VAMP.SCRIPT,       _y] = _script;        // Link de Execução
+    _grid[# ITENS_VAMP.FREQUENCY,    _y] = _frequency;
     // Descrição começa vazia e é preenchida dinamicamente no final da inicialização
-    _grid[# Itens_vamp.description,  _y] = ""; 
-    _grid[# Itens_vamp.level,        _y] = _level;
-    
+    _grid[# ITENS_VAMP.DESCRIPTION,  _y] = ""; 
+    _grid[# ITENS_VAMP.LEVEL,        _y] = _level;
+
     return _y; // Retorna o índice da linha criada
 }
 
 /// @desc Adiciona Upgrade Ativo na Grid (Redimensiona automátiocamente)
-/// @param _config_script O Link para o script scr_XXX_config
+/// @param {String} _name O nome do upgrade
+/// @param {Asset.GMScript|Function|Real} _config_script O Link para o script scr_XXX_config
+/// @param {Asset.GMScript|Function|Real} _script O Link para o script executor
+/// @param {Real} _frequency Frequência de sorteio
+/// @param {Real} _level Nível inicial
 function ds_grid_add_upgrade_vamp(_name, _config_script, _script, _frequency, _level)
 {
     var _grid = global.upgrades_vamp_grid;
     var _old_height = ds_grid_height(_grid);
-    
+
     // Aumenta a grid em 1 linha
-    ds_grid_resize(_grid, Upgrades_vamp.Length, _old_height + 1);
+    ds_grid_resize(_grid, UPGRADES_VAMP.LENGTH, _old_height + 1);
     var _y = _old_height;
 
-    _grid[# Upgrades_vamp.Name,         _y] = _name;
-    _grid[# Upgrades_vamp.ConfigScript, _y] = _config_script; // Link de Dados
-    _grid[# Upgrades_vamp.Script,       _y] = _script;        // Link de Execução
-    _grid[# Upgrades_vamp.frequency,    _y] = _frequency;
+    _grid[# UPGRADES_VAMP.NAME,         _y] = _name;
+    _grid[# UPGRADES_VAMP.CONFIG_SCRIPT, _y] = _config_script; // Link de Dados
+    _grid[# UPGRADES_VAMP.SCRIPT,       _y] = _script;        // Link de Execução
+    _grid[# UPGRADES_VAMP.FREQUENCY,    _y] = _frequency;
     // Descrição começa vazia e é preenchida dinamicamente no final da inicialização
-    _grid[# Upgrades_vamp.description,  _y] = ""; 
-    _grid[# Upgrades_vamp.level,        _y] = _level;
-    
+    _grid[# UPGRADES_VAMP.DESCRIPTION,  _y] = "";
+    _grid[# UPGRADES_VAMP.LEVEL,        _y] = _level;
+
     return _y; // Retorna o índice da linha criada
 }
 
@@ -260,7 +272,7 @@ function inicializar_tudo()
 
     // --- 2. Itens Passivos (Reinicia a grid) ---
     if (variable_global_exists("itens_vamp_grid")) ds_grid_destroy(global.itens_vamp_grid);
-    global.itens_vamp_grid = ds_grid_create(Itens_vamp.Length, 0);
+    global.itens_vamp_grid = ds_grid_create(ITENS_VAMP.LENGTH, 0);
 
     // Adicione novos Itens aqui (Nível começa 0, Descrição vazia "")
     // Nota: Passamos dois scripts agora (Config e Execução)
@@ -269,12 +281,12 @@ function inicializar_tudo()
     // Ímã não tem script de config/execução ainda, passar -1
     ds_grid_add_item_vamp("IMÃ",  -1, -1, -1, 0); 
     // Mantenha a descrição fixa na grid temporariamente para o imã:
-    global.itens_vamp_grid[# Itens_vamp.description, ds_grid_height(global.itens_vamp_grid)-1] = "Coleta recursos de longe.";
+    global.itens_vamp_grid[# ITENS_VAMP.DESCRIPTION, ds_grid_height(global.itens_vamp_grid)-1] = "Coleta recursos de longe.";
 
 
     // --- 3. Upgrades Ativos (Reinicia a grid) ---
     if (variable_global_exists("upgrades_vamp_grid")) ds_grid_destroy(global.upgrades_vamp_grid);
-    global.upgrades_vamp_grid = ds_grid_create(Upgrades_vamp.Length, 0);
+    global.upgrades_vamp_grid = ds_grid_create(UPGRADES_VAMP.LENGTH, 0);
 
     // Adicione novos Upgrades aqui (Nível começa 0, Descrição vazia "")
     // A ordem de chamada define o índice da linha automaticamente. FIM DO BUG HARDCODE.
@@ -303,33 +315,40 @@ function inicializar_tudo()
     
     // --- Atualiza Passivos (PENA) ---
     var _itens_grid = global.itens_vamp_grid;
-    for (var k = 0; k < ds_grid_height(_itens_grid); k++) {
-        var _config_scr = _itens_grid[# Itens_vamp.ConfigScript, k];
-        var _level = _itens_grid[# Itens_vamp.level, k];
-        if (_config_scr != -1 && script_exists(_config_scr)) {
-            // Calculadora de passivos mantém os 3 argumentos originais
-            scr_generic_calculate_passive_upgrade(_config_scr(), _level, k);
+    for (var _k = 0; _k < ds_grid_height(_itens_grid); _k++) {
+        var _config_scr = _itens_grid[# ITENS_VAMP.CONFIG_SCRIPT, _k];
+        var _level = _itens_grid[# ITENS_VAMP.LEVEL, _k];
+        // feather disable once GM1041
+        // feather disable once GM1063
+        if (_config_scr != -1 && script_exists(is_string(_config_scr) ? asset_get_index(string(_config_scr)) : _config_scr)) {
+            // Calculadora de passivos agora usa 5 argumentos
+            // feather disable once GM1021
+            // feather disable once GM1041
+            scr_generic_calculate_passive_upgrade(script_execute(_config_scr), _level, _itens_grid, _k, ITENS_VAMP.DESCRIPTION);
         }
     }
 
     // --- Atualiza Ativos (BOLA, BOMBA, etc.) ---
     var _upgrades_grid = global.upgrades_vamp_grid;
-    for (var i = 0; i < ds_grid_height(_upgrades_grid); i++) {
-        var _config_scr_up = _upgrades_grid[# Upgrades_vamp.ConfigScript, i];
-        var _level_up = _upgrades_grid[# Upgrades_vamp.level, i];
-        
-        if (_config_scr_up != -1 && script_exists(_config_scr_up)) {
+    for (var _i = 0; _i < ds_grid_height(_upgrades_grid); _i++) {
+        var _config_scr_up = _upgrades_grid[# UPGRADES_VAMP.CONFIG_SCRIPT, _i];
+        var _level_up = _upgrades_grid[# UPGRADES_VAMP.LEVEL, _i];
+        // feather disable once GM1041
+        // feather disable once GM1063
+        if (_config_scr_up != -1 && script_exists(is_string(_config_scr_up) ? asset_get_index(string(_config_scr_up)) : _config_scr_up)) {
             // ==========================================================
             // AQUI ESTÁ A MUDANÇA: Agora passamos 5 argumentos para a 
             // calculadora genérica ativa suportar níveis infinitos!
             // (_skill_config, _current_level, _grid, _row_index, _col_desc)
             // ==========================================================
             scr_generic_calculate_stats(
-                _config_scr_up(), 
+                // feather disable once GM1021
+                // feather disable once GM1041
+                script_execute(_config_scr_up), 
                 _level_up, 
                 _upgrades_grid, 
-                i, 
-                Upgrades_vamp.description
+                _i, 
+                UPGRADES_VAMP.DESCRIPTION
             );
         }
     }

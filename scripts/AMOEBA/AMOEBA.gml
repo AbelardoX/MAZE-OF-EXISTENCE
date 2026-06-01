@@ -1,5 +1,7 @@
+// feather disable GM2017
 /// @desc Estados Padronizados para a Amoeba
 
+/// @self obj_amoeba
 function scr_amoeba_check_player(){
     if (instance_exists(obj_player)) {
         if (distance_to_object(obj_player) <= dist_aggro) {
@@ -8,6 +10,7 @@ function scr_amoeba_check_player(){
     }
 }
 
+/// @self obj_amoeba
 function scr_amoeba_hit(){
     alarm[2] = 180;
     empurrar_veloc = lerp(empurrar_veloc, 0, 0.05);
@@ -17,6 +20,7 @@ function scr_amoeba_hit(){
     aplicar_movimento_com_colisao(hveloc, vveloc);
 }
 
+/// @self obj_amoeba
 function scr_amoeba_perseguir(){
     if (variable_instance_exists(id, "sprite_normal")) sprite_index = sprite_normal;
     image_speed = 1.5;
@@ -40,6 +44,7 @@ function scr_amoeba_perseguir(){
     }
 }
 
+/// @self obj_amoeba
 function scr_amoeba_escolher_estado(){
     scr_amoeba_check_player();
     var _prox_state = choose(scr_amoeba_andar, scr_amoeba_parada);
@@ -53,6 +58,7 @@ function scr_amoeba_escolher_estado(){
     }
 }
 
+/// @self obj_amoeba
 function scr_amoeba_andar(){
     scr_amoeba_check_player();
     if (variable_instance_exists(id, "sprite_normal")) sprite_index = sprite_normal;
@@ -68,6 +74,7 @@ function scr_amoeba_andar(){
     }
 }
 
+/// @self obj_amoeba
 function scr_amoeba_parada(){
     scr_amoeba_check_player();
     if (variable_instance_exists(id, "sprite_parado")) sprite_index = sprite_parado;
@@ -76,5 +83,7 @@ function scr_amoeba_parada(){
 }
 
 // Compatibilidade com nomes antigos
+/// @self obj_amoeba
 function scr_amoeba_colisao() { aplicar_movimento_com_colisao(hveloc, vveloc); }
+/// @self obj_amoeba
 function scr_escolher_state_amoeba() { scr_amoeba_escolher_estado(); }

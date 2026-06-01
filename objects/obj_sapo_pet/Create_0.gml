@@ -1,3 +1,4 @@
+// feather disable GM2017
 event_inherited();
 
 // --- Status Básicos (Sobrescritos pelo script scr_sapo) ---

@@ -1,3 +1,4 @@
+// feather disable GM2017
 // Buscar a instância de obj_lab
 
 bombs += 1; // Incrementa a contagem de bombas

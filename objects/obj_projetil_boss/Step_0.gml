@@ -1,21 +1,30 @@
+// feather disable GM1041
+// feather disable GM1049
+// feather disable GM2017
+// feather disable GM1063
 
-if(seguidor){
+if(real(seguidor)){
+// feather disable once GM1041
 if (!instance_exists(target)) {
     // Se o alvo não existir mais, destrói o projétil
     instance_destroy();
 } else {
     // Ajusta a direção do projétil para seguir o alvo
-    var dir = point_direction(x, y, target.x, target.y);
-    direction = dir;
+    var _dir = point_direction(x, y, target.x, target.y);
+    direction = _dir;
 
     // Move o projétil na direção do alvo
     motion_add(direction, speed);
 
     // Checa a colisão com o jogador (ou outro alvo)
-    if (place_meeting(x, y, target)) {
+	var _target_inst = target;
+	if (is_string(target)) _target_inst = asset_get_index(target);
+	
+    if (place_meeting(x, y, _target_inst)) {
         // Aplica o dano ao jogador
-        with (target) {
-            global.vida -= other.damage;  // Supondo que o jogador tenha uma variável `vida`
+        var _dmg = damage;
+        with (_target_inst) {
+            global.vida -= _dmg;  // Supondo que o jogador tenha uma variável `vida`
         }
 
         // Destrói o projétil ao atingir o alvo

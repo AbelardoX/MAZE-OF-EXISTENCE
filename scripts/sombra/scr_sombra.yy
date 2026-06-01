@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "APAGAR",
+  "name": "scr_sombra",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "GLOBAL_VARIAVEIS",
-    "path": "folders/Scripts/GLOBAL_VARIAVEIS.yy",
+    "name": "GUI",
+    "path": "folders/Scripts/GUI.yy",
   },
 }

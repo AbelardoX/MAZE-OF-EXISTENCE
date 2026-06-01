@@ -1,3 +1,4 @@
+// feather disable GM2017
 
 if(global.full = false){
 window_set_fullscreen(true);

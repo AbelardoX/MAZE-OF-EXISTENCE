@@ -1,3 +1,4 @@
+// feather disable GM2017
 /// @desc Máquina de Estados da Bomba (Voo e Explosão)
 /// [O QUE]: Controla o movimento parabólico da bomba até o alvo e, ao chegar, executa a lógica de dano em área e animação.
 /// [COMO] : 
@@ -73,11 +74,11 @@ switch (state)
             var _enemies_hit_list = ds_list_create();
             
             // Verifica colisão circular (retorna quantos colidiram)
-            var _count = collision_circle_list(x, y, radius, par_inimigos, false, true, _enemies_hit_list, false);
+            var _count = collision_circle_list(x, y, radius, obj_par_inimigos, false, true, _enemies_hit_list, false);
             
-            for (var i = 0; i < _count; i++) 
+            for (var _i = 0; _i < _count; _i++) 
             {
-                var _enemy_id = _enemies_hit_list[| i];
+                var _enemy_id = _enemies_hit_list[| _i];
                 
                 if (instance_exists(_enemy_id)) 
                 {
@@ -117,9 +118,6 @@ switch (state)
             }
             // Limpeza de memória obrigatória
             ds_list_destroy(_enemies_hit_list);
-            
-            // Opcional: Efeitos de tela ou som
-            // audio_play_sound(snd_explosion, 1, false);
         }
 
         // 2. Destruição após o fim da animação
