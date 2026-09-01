@@ -277,11 +277,9 @@ function inicializar_tudo()
     // Adicione novos Itens aqui (Nível começa 0, Descrição vazia "")
     // Nota: Passamos dois scripts agora (Config e Execução)
     ds_grid_add_item_vamp("PENA", scr_feather_config, scr_pena, -1, 0); 
-    
-    // Ímã não tem script de config/execução ainda, passar -1
-    ds_grid_add_item_vamp("IMÃ",  -1, -1, -1, 0); 
-    // Mantenha a descrição fixa na grid temporariamente para o imã:
-    global.itens_vamp_grid[# ITENS_VAMP.DESCRIPTION, ds_grid_height(global.itens_vamp_grid)-1] = "Coleta recursos de longe.";
+    ds_grid_add_item_vamp("ÍMÃ",  scr_ima_de_almas_config, scr_ima_de_almas, -1, 0); 
+    ds_grid_add_item_vamp("ANEL",  scr_anel_amplificador_config, scr_anel_amplificador, -1, 0); 
+    ds_grid_add_item_vamp("TOMO",  scr_tomo_celeridade_config, scr_tomo_celeridade, -1, 0); 
 
 
     // --- 3. Upgrades Ativos (Reinicia a grid) ---
@@ -295,6 +293,9 @@ function inicializar_tudo()
     ds_grid_add_upgrade_vamp("EXPLOSÃO",   scr_explosion_config,   scr_explosao,   -1, 0);
     ds_grid_add_upgrade_vamp("SHURIKEN",   scr_shuriken_config,   scr_shuriken,   -1, 0);
     ds_grid_add_upgrade_vamp("BUMERANGUE", scr_boomerang_config, scr_bumerangue, -1, 0);
+    ds_grid_add_upgrade_vamp("LÂMINAS",    scr_laminas_giras_config, scr_laminas_giras, -1, 0);
+    ds_grid_add_upgrade_vamp("RASTRO",     scr_rastro_sombrio_config, scr_rastro_sombrio, -1, 0);
+    ds_grid_add_upgrade_vamp("ADAGAS",     scr_adagas_velozes_config, scr_adagas_velozes, -1, 0);
 
     
     // Habilidades sem config/script ainda
@@ -318,13 +319,12 @@ function inicializar_tudo()
     for (var _k = 0; _k < ds_grid_height(_itens_grid); _k++) {
         var _config_scr = _itens_grid[# ITENS_VAMP.CONFIG_SCRIPT, _k];
         var _level = _itens_grid[# ITENS_VAMP.LEVEL, _k];
-        // feather disable once GM1041
-        // feather disable once GM1063
-        if (_config_scr != -1 && script_exists(is_string(_config_scr) ? asset_get_index(string(_config_scr)) : _config_scr)) {
-            // Calculadora de passivos agora usa 5 argumentos
-            // feather disable once GM1021
-            // feather disable once GM1041
-            scr_generic_calculate_passive_upgrade(script_execute(_config_scr), _level, _itens_grid, _k, ITENS_VAMP.DESCRIPTION);
+
+        if (_config_scr != -1) {
+            var _scr = is_string(_config_scr) ? asset_get_index(_config_scr) : _config_scr;
+            if (_scr != -1) {
+                scr_generic_calculate_passive_upgrade(script_execute(_scr), _level, _itens_grid, _k, ITENS_VAMP.DESCRIPTION);
+            }
         }
     }
 
@@ -333,23 +333,12 @@ function inicializar_tudo()
     for (var _i = 0; _i < ds_grid_height(_upgrades_grid); _i++) {
         var _config_scr_up = _upgrades_grid[# UPGRADES_VAMP.CONFIG_SCRIPT, _i];
         var _level_up = _upgrades_grid[# UPGRADES_VAMP.LEVEL, _i];
-        // feather disable once GM1041
-        // feather disable once GM1063
-        if (_config_scr_up != -1 && script_exists(is_string(_config_scr_up) ? asset_get_index(string(_config_scr_up)) : _config_scr_up)) {
-            // ==========================================================
-            // AQUI ESTÁ A MUDANÇA: Agora passamos 5 argumentos para a 
-            // calculadora genérica ativa suportar níveis infinitos!
-            // (_skill_config, _current_level, _grid, _row_index, _col_desc)
-            // ==========================================================
-            scr_generic_calculate_stats(
-                // feather disable once GM1021
-                // feather disable once GM1041
-                script_execute(_config_scr_up), 
-                _level_up, 
-                _upgrades_grid, 
-                _i, 
-                UPGRADES_VAMP.DESCRIPTION
-            );
+
+        if (_config_scr_up != -1) {
+            var _scr_up = is_string(_config_scr_up) ? asset_get_index(_config_scr_up) : _config_scr_up;
+            if (_scr_up != -1) {
+                scr_generic_calculate_stats(script_execute(_scr_up), _level_up, _upgrades_grid, _i, UPGRADES_VAMP.DESCRIPTION);
+            }
         }
     }
 }

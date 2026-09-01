@@ -97,3 +97,9 @@ pegar = true; // Controle para não pegar itens infinitamente num frame
 // ========================================================
 // Se você usa viewports, pode querer inicializar algo aqui, 
 // mas geralmente fica num objeto controlador de câmera.
+
+// --- NOVO: SISTEMA DE SKILLS ---
+var _mgr_index = asset_get_index("obj_skill_manager");
+if (_mgr_index != -1 && !instance_exists(_mgr_index)) {
+    instance_create_layer(x, y, "Instances", _mgr_index);
+}

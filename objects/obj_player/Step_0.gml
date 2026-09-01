@@ -179,18 +179,15 @@ var _upgrades_grid = global.upgrades_vamp_grid;
 var _upgrades_count = ds_grid_height(_upgrades_grid);
 
 for (var _i = 0; _i < _upgrades_count; _i++)
-    {
+{
     var _level = _upgrades_grid[# UPGRADES_VAMP.LEVEL, _i];
-    
-    // Se nível > 0, tentamos executar
     if (_level > 0) {
         var _script = _upgrades_grid[# UPGRADES_VAMP.SCRIPT, _i];
-        
-        // Verifica se o script existe e é uma função válida
-        if (_script != -1 && script_exists(_script)) {
-            // --- CONEXÃO UNIFICADA ---
-            // Executa o script passando '_i' (o índice da linha) como argumento 0.
-            script_execute(_script, _i); 
+        if (_script != -1) {
+            var _scr_to_exec = is_string(_script) ? asset_get_index(_script) : _script;
+            if (_scr_to_exec != -1 && (script_exists(_scr_to_exec) || is_method(_scr_to_exec) || is_real(_scr_to_exec))) {
+                script_execute(_scr_to_exec, _i); 
+            }
         }
     }
 }
@@ -202,16 +199,13 @@ var _itens_count = ds_grid_height(_itens_grid);
 for (var _k = 0; _k < _itens_count; _k++)
 {
     var _level_item = _itens_grid[# ITENS_VAMP.LEVEL, _k];
-    
-    // Se nível > 0, tentamos executar
     if (_level_item > 0) {
         var _script_item = _itens_grid[# ITENS_VAMP.SCRIPT, _k];
-        
-        if (_script_item != -1 && script_exists(real(_script_item))) {
-            // --- CONEXÃO UNIFICADA ---
-            // Executa o script do item passando '_k' como argumento.
-			// feather disable once GM1041
-            script_execute(_script_item, _k);
+        if (_script_item != -1) {
+            var _scr_item_to_exec = is_string(_script_item) ? asset_get_index(_script_item) : _script_item;
+            if (_scr_item_to_exec != -1 && (script_exists(_scr_item_to_exec) || is_method(_scr_item_to_exec) || is_real(_scr_item_to_exec))) {
+                script_execute(_scr_item_to_exec, _k);
+            }
         }
     }
 }

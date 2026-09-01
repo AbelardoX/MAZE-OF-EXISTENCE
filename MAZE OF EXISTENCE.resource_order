@@ -278,7 +278,6 @@
     {"name":"spr_player_cima","order":1,"path":"sprites/spr_player_cima/spr_player_cima.yy",},
     {"name":"BOSS","order":3,"path":"scripts/BOSS/BOSS.yy",},
     {"name":"spr_arvore","order":2,"path":"sprites/spr_arvore/spr_arvore.yy",},
-    {"name":"spr_pena_up","order":5,"path":"scripts/spr_pena_up/spr_pena_up.yy",},
     {"name":"Fase_BEBE","order":4,"path":"rooms/Fase_BEBE/Fase_BEBE.yy",},
     {"name":"obj_chao_grama","order":15,"path":"objects/obj_chao_grama/obj_chao_grama.yy",},
     {"name":"spr_botoes","order":1,"path":"sprites/spr_botoes/spr_botoes.yy",},

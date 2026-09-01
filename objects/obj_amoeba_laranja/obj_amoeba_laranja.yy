@@ -33,7 +33,7 @@
   "physicsShapePoints": [],
   "physicsStartAwake": true,
   "properties": [],
-  "solid": false,
+  "solid": true,
   "spriteId": {
     "name": "spr_amoeba_laranja",
     "path": "sprites/spr_amoeba_laranja/spr_amoeba_laranja.yy",

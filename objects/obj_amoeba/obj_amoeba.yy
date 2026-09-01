@@ -32,7 +32,7 @@
   "physicsShapePoints": [],
   "physicsStartAwake": true,
   "properties": [],
-  "solid": false,
+  "solid": true,
   "spriteId": {
     "name": "spr_amoeba_verde",
     "path": "sprites/spr_amoeba_verde/spr_amoeba_verde.yy",

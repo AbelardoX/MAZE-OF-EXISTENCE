@@ -14,7 +14,10 @@
     "name": "INIMIGOS",
     "path": "folders/Objects/FASE_UT/INIMIGOS.yy",
   },
-  "parentObjectId": null,
+  "parentObjectId": {
+    "name": "obj_par_inimigos",
+    "path": "objects/obj_par_inimigos/obj_par_inimigos.yy",
+  },
   "persistent": false,
   "physicsAngularDamping": 0.1,
   "physicsDensity": 0.5,

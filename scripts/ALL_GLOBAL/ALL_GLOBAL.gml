@@ -100,5 +100,10 @@ global.upgrade_num = 4;
 global.timer = 0;
 global.timer_running = true;
 
+// --- NOVAS VARIÁVEIS DO SISTEMA DE SKILLS ---
+global.player_area_mod = 1.0;
+global.player_cooldown_mod = 1.0;
+global.speed_player_base = 4.0; // Referência para as passivas de velocidade
+
 // Inicializa catálogo de itens se necessário
 criar_lista_itens_padronizados();

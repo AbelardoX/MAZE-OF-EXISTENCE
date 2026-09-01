@@ -105,10 +105,14 @@ if (global.level_up == true)
             if (mouse_check_button_pressed(mb_left)) 
             {
                 // 1. APLICAÇÃO DO LEVEL UP NA ARMA/ITEM
-                if (_type == 0) { // ARMA
+                if (_type == 0) { // ARMA (SISTEMA ANTIGO)
                     global.upgrades_vamp_grid[# UPGRADES_VAMP.LEVEL, _row_index] += 1;
-                } else { // ITEM
+                } else if (_type == 1) { // ITEM (SISTEMA ANTIGO)
                     global.itens_vamp_grid[# ITENS_VAMP.LEVEL, _row_index] += 1;
+                } else if (_type == 2) { // NOVO SISTEMA DE SKILLS
+                    if (instance_exists(obj_skill_manager)) {
+                        obj_skill_manager.add_skill(_card_data.skill_id);
+                    }
                 }
 
                 // 2. GERENCIA A FILA DE LEVEL UPS PENDENTES

@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "spr_pena_up",
+  "name": "scr_anel_amplificador",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

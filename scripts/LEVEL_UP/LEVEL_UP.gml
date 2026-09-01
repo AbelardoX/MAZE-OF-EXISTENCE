@@ -49,50 +49,43 @@ function level_upp()
     
     for (var _i = 0; _i < _total_weapons; _i++) 
     {
-        var _config_scr = _grid_weapons[# UPGRADES_VAMP.CONFIG_SCRIPT, _i];
-        
-        if (_config_scr != -1 && script_exists(_config_scr)) 
+        var _config_raw = _grid_weapons[# UPGRADES_VAMP.CONFIG_SCRIPT, _i];
+        if (_config_raw == -1) continue;
+
+        var _scr_index = is_string(_config_raw) ? asset_get_index(_config_raw) : _config_raw;
+
+        if (_scr_index != -1 && (script_exists(_scr_index) || is_method(_scr_index) || is_real(_scr_index))) 
         {
             var _curr_lvl_weapon = _grid_weapons[# UPGRADES_VAMP.LEVEL, _i];
-            var _skill_data = script_execute(_config_scr); 
+            var _skill_data = script_execute(_scr_index); 
             var _max_lvl = array_length(_skill_data.niveis);
             
             var _next_level = _curr_lvl_weapon + 1;
-            
-            // Textos e Ícones normais do ciclo infinito
             var _safe_index = _curr_lvl_weapon % _max_lvl;
             var _next_lvl_info = _skill_data.niveis[_safe_index]; 
             
             var _desc_final = _next_lvl_info.desc;
             var _sprite_final = variable_struct_exists(_skill_data.stats_base, "sprite_icon") ? _skill_data.stats_base.sprite_icon : -1;
             
-            // ========================================================
-            // --- MÁGICA DA EVOLUÇÃO ---
-            // ========================================================
             if (variable_struct_exists(_skill_data, "evolucao")) 
             {
-                // Se o PRÓXIMO nível for o nível de evolução (ex: está no 14, vai pro 15)
-                // Substitui a descrição pelo texto único da evolução
                 if (_next_level == _skill_data.evolucao.nivel) {
                     _desc_final = _skill_data.evolucao.desc;
                 }
-                
-                // Se o nível atual for 14 ou maior, a carta passa a usar o Ícone Novo para sempre
                 if (_curr_lvl_weapon >= _skill_data.evolucao.nivel - 1) {
                     _sprite_final = _skill_data.evolucao.sprite_icon;
                 }
             }
             
-            // Adiciona marcador de ciclo para níveis muito altos (Opcional)
             var _ciclos = floor(_curr_lvl_weapon / _max_lvl);
-            if (_ciclos > 0 && _next_level != 15) { // Evita botar [Ciclo] justo no nível da evolução
+            if (_ciclos > 0 && _next_level != 15) { 
                 _desc_final += "\n[Ciclo " + string(_ciclos + 1) + "]";
             }
             
             var _card_info = {
                 nome: _grid_weapons[# UPGRADES_VAMP.NAME, _i],
                 sprite: _sprite_final,
-                DESCRIPTION: _desc_final, 
+                description: _desc_final, 
                 next_level: _next_level,
                 type: 0, 
                 id_grid: _i 
@@ -110,19 +103,18 @@ function level_upp()
     
     for (var _k = 0; _k < _total_items; _k++) 
     {
-        var _config_scr_item = _grid_items[# ITENS_VAMP.CONFIG_SCRIPT, _k];
-        
-        if (_config_scr_item != -1 && script_exists(asset_get_index(_config_scr_item))) 
+        var _config_raw_item = _grid_items[# ITENS_VAMP.CONFIG_SCRIPT, _k];
+        if (_config_raw_item == -1) continue;
+
+        var _scr_item_index = is_string(_config_raw_item) ? asset_get_index(_config_raw_item) : _config_raw_item;
+
+        if (_scr_item_index != -1 && (script_exists(_scr_item_index) || is_method(_scr_item_index) || is_real(_scr_item_index))) 
         {
             var _curr_lvl_item = _grid_items[# ITENS_VAMP.LEVEL, _k];
-            // Executa o script e garante que o retorno seja tratado como um struct de dados
-			// feather disable once GM1041
-            var _item_data = script_execute(asset_get_index(_config_scr_item));
+            var _item_data = script_execute(_scr_item_index);
             var _max_lvl_item = array_length(_item_data.niveis);
             
             var _next_level_item = _curr_lvl_item + 1;
-            
-            // MÁGICA DO INFINITO (Mesma lógica)
             var _safe_index_item = _curr_lvl_item % _max_lvl_item;
             var _next_lvl_info_item = _item_data.niveis[_safe_index_item];
             
@@ -133,13 +125,46 @@ function level_upp()
             var _item_card_info = {
                 nome: _grid_items[# ITENS_VAMP.NAME, _k],
                 sprite: variable_struct_exists(_item_data.stats_base, "sprite_icon") ? _item_data.stats_base.sprite_icon : -1,
-                DESCRIPTION: _desc_final_item, 
+                description: _desc_final_item, 
                 next_level: _next_level_item,
                 type: 1, 
                 id_grid: _k 
             };
             
             ds_list_add(_pool, _item_card_info);
+        }
+    }
+
+    // ========================================================
+    // --- Sub-Part D: NOVO SISTEMA DE SKILLS (Struct-Based) ---
+    // ========================================================
+    if (variable_global_exists("skill_db")) {
+        var _skill_ids = variable_struct_get_names(global.skill_db);
+        for (var _m = 0; _m < array_length(_skill_ids); _m++) {
+            var _sid = _skill_ids[_m];
+            var _sdef = global.skill_db[$ _sid];
+            
+            var _clvl = 0;
+            if (instance_exists(obj_skill_manager)) {
+                if (variable_struct_exists(obj_skill_manager.skills_owned, _sid)) {
+                    _clvl = obj_skill_manager.skills_owned[$ _sid].level;
+                }
+            }
+            
+            if (_clvl < _sdef.max_level) {
+                var _nlvl = _clvl + 1;
+                var _sinfo = _sdef.levels[_nlvl - 1];
+                
+                var _skill_card = {
+                    nome: _sdef.name,
+                    sprite: _sdef.icon,
+                    description: _sdef.description + "\nLv." + string(_nlvl),
+                    next_level: _nlvl,
+                    type: 2, // NOVO SISTEMA
+                    skill_id: _sid 
+                };
+                ds_list_add(_pool, _skill_card);
+            }
         }
     }
 
@@ -167,13 +192,22 @@ function aplicar_status_level() {
     var _prev_lvl = global.level_player - 1;
     var _curr_lvl = global.level_player;
 
-    global.vida_max_calc[_curr_lvl]     = global.vida_max_calc[_prev_lvl] + (_curr_lvl * 0.8);
-    global.max_estamina_calc[_curr_lvl] = global.max_estamina_calc[_prev_lvl] + 5;
-    global.dano_base[_curr_lvl]         = global.dano_base[_prev_lvl] * 1.1;
+    // Garante que os arrays de cálculo cresçam
+    if (_curr_lvl >= array_length(global.vida_max_calc)) {
+        global.vida_max_calc[_curr_lvl]     = global.vida_max_calc[_prev_lvl] + (_curr_lvl * 0.8);
+        global.max_estamina_calc[_curr_lvl] = global.max_estamina_calc[_prev_lvl] + 5;
+        global.dano_base[_curr_lvl]         = global.dano_base[_prev_lvl] * 1.1;
+    }
 
-    global.vida_max = global.vida_max_calc[_curr_lvl];
     global.max_estamina = global.max_estamina_calc[_curr_lvl];
-    global.ataque = global.dano_base[_curr_lvl];
+    
+    // Deixa o Skill Manager recalcular ataque, velocidade e vida máxima considerando passivas
+    if (instance_exists(obj_skill_manager)) {
+        obj_skill_manager.recalculate_player_stats();
+    } else {
+        global.vida_max = global.vida_max_calc[_curr_lvl];
+        global.ataque = global.dano_base[_curr_lvl];
+    }
 }
 
 

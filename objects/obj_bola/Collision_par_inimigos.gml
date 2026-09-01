@@ -1,18 +1,9 @@
 // feather disable GM2017
-// 1. Dá o dano e Knockback
-other.vida -= damage;
+if (!instance_exists(other)) exit;
 
-var _dir = point_direction(obj_player.x, obj_player.y, other.x, other.y);
-other.empurrar_dir = _dir;
-other.empurrar_veloc = push; // Note que no script vc chama de push_force
-other.state = scr_inimigo_hit;
-other.alarm[1] = 5;
-other.hit = true;
+var _kb_force = push;
+var _kb_dir = point_direction(obj_player.x, obj_player.y, other.x, other.y);
 
-var _inst = instance_create_layer(x, y, "Instances", obj_dano);
-_inst.alvo = other;
-_inst.dano = damage;
+scr_enemy_damage_apply(other, damage, _kb_force, _kb_dir, false);
 
-// 2. Estoura e some imediatamente!
-// Se tiver um obj_explosao_visual, você pode criá-lo aqui antes de destruir
 instance_destroy();

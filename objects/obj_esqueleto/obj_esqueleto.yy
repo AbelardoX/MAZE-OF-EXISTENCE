@@ -32,7 +32,7 @@
   "physicsShapePoints": [],
   "physicsStartAwake": true,
   "properties": [],
-  "solid": false,
+  "solid": true,
   "spriteId": {
     "name": "spr_esqueleto",
     "path": "sprites/spr_esqueleto/spr_esqueleto.yy",

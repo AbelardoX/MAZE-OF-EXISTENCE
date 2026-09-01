@@ -33,7 +33,7 @@
   "physicsShapePoints": [],
   "physicsStartAwake": true,
   "properties": [],
-  "solid": false,
+  "solid": true,
   "spriteId": {
     "name": "spr_amoeba_vermelha",
     "path": "sprites/spr_amoeba_vermelha/spr_amoeba_vermelha.yy",

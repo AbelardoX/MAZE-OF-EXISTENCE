@@ -33,7 +33,7 @@
   "physicsShapePoints": [],
   "physicsStartAwake": true,
   "properties": [],
-  "solid": false,
+  "solid": true,
   "spriteId": {
     "name": "spr_amoeba_rosa",
     "path": "sprites/spr_amoeba_rosa/spr_amoeba_rosa.yy",

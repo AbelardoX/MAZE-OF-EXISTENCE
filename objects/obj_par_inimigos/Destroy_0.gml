@@ -10,8 +10,10 @@ if (_index != -1) {
 }
 
 if (instance_exists(obj_grupo_inimigos)) {
+    var _my_grupo_id = (variable_instance_exists(id, "grupo_id") ? grupo_id : noone);
+    
     with (obj_grupo_inimigos) {
-        if (other.grupo_id == grupo_id) {
+        if (_my_grupo_id != noone && _my_grupo_id == grupo_id) {
             inimigos_spawnados--;
             if (inimigos_spawnados <= 0) {
                 // Remove da lista

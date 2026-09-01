@@ -10,31 +10,11 @@
 // 1. Verificação de Lista (Evita dano múltiplo no mesmo inimigo)
 if (ds_list_find_index(hit_list, other.id) == -1) 
 {
-    var _damage = damage; // Variável local para o dano
+    var _damage = damage; 
 
-    // --- Aplicação de Dano e Status ---
-    other.vida -= _damage;
-    other.hit = true;
-    other.state = scr_inimigo_hit; // Coloca o inimigo no estado de hit
-    other.alarm[1] = 5;            // Tempo do flash branco
-
-    // --- Lógica de Empurrão (Knockback) ---
-    // Usamos 'push_force' que definimos no Create/Config
-    // Se a variável for 'push' no seu jogo, altere abaixo
-    if (push_force > 0) 
-    {
-        // Empurra na direção que o bumerangue está indo ou vindo do player? 
-        // Geralmente bumerangue empurra na direção do impacto:
-        var _dir = point_direction(x, y, other.x, other.y); 
-        
-        other.empurrar_dir = _dir;
-        other.empurrar_veloc = push_force;
-    }
-
-    // --- Visual: Número de Dano ---
-    var _inst = instance_create_layer(x, y, "Instances", obj_dano);
-    _inst.alvo = other;
-    _inst.dano = _damage;
+    // --- Aplicação de Dano Universal ---
+    var _kb_dir = point_direction(x, y, other.x, other.y); 
+    scr_enemy_damage_apply(other, _damage, push_force, _kb_dir, false);
 
     // --- Lógica do Bumerangue (Perfuração) ---
     

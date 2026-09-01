@@ -33,7 +33,7 @@
   "physicsShapePoints": [],
   "physicsStartAwake": true,
   "properties": [],
-  "solid": false,
+  "solid": true,
   "spriteId": {
     "name": "spr_amoeba_azul",
     "path": "sprites/spr_amoeba_azul/spr_amoeba_azul.yy",

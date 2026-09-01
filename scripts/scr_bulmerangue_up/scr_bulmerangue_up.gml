@@ -88,7 +88,7 @@ function scr_bumerangue(_row_index)
     if (global.level_up) exit; 
 
     // OBTÉM O NÍVEL ATUAL CORRETAMENTE BASEADO NA LINHA RECEBIDA
-    var _current_level = global.upgrades_vamp_grid[# upgrades_vamp.level, _row_index];
+    var _current_level = global.upgrades_vamp_grid[# UPGRADES_VAMP.LEVEL, _row_index];
     
     // Se nível 0, não faz nada (segurança)
     if (_current_level <= 0) exit;
@@ -100,7 +100,7 @@ function scr_bumerangue(_row_index)
     
     // Chama a calculadora genérica universal (Passando referências corretas da grid e colunas)
     // Nota: Certifique-se de que a função 'scr_generic_calculate_stats' já foi criada.
-    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, upgrades_vamp.description);
+    var _stats = scr_generic_calculate_stats(_config, _current_level, global.upgrades_vamp_grid, _row_index, UPGRADES_VAMP.DESCRIPTION);
 
     // ========================================================
     // --- 2. LÓGICA DO TIMER (Sua lógica Delta_Time permanece aqui) ---
